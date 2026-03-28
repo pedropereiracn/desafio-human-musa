@@ -99,7 +99,7 @@ body::before {
     radial-gradient(ellipse 20% 30% at 40% 75%, rgba(34, 197, 94, 0.08) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
-  animation: aurora 40s ease-in-out infinite;
+  animation: aurora 60s ease-in-out infinite;
   will-change: transform;
 }
 body::after {
@@ -116,7 +116,7 @@ body::after {
     radial-gradient(ellipse 20% 25% at 15% 40%, rgba(52, 211, 153, 0.06) 0%, transparent 55%);
   pointer-events: none;
   z-index: 0;
-  animation: aurora-2 35s ease-in-out infinite;
+  animation: aurora-2 50s ease-in-out infinite;
   will-change: transform;
 }
 
@@ -231,7 +231,7 @@ body::after {
     rgba(5, 150, 105, 0.03) 60%,
     transparent 75%
   );
-  animation: aurora-blob-1 45s ease-in-out infinite;
+  animation: aurora-blob-1 70s ease-in-out infinite;
 }
 
 /* Blob 2 — emerald, bottom-right origin */
@@ -247,7 +247,7 @@ body::after {
     rgba(16, 185, 129, 0.02) 60%,
     transparent 75%
   );
-  animation: aurora-blob-2 38s ease-in-out infinite;
+  animation: aurora-blob-2 60s ease-in-out infinite;
 }
 
 /* Blob 3 — violet accent, mid-right */
@@ -262,7 +262,7 @@ body::after {
     rgba(139, 92, 246, 0.04) 40%,
     transparent 65%
   );
-  animation: aurora-blob-3 50s ease-in-out infinite;
+  animation: aurora-blob-3 80s ease-in-out infinite;
 }
 
 /* Blob 4 — teal, center wanderer */
@@ -277,7 +277,7 @@ body::after {
     rgba(34, 197, 94, 0.06) 40%,
     transparent 70%
   );
-  animation: aurora-blob-4 42s ease-in-out infinite;
+  animation: aurora-blob-4 65s ease-in-out infinite;
 }
 
 /* Blob 5 — bright green spark, smaller and offset */
@@ -292,7 +292,7 @@ body::after {
     rgba(52, 211, 153, 0.05) 40%,
     transparent 65%
   );
-  animation: aurora-blob-5 36s ease-in-out infinite;
+  animation: aurora-blob-5 55s ease-in-out infinite;
 }
 
 @keyframes aurora-blob-1 {

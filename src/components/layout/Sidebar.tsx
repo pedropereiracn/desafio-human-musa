@@ -32,21 +32,21 @@ interface SidebarProps {
 }
 
 const NAV_ITEMS = [
-  { href: "/", icon: LayoutDashboard, label: "Inicio" },
-  { href: "/musa", icon: Sparkles, label: "Musa" },
-  { href: "/copy-lab", icon: PenTool, label: "Copy Lab" },
-  { href: "/briefs", icon: FileText, label: "Briefs" },
-  { href: "/clients", icon: Users, label: "Clientes" },
-  { href: "/carousel", icon: Layers, label: "Carrossel" },
+  { href: "/", icon: LayoutDashboard, label: "Inicio", color: "text-white", bg: "bg-white/[0.06]" },
+  { href: "/musa", icon: Sparkles, label: "Musa Pipeline", color: "text-green-400", bg: "bg-green-500/10" },
+  { href: "/copy-lab", icon: PenTool, label: "Copy Lab", color: "text-violet-400", bg: "bg-violet-500/10" },
+  { href: "/briefs", icon: FileText, label: "Briefs", color: "text-amber-400", bg: "bg-amber-500/10" },
+  { href: "/clients", icon: Users, label: "Clientes", color: "text-emerald-400", bg: "bg-emerald-500/10" },
+  { href: "/carousel", icon: Layers, label: "Carrossel", color: "text-blue-400", bg: "bg-blue-500/10" },
 ];
 
 const BETA_ITEMS = [
-  { href: "/reports", icon: BarChart3, label: "Relatorios" },
-  { href: "/calendar", icon: CalendarDays, label: "Calendario" },
+  { href: "/reports", icon: BarChart3, label: "Relatorios", color: "text-rose-400", bg: "bg-rose-500/10" },
+  { href: "/calendar", icon: CalendarDays, label: "Calendario", color: "text-cyan-400", bg: "bg-cyan-500/10" },
 ];
 
 const INTERNAL_ITEMS = [
-  { href: "/brand", icon: BookOpen, label: "Brand Book" },
+  { href: "/brand", icon: BookOpen, label: "Brand Book", color: "text-purple-400", bg: "bg-purple-500/10" },
 ];
 
 /* Inline Musa logo — speech bubble + spark */
@@ -81,13 +81,15 @@ function MusaIcon({ size = 32 }: { size?: number }) {
   );
 }
 
+type NavItemType = { href: string; icon: React.ComponentType<{ size?: number; className?: string }>; label: string; color: string; bg: string };
+
 function NavItem({
   item,
   isActive,
   collapsed,
   badge,
 }: {
-  item: { href: string; icon: React.ComponentType<{ size?: number; className?: string }>; label: string };
+  item: NavItemType;
   isActive: boolean;
   collapsed: boolean;
   badge?: { text: string; variant: "green" | "violet" };
@@ -96,7 +98,7 @@ function NavItem({
     <Link
       href={item.href}
       className={cn(
-        "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all relative group",
+        "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all relative group",
         isActive
           ? "text-foreground font-medium"
           : "text-muted-foreground hover:text-foreground hover:bg-white/[0.03]"
@@ -109,10 +111,9 @@ function NavItem({
           transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
         />
       )}
-      <item.icon
-        size={18}
-        className={cn("shrink-0 relative z-10 transition-colors", isActive && "text-primary")}
-      />
+      <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0 relative z-10", item.bg)}>
+        <item.icon size={16} className={item.color} />
+      </div>
       <AnimatePresence>
         {!collapsed && (
           <motion.span
@@ -256,18 +257,20 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* Mobile Bottom Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#09090b]/40 backdrop-blur-2xl border-t border-white/[0.07]">
         <div className="flex items-center justify-around py-2 px-1">
-          {[...NAV_ITEMS.slice(0, 4), NAV_ITEMS[5]].map((item) => (
+          {[NAV_ITEMS[0], NAV_ITEMS[1], NAV_ITEMS[2], NAV_ITEMS[3], NAV_ITEMS[5]].map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
                 "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs transition-colors",
                 isActive(item.href)
-                  ? "text-primary"
+                  ? "text-foreground"
                   : "text-muted-foreground"
               )}
             >
-              <item.icon size={20} />
+              <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", isActive(item.href) ? item.bg : "")}>
+                <item.icon size={18} className={isActive(item.href) ? item.color : ""} />
+              </div>
               <span className="text-[10px]">{item.label}</span>
             </Link>
           ))}

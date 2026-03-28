@@ -13,7 +13,6 @@ import {
   Layers,
   BookOpen,
   Clock,
-  ArrowRight,
   TrendingUp,
   Zap,
   Copy,
@@ -71,57 +70,10 @@ export default function DashboardPage() {
   const recentActivities = activities.slice(0, 6);
 
   return (
-    <div className="flex gap-8 min-h-[calc(100vh-3.5rem)]">
+    <div className="min-h-[calc(100vh-3.5rem)]">
 
-      {/* ─── Left: Ferramentas ─── */}
-      <motion.div
-        initial={{ opacity: 0, x: -12 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.4 }}
-        className="w-72 shrink-0 py-2 space-y-2 hidden lg:block"
-      >
-        <h2 className="text-xs font-semibold text-muted-foreground/60 uppercase tracking-widest px-1 mb-3">
-          Ferramentas
-        </h2>
-        {TOOLS.map((tool, i) => (
-          <motion.div
-            key={tool.href}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.04 }}
-          >
-            <Link
-              href={tool.href}
-              className={cn(
-                "group flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent transition-all",
-                "hover:bg-white/[0.02]",
-                tool.border
-              )}
-            >
-              <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center shrink-0", tool.bg)}>
-                <tool.icon size={16} className={tool.color} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-foreground group-hover:text-white transition-colors truncate">
-                    {tool.label}
-                  </span>
-                  {tool.badge && (
-                    <Badge variant="outline" className="text-[8px] px-1.5 py-0 h-3.5 rounded-full border-0 bg-green-500/10 text-green-400 font-semibold uppercase tracking-wider">
-                      {tool.badge}
-                    </Badge>
-                  )}
-                </div>
-                <span className="text-[11px] text-muted-foreground/60 truncate block">{tool.desc}</span>
-              </div>
-              <ArrowRight size={12} className="text-muted-foreground/0 group-hover:text-muted-foreground/40 transition-all shrink-0" />
-            </Link>
-          </motion.div>
-        ))}
-      </motion.div>
-
-      {/* ─── Center: Main Content ─── */}
-      <div className="flex-1 flex flex-col items-center justify-start py-6 max-w-2xl mx-auto w-full">
+      {/* ─── Main Content ─── */}
+      <div className="flex flex-col items-center justify-start py-6 max-w-2xl mx-auto w-full px-4">
 
         {/* Hero Greeting */}
         <motion.div
