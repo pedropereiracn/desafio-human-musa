@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { Download, FileImage, FileText, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { CarouselSlide } from "@/lib/types";
+import type { CarouselSlide, BrandKit } from "@/lib/types";
 import { SlideExportRenderer } from "./SlidePreview";
 
 interface CarouselExportProps {
@@ -11,9 +11,10 @@ interface CarouselExportProps {
   width: number;
   height: number;
   title: string;
+  brandKit?: BrandKit;
 }
 
-export default function CarouselExport({ slides, width, height, title }: CarouselExportProps) {
+export default function CarouselExport({ slides, width, height, title, brandKit }: CarouselExportProps) {
   const [exporting, setExporting] = useState<"png" | "pdf" | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -98,6 +99,7 @@ export default function CarouselExport({ slides, width, height, title }: Carouse
         width={width}
         height={height}
         containerRef={containerRef}
+        brandKit={brandKit}
       />
 
       <div className="flex gap-2">

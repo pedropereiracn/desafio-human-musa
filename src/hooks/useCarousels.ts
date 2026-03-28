@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { useLocalStorage } from "./useLocalStorage";
-import type { CarouselSlide, Platform } from "@/lib/types";
+import type { CarouselSlide, Platform, BrandKit } from "@/lib/types";
 
 export interface SavedCarousel {
   id: string;
@@ -11,6 +11,7 @@ export interface SavedCarousel {
   platform: Platform;
   templateId: string;
   slides: CarouselSlide[];
+  brandKit?: BrandKit;
   caption?: string;
   hashtags?: string[];
   createdAt: string;

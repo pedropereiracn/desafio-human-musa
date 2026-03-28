@@ -8,13 +8,18 @@ import {
   ChevronDown,
   RefreshCw,
   Loader2,
-  AlignCenter,
-  AlignLeft,
-  Columns2,
+  ChevronRight,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
-import type { CarouselSlide, CarouselTemplate, SlideLayout, SlideBackgroundType } from "@/lib/types";
+import type {
+  CarouselSlide,
+  CarouselTemplate,
+  BrandKit,
+  SlideType,
+  TypographyStyle,
+  VisualStyle,
+} from "@/lib/types";
 import { getTemplate, getSlideSizeForPlatform } from "@/lib/carousel-templates";
 import SlidePreview from "./SlidePreview";
 import SlideTemplates from "./SlideTemplates";
@@ -24,29 +29,58 @@ interface CarouselEditorProps {
   initialSlides: CarouselSlide[];
   platform: string;
   topic: string;
-  onSave?: (slides: CarouselSlide[], templateId: string) => void;
+  brandKit?: BrandKit;
+  onSave?: (slides: CarouselSlide[], templateId: string, brandKit?: BrandKit) => void;
 }
 
 let slideCounter = 100;
 
-export default function CarouselEditor({ initialSlides, platform, topic, onSave }: CarouselEditorProps) {
+const SLIDE_TYPES: { value: SlideType; label: string }[] = [
+  { value: "cover", label: "Cover" },
+  { value: "content", label: "Conteúdo" },
+  { value: "statistic", label: "Estatística" },
+  { value: "quote", label: "Citação" },
+  { value: "list", label: "Lista" },
+  { value: "cta", label: "CTA" },
+];
+
+const HEADLINE_STYLES: { value: TypographyStyle; label: string }[] = [
+  { value: "uppercase-bold", label: "Uppercase Bold" },
+  { value: "elegant", label: "Elegant" },
+  { value: "playful", label: "Playful" },
+  { value: "minimal", label: "Minimal" },
+  { value: "tech", label: "Tech" },
+  { value: "editorial", label: "Editorial" },
+];
+
+const VISUAL_STYLES: { value: VisualStyle; label: string }[] = [
+  { value: "corporate", label: "Corporate" },
+  { value: "bold", label: "Bold" },
+  { value: "elegant", label: "Elegant" },
+  { value: "creative", label: "Creative" },
+  { value: "tech", label: "Tech" },
+  { value: "editorial", label: "Editorial" },
+];
+
+export default function CarouselEditor({ initialSlides, platform, topic, brandKit: initialBrandKit, onSave }: CarouselEditorProps) {
   const [slides, setSlides] = useState<CarouselSlide[]>(initialSlides);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [templateId, setTemplateId] = useState("obsidian");
+  const [templateId, setTemplateId] = useState("corporate");
   const [regenerating, setRegenerating] = useState(false);
+  const [brandKit, setBrandKit] = useState<BrandKit | undefined>(initialBrandKit);
+  const [brandKitOpen, setBrandKitOpen] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Debounced auto-save when slides change
   useEffect(() => {
     if (!onSave) return;
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
     saveTimeoutRef.current = setTimeout(() => {
-      onSave(slides, templateId);
+      onSave(slides, templateId, brandKit);
     }, 1000);
     return () => {
       if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
     };
-  }, [slides, templateId, onSave]);
+  }, [slides, templateId, brandKit, onSave]);
 
   const { width, height } = getSlideSizeForPlatform(platform);
   const selected = slides[selectedIndex];
@@ -62,6 +96,16 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
     []
   );
 
+  const updateBrandKitPalette = useCallback(
+    (key: keyof BrandKit["palette"], value: string) => {
+      setBrandKit((prev) => {
+        if (!prev) return prev;
+        return { ...prev, palette: { ...prev.palette, [key]: value } };
+      });
+    },
+    []
+  );
+
   const addSlide = useCallback(() => {
     const template = getTemplate(templateId);
     const newSlide: CarouselSlide = {
@@ -73,6 +117,7 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
       backgroundType: template.defaults.backgroundType,
       colors: { ...template.defaults.colors },
       layout: template.defaults.layout,
+      slideType: "content",
     };
     setSlides((prev) => [...prev, newSlide]);
     setSelectedIndex(slides.length);
@@ -104,7 +149,7 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
   const applyTemplate = useCallback(
     (template: CarouselTemplate) => {
       setTemplateId(template.id);
-      if (template.id === "custom") return;
+      setBrandKit(template.brandKit);
       setSlides((prev) =>
         prev.map((s) => ({
           ...s,
@@ -140,7 +185,7 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
           });
         }
       } catch {
-        // Silent fail, user can try again
+        // Silent fail
       } finally {
         setRegenerating(false);
       }
@@ -149,6 +194,8 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
   );
 
   if (!selected) return null;
+
+  const slideType = selected.slideType || "content";
 
   return (
     <div className="flex flex-col lg:flex-row gap-4 h-full">
@@ -170,10 +217,16 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
               width={width}
               height={height}
               scale={thumbScale}
+              brandKit={brandKit}
             />
             <span className="absolute bottom-0.5 right-1 text-[9px] font-bold text-white/60 drop-shadow">
               {i + 1}
             </span>
+            {slide.slideType && slide.slideType !== "content" && (
+              <span className="absolute top-0.5 left-0.5 text-[7px] font-bold text-white/50 bg-black/40 px-1 rounded">
+                {slide.slideType}
+              </span>
+            )}
           </button>
         ))}
         <button
@@ -200,6 +253,7 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
               width={width}
               height={height}
               scale={previewScale}
+              brandKit={brandKit}
             />
           </motion.div>
         </AnimatePresence>
@@ -235,6 +289,22 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
           </button>
         </div>
 
+        {/* Slide Type */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            Tipo de Slide
+          </label>
+          <select
+            value={slideType}
+            onChange={(e) => updateSlide(selectedIndex, { slideType: e.target.value as SlideType })}
+            className="input-field w-full text-sm"
+          >
+            {SLIDE_TYPES.map((t) => (
+              <option key={t.value} value={t.value}>{t.label}</option>
+            ))}
+          </select>
+        </div>
+
         {/* Text Fields */}
         <div className="space-y-3">
           <div>
@@ -260,6 +330,64 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
               placeholder="Texto complementar (opcional)"
             />
           </div>
+
+          {/* Conditional fields based on slide type */}
+          {slideType === "statistic" && (
+            <>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1 block">
+                  Valor da Estatística
+                </label>
+                <input
+                  value={selected.statValue || ""}
+                  onChange={(e) => updateSlide(selectedIndex, { statValue: e.target.value })}
+                  className="input-field w-full text-sm"
+                  placeholder="Ex: 87%, 2.5M, 10x"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1 block">
+                  Label da Estatística
+                </label>
+                <input
+                  value={selected.statLabel || ""}
+                  onChange={(e) => updateSlide(selectedIndex, { statLabel: e.target.value })}
+                  className="input-field w-full text-sm"
+                  placeholder="Descrição do número"
+                />
+              </div>
+            </>
+          )}
+
+          {slideType === "quote" && (
+            <div>
+              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1 block">
+                Atribuição
+              </label>
+              <input
+                value={selected.quoteAttribution || ""}
+                onChange={(e) => updateSlide(selectedIndex, { quoteAttribution: e.target.value })}
+                className="input-field w-full text-sm"
+                placeholder="Autor da citação"
+              />
+            </div>
+          )}
+
+          {slideType === "list" && (
+            <div>
+              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1 block">
+                Itens da Lista (um por linha)
+              </label>
+              <textarea
+                value={(selected.listItems || []).join("\n")}
+                onChange={(e) => updateSlide(selectedIndex, { listItems: e.target.value.split("\n").filter(Boolean) })}
+                className="input-field w-full resize-none text-sm"
+                rows={4}
+                placeholder={"Item 1\nItem 2\nItem 3"}
+              />
+            </div>
+          )}
+
           <div>
             <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1 block">
               Footnote
@@ -287,119 +415,95 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
           </button>
         </div>
 
-        {/* Layout */}
-        <div className="space-y-2">
-          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Layout
-          </label>
-          <div className="flex gap-1.5">
-            {([
-              { value: "centered", icon: AlignCenter, label: "Centro" },
-              { value: "left", icon: AlignLeft, label: "Esquerda" },
-              { value: "split", icon: Columns2, label: "Split" },
-            ] as const).map(({ value, icon: Icon, label }) => (
-              <button
-                key={value}
-                onClick={() => updateSlide(selectedIndex, { layout: value as SlideLayout })}
+        {/* Brand Kit Section */}
+        {brandKit && (
+          <div className="space-y-2 border-t border-border pt-3">
+            <button
+              onClick={() => setBrandKitOpen(!brandKitOpen)}
+              className="flex items-center gap-2 w-full text-left"
+            >
+              <ChevronRight
+                size={14}
                 className={cn(
-                  "flex-1 flex flex-col items-center gap-1 py-2 rounded-lg text-[10px] transition-all border",
-                  selected.layout === value
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border text-muted-foreground hover:border-primary/30"
+                  "text-muted-foreground transition-transform",
+                  brandKitOpen && "rotate-90"
                 )}
-              >
-                <Icon size={14} />
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Background Type */}
-        <div className="space-y-2">
-          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Fundo
-          </label>
-          <div className="flex gap-1.5">
-            {(["solid", "gradient"] as const).map((type) => (
-              <button
-                key={type}
-                onClick={() => updateSlide(selectedIndex, { backgroundType: type as SlideBackgroundType })}
-                className={cn(
-                  "flex-1 py-2 rounded-lg text-xs font-medium transition-all border capitalize",
-                  selected.backgroundType === type
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border text-muted-foreground hover:border-primary/30"
-                )}
-              >
-                {type === "solid" ? "Sólido" : "Gradiente"}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Colors */}
-        <div className="space-y-2">
-          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Cores
-          </label>
-          <div className="grid grid-cols-2 gap-2">
-            <label className="flex items-center gap-2">
-              <input
-                type="color"
-                value={selected.colors.background}
-                onChange={(e) =>
-                  updateSlide(selectedIndex, {
-                    colors: { ...selected.colors, background: e.target.value },
-                  })
-                }
-                className="w-6 h-6 rounded cursor-pointer border border-border"
               />
-              <span className="text-[10px] text-muted-foreground">Fundo</span>
-            </label>
-            {selected.backgroundType === "gradient" && (
-              <label className="flex items-center gap-2">
-                <input
-                  type="color"
-                  value={selected.colors.backgroundEnd || selected.colors.background}
-                  onChange={(e) =>
-                    updateSlide(selectedIndex, {
-                      colors: { ...selected.colors, backgroundEnd: e.target.value },
-                    })
-                  }
-                  className="w-6 h-6 rounded cursor-pointer border border-border"
-                />
-                <span className="text-[10px] text-muted-foreground">Fundo 2</span>
+              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer">
+                Brand Kit{brandKit.brandName ? ` — ${brandKit.brandName}` : ""}
               </label>
+            </button>
+
+            {brandKitOpen && (
+              <div className="space-y-3 pl-1">
+                {/* Handle */}
+                <div>
+                  <label className="text-[10px] text-muted-foreground mb-0.5 block">Handle</label>
+                  <input
+                    value={brandKit.handle || ""}
+                    onChange={(e) => setBrandKit((prev) => prev ? { ...prev, handle: e.target.value } : prev)}
+                    className="input-field w-full text-sm"
+                    placeholder="@handle"
+                  />
+                </div>
+
+                {/* Palette Colors */}
+                <div>
+                  <label className="text-[10px] text-muted-foreground mb-1 block">Paleta</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {(["primary", "secondary", "background", "backgroundAlt", "text", "accent"] as const).map((key) => (
+                      <label key={key} className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={brandKit.palette[key]}
+                          onChange={(e) => updateBrandKitPalette(key, e.target.value)}
+                          className="w-6 h-6 rounded cursor-pointer border border-border"
+                        />
+                        <span className="text-[10px] text-muted-foreground capitalize">
+                          {key === "backgroundAlt" ? "Bg Alt" : key}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Typography */}
+                <div>
+                  <label className="text-[10px] text-muted-foreground mb-0.5 block">Headline Style</label>
+                  <select
+                    value={brandKit.typography.headlineStyle}
+                    onChange={(e) => setBrandKit((prev) => prev ? {
+                      ...prev,
+                      typography: { ...prev.typography, headlineStyle: e.target.value as TypographyStyle }
+                    } : prev)}
+                    className="input-field w-full text-sm"
+                  >
+                    {HEADLINE_STYLES.map((s) => (
+                      <option key={s.value} value={s.value}>{s.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Visual Style */}
+                <div>
+                  <label className="text-[10px] text-muted-foreground mb-0.5 block">Visual Style</label>
+                  <select
+                    value={brandKit.visualStyle}
+                    onChange={(e) => setBrandKit((prev) => prev ? {
+                      ...prev,
+                      visualStyle: e.target.value as VisualStyle
+                    } : prev)}
+                    className="input-field w-full text-sm"
+                  >
+                    {VISUAL_STYLES.map((s) => (
+                      <option key={s.value} value={s.value}>{s.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             )}
-            <label className="flex items-center gap-2">
-              <input
-                type="color"
-                value={selected.colors.text}
-                onChange={(e) =>
-                  updateSlide(selectedIndex, {
-                    colors: { ...selected.colors, text: e.target.value },
-                  })
-                }
-                className="w-6 h-6 rounded cursor-pointer border border-border"
-              />
-              <span className="text-[10px] text-muted-foreground">Texto</span>
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="color"
-                value={selected.colors.accent}
-                onChange={(e) =>
-                  updateSlide(selectedIndex, {
-                    colors: { ...selected.colors, accent: e.target.value },
-                  })
-                }
-                className="w-6 h-6 rounded cursor-pointer border border-border"
-              />
-              <span className="text-[10px] text-muted-foreground">Accent</span>
-            </label>
           </div>
-        </div>
+        )}
 
         {/* Templates */}
         <SlideTemplates selectedId={templateId} onSelect={applyTemplate} />
@@ -414,6 +518,7 @@ export default function CarouselEditor({ initialSlides, platform, topic, onSave 
             width={width}
             height={height}
             title={topic.slice(0, 30).replace(/\s+/g, "-")}
+            brandKit={brandKit}
           />
         </div>
       </div>

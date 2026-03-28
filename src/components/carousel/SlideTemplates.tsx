@@ -9,6 +9,15 @@ interface SlideTemplatesProps {
   onSelect: (template: CarouselTemplate) => void;
 }
 
+const STYLE_LABELS: Record<string, string> = {
+  corporate: "Profissional",
+  bold: "Impactante",
+  elegant: "Sofisticado",
+  creative: "Criativo",
+  tech: "Tecnológico",
+  editorial: "Editorial",
+};
+
 export default function SlideTemplates({ selectedId, onSelect }: SlideTemplatesProps) {
   return (
     <div className="space-y-2">
@@ -17,16 +26,12 @@ export default function SlideTemplates({ selectedId, onSelect }: SlideTemplatesP
       </label>
       <div className="grid grid-cols-3 gap-2">
         {CAROUSEL_TEMPLATES.map((template) => {
-          const { colors, backgroundType } = template.defaults;
-          const bg =
-            backgroundType === "gradient" && colors.backgroundEnd
-              ? `linear-gradient(135deg, ${colors.background}, ${colors.backgroundEnd})`
-              : colors.background;
-
+          const bk = template.brandKit;
           return (
             <button
               key={template.id}
               onClick={() => onSelect(template)}
+              title={STYLE_LABELS[bk.visualStyle] || bk.visualStyle}
               className={cn(
                 "flex flex-col items-center gap-1.5 p-2 rounded-lg border transition-all",
                 selectedId === template.id
@@ -34,15 +39,45 @@ export default function SlideTemplates({ selectedId, onSelect }: SlideTemplatesP
                   : "border-border hover:border-primary/30"
               )}
             >
+              {/* Mini cover slide preview */}
               <div
-                className="w-full aspect-square rounded-md flex items-center justify-center"
-                style={{ background: bg }}
+                className="w-full aspect-square rounded-md flex flex-col items-center justify-center p-2 relative overflow-hidden"
+                style={{ background: bk.palette.primary }}
               >
+                {/* Accent detail */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 3,
+                    background: bk.palette.accent,
+                  }}
+                />
                 <span
-                  style={{ color: colors.text, fontSize: 10, fontWeight: 700 }}
+                  style={{
+                    color: bk.palette.text,
+                    fontSize: 9,
+                    fontWeight: 800,
+                    lineHeight: 1.2,
+                    textAlign: "center",
+                    letterSpacing: bk.typography.headlineStyle === "uppercase-bold" ? "0.05em" : undefined,
+                    textTransform: bk.typography.headlineStyle === "uppercase-bold" || bk.typography.headlineStyle === "tech" ? "uppercase" : undefined,
+                    fontFamily: bk.typography.bodyStyle === "serif" ? "Georgia, serif" : bk.typography.bodyStyle === "mono" ? "monospace" : "inherit",
+                  }}
                 >
-                  Aa
+                  {template.name}
                 </span>
+                <div
+                  style={{
+                    width: 12,
+                    height: 2,
+                    borderRadius: 1,
+                    background: bk.palette.accent,
+                    marginTop: 3,
+                  }}
+                />
               </div>
               <span className="text-[10px] text-muted-foreground">{template.name}</span>
             </button>

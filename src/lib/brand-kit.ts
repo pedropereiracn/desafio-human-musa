@@ -78,16 +78,11 @@ export function getHeadlineSize(brandKit: BrandKit, textLength: number) {
 
 // ═══ DECORATIVE ELEMENTS ═══
 
-export interface DecorativeElement {
-  type: string;
-  render: (palette: BrandKit["palette"], slideWidth: number, slideHeight: number) => React.CSSProperties[];
-}
-
 export function getDecorativeStyles(
   elementType: string,
   palette: BrandKit["palette"],
-  w: number,
-  h: number
+  _w: number,
+  _h: number
 ): React.CSSProperties[] {
   switch (elementType) {
     case "geometric-shapes":

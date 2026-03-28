@@ -7,12 +7,24 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import CarouselEditor from "@/components/carousel/CarouselEditor";
-import type { CarouselSlide, Platform, Tone } from "@/lib/types";
+import type { CarouselSlide, Platform, Tone, BrandKit, SlideType } from "@/lib/types";
 import { getTemplate } from "@/lib/carousel-templates";
 import { useCarousels, type SavedCarousel } from "@/hooks/useCarousels";
 
+interface GeneratedSlide {
+  slideType?: string;
+  headline: string;
+  body?: string;
+  footnote?: string;
+  listItems?: string[];
+  statValue?: string;
+  statLabel?: string;
+  quoteAttribution?: string;
+}
+
 interface GeneratedData {
-  slides: { headline: string; body?: string; footnote?: string }[];
+  brandKit?: BrandKit;
+  slides: GeneratedSlide[];
   caption: string;
   hashtags: string[];
 }
@@ -29,18 +41,19 @@ type ViewMode = "home" | "editor";
 
 function CarouselPageInner() {
   const [topic, setTopic] = useState("");
+  const [brandName, setBrandName] = useState("");
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [tone, setTone] = useState<Tone>("casual");
   const [loading, setLoading] = useState(false);
   const [slides, setSlides] = useState<CarouselSlide[] | null>(null);
+  const [brandKit, setBrandKit] = useState<BrandKit | undefined>(undefined);
   const [generatedCaption, setGeneratedCaption] = useState<{ caption: string; hashtags: string[] } | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("home");
   const [activeCarouselId, setActiveCarouselId] = useState<string | null>(null);
   const searchParams = useSearchParams();
 
-  const { carousels, isLoaded, saveCarousel, updateCarousel, deleteCarousel, getCarousel } = useCarousels();
+  const { carousels, isLoaded, saveCarousel, updateCarousel, deleteCarousel } = useCarousels();
 
-  // Pre-fill from Musa pipeline URL params
   useEffect(() => {
     const paramTopic = searchParams.get("topic");
     const paramPlatform = searchParams.get("platform") as Platform | null;
@@ -70,7 +83,7 @@ function CarouselPageInner() {
       const res = await fetch("/api/carousel", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, platform, tone, context }),
+        body: JSON.stringify({ topic, platform, tone, brandName: brandName.trim() || undefined, context }),
       });
 
       if (!res.ok) {
@@ -79,7 +92,10 @@ function CarouselPageInner() {
       }
       const data: GeneratedData = await res.json();
 
-      const template = getTemplate("obsidian");
+      // Use brand kit from API or fallback to template
+      const responseBrandKit = data.brandKit;
+      const template = getTemplate("corporate");
+
       const carouselSlides: CarouselSlide[] = data.slides.map((s, i) => ({
         id: `slide-${i}`,
         order: i,
@@ -89,18 +105,24 @@ function CarouselPageInner() {
         backgroundType: template.defaults.backgroundType,
         colors: { ...template.defaults.colors },
         layout: template.defaults.layout,
+        slideType: (s.slideType as SlideType) || "content",
+        listItems: s.listItems,
+        statValue: s.statValue,
+        statLabel: s.statLabel,
+        quoteAttribution: s.quoteAttribution,
       }));
 
       setSlides(carouselSlides);
+      setBrandKit(responseBrandKit);
       setGeneratedCaption({ caption: data.caption, hashtags: data.hashtags });
 
-      // Auto-save
       const id = saveCarousel({
         title: topic.slice(0, 60),
         topic,
         platform,
-        templateId: "obsidian",
+        templateId: "corporate",
         slides: carouselSlides,
+        brandKit: responseBrandKit,
         caption: data.caption,
         hashtags: data.hashtags,
       });
@@ -113,13 +135,14 @@ function CarouselPageInner() {
     } finally {
       setLoading(false);
     }
-  }, [topic, platform, tone, saveCarousel]);
+  }, [topic, platform, tone, brandName, saveCarousel]);
 
   const handleOpenSaved = useCallback(
     (saved: SavedCarousel) => {
       setTopic(saved.topic);
       setPlatform(saved.platform);
       setSlides(saved.slides);
+      setBrandKit(saved.brandKit);
       setActiveCarouselId(saved.id);
       setGeneratedCaption(
         saved.caption ? { caption: saved.caption, hashtags: saved.hashtags || [] } : null
@@ -131,16 +154,18 @@ function CarouselPageInner() {
 
   const handleReset = useCallback(() => {
     setSlides(null);
+    setBrandKit(undefined);
     setGeneratedCaption(null);
     setActiveCarouselId(null);
     setTopic("");
+    setBrandName("");
     setViewMode("home");
   }, []);
 
   const handleSaveCurrentState = useCallback(
-    (updatedSlides: CarouselSlide[], templateId: string) => {
+    (updatedSlides: CarouselSlide[], templateId: string, updatedBrandKit?: BrandKit) => {
       if (activeCarouselId) {
-        updateCarousel(activeCarouselId, { slides: updatedSlides, templateId });
+        updateCarousel(activeCarouselId, { slides: updatedSlides, templateId, brandKit: updatedBrandKit });
       }
     },
     [activeCarouselId, updateCarousel]
@@ -175,7 +200,7 @@ function CarouselPageInner() {
                 Crie carrosséis que <span className="gradient-text">engajam.</span>
               </h1>
               <p className="text-muted-foreground max-w-md mx-auto">
-                Gere slides automaticamente com IA, customize visual e cores, e exporte pronto para postar.
+                Gere slides com identidade visual de marca, tipos variados e design profissional.
               </p>
             </div>
 
@@ -190,6 +215,18 @@ function CarouselPageInner() {
                   placeholder="Ex: 5 dicas de produtividade para empreendedores"
                   className="input-field w-full"
                   onKeyDown={(e) => e.key === "Enter" && handleGenerate()}
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-foreground mb-1.5 block">
+                  Marca <span className="text-muted-foreground font-normal">(opcional)</span>
+                </label>
+                <input
+                  value={brandName}
+                  onChange={(e) => setBrandName(e.target.value)}
+                  placeholder="Ex: Rockstar Games, Apple, Nike..."
+                  className="input-field w-full"
                 />
               </div>
 
@@ -266,15 +303,14 @@ function CarouselPageInner() {
                       onClick={() => handleOpenSaved(c)}
                       className="w-full card p-4 flex items-center gap-3 hover:border-primary/30 transition-colors text-left group"
                     >
-                      {/* Mini preview of first slide */}
                       <div
                         className="w-10 h-10 rounded-md shrink-0 flex items-center justify-center"
                         style={{
-                          background: c.slides[0]?.colors.background || "#0c0c10",
+                          background: c.brandKit?.palette.primary || c.slides[0]?.colors.background || "#0c0c10",
                         }}
                       >
                         <span
-                          style={{ color: c.slides[0]?.colors.text || "#fff" }}
+                          style={{ color: c.brandKit?.palette.text || c.slides[0]?.colors.text || "#fff" }}
                           className="text-[8px] font-bold leading-none text-center px-0.5"
                         >
                           {c.slides[0]?.headline.slice(0, 12)}
@@ -285,6 +321,9 @@ function CarouselPageInner() {
                         <p className="text-xs text-muted-foreground flex items-center gap-2">
                           <span>{c.slides.length} slides</span>
                           <span className="capitalize">{c.platform}</span>
+                          {c.brandKit?.brandName && (
+                            <span className="text-primary/70">{c.brandKit.brandName}</span>
+                          )}
                           <span className="flex items-center gap-1">
                             <Clock size={10} />
                             {new Date(c.updatedAt).toLocaleDateString("pt-BR")}
@@ -319,7 +358,10 @@ function CarouselPageInner() {
             <div className="flex items-center justify-between mb-4 shrink-0">
               <div>
                 <h1 className="text-xl font-bold text-foreground">Editor de Carrossel</h1>
-                <p className="text-sm text-muted-foreground">{slides?.length || 0} slides &mdash; {topic}</p>
+                <p className="text-sm text-muted-foreground">
+                  {slides?.length || 0} slides &mdash; {topic}
+                  {brandKit?.brandName && <span className="text-primary/70 ml-2">{brandKit.brandName}</span>}
+                </p>
               </div>
               <button
                 onClick={handleReset}
@@ -335,6 +377,7 @@ function CarouselPageInner() {
                   initialSlides={slides}
                   platform={platform}
                   topic={topic}
+                  brandKit={brandKit}
                   onSave={handleSaveCurrentState}
                 />
               )}
