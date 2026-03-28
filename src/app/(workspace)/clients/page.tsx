@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Users, Plus, X, Trash2, Edit3, Check, MessageSquare } from "lucide-react";
+import { Users, Plus, X, Trash2, Edit3, Check, MessageSquare, Loader2, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useClients } from "@/hooks/useClients";
@@ -46,6 +46,9 @@ export default function ClientsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [voiceStep, setVoiceStep] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const handleOpenNew = () => {
     setForm(EMPTY_FORM);
@@ -75,27 +78,42 @@ export default function ClientsPage() {
       return;
     }
 
-    if (editingId) {
-      await updateClient(editingId, form);
-      toast.success(`${form.name} atualizado`);
-    } else {
-      await addClient(form);
-      toast.success(`${form.name} adicionado`);
-      await addActivity({
-        type: "client",
-        title: `Novo cliente: ${form.name}`,
-        module: "Hub de Clientes",
-      });
-    }
+    try {
+      setSaving(true);
+      if (editingId) {
+        await updateClient(editingId, form);
+        toast.success(`${form.name} atualizado`);
+      } else {
+        await addClient(form);
+        toast.success(`${form.name} adicionado`);
+        await addActivity({
+          type: "client",
+          title: `Novo cliente: ${form.name}`,
+          module: "Hub de Clientes",
+        });
+      }
 
-    setShowForm(false);
-    setForm(EMPTY_FORM);
-    setEditingId(null);
+      setShowForm(false);
+      setForm(EMPTY_FORM);
+      setEditingId(null);
+    } catch {
+      toast.error("Erro ao salvar cliente. Verifique a conexão.");
+    } finally {
+      setSaving(false);
+    }
   }, [form, editingId, addClient, updateClient, addActivity]);
 
   const handleDelete = async (id: string, name: string) => {
-    await deleteClient(id);
-    toast.success(`${name} removido`);
+    try {
+      setDeleting(id);
+      await deleteClient(id);
+      toast.success(`${name} removido`);
+    } catch {
+      toast.error("Erro ao remover cliente. Verifique a conexão.");
+    } finally {
+      setDeleting(null);
+      setConfirmDeleteId(null);
+    }
   };
 
   const togglePlatform = (p: Platform) => {
@@ -124,7 +142,7 @@ export default function ClientsPage() {
         <motion.button
           whileTap={{ scale: 0.98 }}
           onClick={handleOpenNew}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors"
+          className="flex items-center gap-2 btn-primary"
         >
           <Plus size={16} />
           Novo Cliente
@@ -156,7 +174,7 @@ export default function ClientsPage() {
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   placeholder="Nome do cliente"
-                  className="w-full px-3 py-2 bg-surface-2 border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 transition-colors"
+                  className="input-field w-full text-sm"
                 />
               </div>
               <div>
@@ -165,7 +183,7 @@ export default function ClientsPage() {
                   value={form.segment}
                   onChange={(e) => setForm((f) => ({ ...f, segment: e.target.value }))}
                   placeholder="Ex: Moda, Tech, Food..."
-                  className="w-full px-3 py-2 bg-surface-2 border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 transition-colors"
+                  className="input-field w-full text-sm"
                 />
               </div>
             </div>
@@ -176,7 +194,7 @@ export default function ClientsPage() {
                 value={form.targetAudience}
                 onChange={(e) => setForm((f) => ({ ...f, targetAudience: e.target.value }))}
                 placeholder="Ex: Mulheres 25-40, interessadas em skincare"
-                className="w-full px-3 py-2 bg-surface-2 border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 transition-colors"
+                className="input-field w-full text-sm"
               />
             </div>
 
@@ -206,7 +224,7 @@ export default function ClientsPage() {
                 onChange={(e) => setForm((f) => ({ ...f, brandVoice: e.target.value }))}
                 placeholder="Descreva a voz e personalidade da marca..."
                 rows={3}
-                className="w-full px-3 py-2 bg-surface-2 border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 transition-colors resize-none"
+                className="input-field w-full text-sm resize-none"
               />
             </div>
 
@@ -259,17 +277,26 @@ export default function ClientsPage() {
                 onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
                 placeholder="Observações, restrições, preferências..."
                 rows={2}
-                className="w-full px-3 py-2 bg-surface-2 border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 transition-colors resize-none"
+                className="input-field w-full text-sm resize-none"
               />
             </div>
 
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={handleSave}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-colors"
+              disabled={saving}
+              className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              <Check size={16} />
-              {editingId ? "Salvar Alterações" : "Adicionar Cliente"}
+              {saving ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Check size={16} />
+              )}
+              {saving
+                ? "Salvando..."
+                : editingId
+                  ? "Salvar Alterações"
+                  : "Adicionar Cliente"}
             </motion.button>
           </motion.div>
         )}
@@ -277,12 +304,22 @@ export default function ClientsPage() {
 
       {/* Client Cards */}
       {clients.length === 0 && !showForm ? (
-        <div className="card p-12 text-center">
-          <Users size={32} className="text-muted-foreground/30 mx-auto mb-4" />
-          <p className="text-muted-foreground">Nenhum cliente cadastrado</p>
-          <p className="text-xs text-muted-foreground/60 mt-1">
-            Adicione clientes para integrar brand voice nos seus prompts.
+        <div className="card p-16 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
+            <Users size={28} className="text-primary" />
+          </div>
+          <h3 className="text-lg font-semibold text-foreground mb-2">Nenhum cliente cadastrado</h3>
+          <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-6">
+            Adicione seus clientes para integrar brand voice, tom de voz e preferências nos seus prompts de conteúdo.
           </p>
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={handleOpenNew}
+            className="btn-primary inline-flex items-center gap-2"
+          >
+            <Plus size={16} />
+            Adicionar primeiro cliente
+          </motion.button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -294,60 +331,109 @@ export default function ClientsPage() {
               animate={{ opacity: 1, scale: 1 }}
               className="card p-5 space-y-3"
             >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
-                    style={{ backgroundColor: client.color }}
+              <AnimatePresence mode="wait">
+                {confirmDeleteId === client.id ? (
+                  <motion.div
+                    key="confirm"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="flex flex-col items-center gap-3 py-4"
                   >
-                    {client.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">{client.name}</h3>
-                    <p className="text-xs text-muted-foreground">{client.segment}</p>
-                  </div>
-                </div>
-                <div className="flex gap-1">
-                  <button
-                    onClick={() => handleEdit(client)}
-                    className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-2 transition-colors"
+                    <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center">
+                      <AlertTriangle size={20} className="text-destructive" />
+                    </div>
+                    <p className="text-sm text-foreground font-medium">
+                      Remover <strong>{client.name}</strong>?
+                    </p>
+                    <p className="text-xs text-muted-foreground">Essa ação não pode ser desfeita.</p>
+                    <div className="flex gap-2 w-full">
+                      <button
+                        onClick={() => setConfirmDeleteId(null)}
+                        disabled={deleting === client.id}
+                        className="flex-1 px-3 py-2 rounded-lg text-sm font-medium bg-surface-2 text-muted-foreground hover:text-foreground border border-border transition-colors"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={() => handleDelete(client.id, client.name)}
+                        disabled={deleting === client.id}
+                        className="flex-1 px-3 py-2 rounded-lg text-sm font-medium bg-destructive text-white hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                      >
+                        {deleting === client.id ? (
+                          <Loader2 size={14} className="animate-spin" />
+                        ) : (
+                          <Trash2 size={14} />
+                        )}
+                        Confirmar
+                      </button>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="content"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="space-y-3"
                   >
-                    <Edit3 size={14} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(client.id, client.name)}
-                    className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-surface-2 transition-colors"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              </div>
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
+                          style={{ backgroundColor: client.color }}
+                        >
+                          {client.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-foreground">{client.name}</h3>
+                          <p className="text-xs text-muted-foreground">{client.segment}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-1">
+                        <button
+                          onClick={() => handleEdit(client)}
+                          className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-2 transition-colors"
+                        >
+                          <Edit3 size={14} />
+                        </button>
+                        <button
+                          onClick={() => setConfirmDeleteId(client.id)}
+                          className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-surface-2 transition-colors"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
 
-              {client.brandVoice && (
-                <div className="bg-surface-2 rounded-lg p-3">
-                  <span className="text-xs text-muted-foreground">Brand Voice</span>
-                  <p className="text-sm text-foreground mt-1 line-clamp-2">{client.brandVoice}</p>
-                </div>
-              )}
+                    {client.brandVoice && (
+                      <div className="bg-surface-2 rounded-lg p-3">
+                        <span className="text-xs text-muted-foreground">Brand Voice</span>
+                        <p className="text-sm text-foreground mt-1 line-clamp-2">{client.brandVoice}</p>
+                      </div>
+                    )}
 
-              {client.targetAudience && (
-                <p className="text-xs text-muted-foreground">
-                  <span className="font-medium">Público:</span> {client.targetAudience}
-                </p>
-              )}
+                    {client.targetAudience && (
+                      <p className="text-xs text-muted-foreground">
+                        <span className="font-medium">Público:</span> {client.targetAudience}
+                      </p>
+                    )}
 
-              <div className="flex gap-1.5 flex-wrap">
-                {client.platforms.map((p) => (
-                  <span key={p} className="px-2 py-0.5 rounded text-[10px] bg-primary/10 text-primary font-medium capitalize">
-                    {p}
-                  </span>
-                ))}
-                {client.preferredFormats.map((f) => (
-                  <span key={f} className="px-2 py-0.5 rounded text-[10px] bg-surface-2 text-muted-foreground capitalize">
-                    {f}
-                  </span>
-                ))}
-              </div>
+                    <div className="flex gap-1.5 flex-wrap">
+                      {client.platforms.map((p) => (
+                        <span key={p} className="px-2 py-0.5 rounded text-[10px] bg-primary/10 text-primary font-medium capitalize">
+                          {p}
+                        </span>
+                      ))}
+                      {client.preferredFormats.map((f) => (
+                        <span key={f} className="px-2 py-0.5 rounded text-[10px] bg-surface-2 text-muted-foreground capitalize">
+                          {f}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           ))}
         </div>
