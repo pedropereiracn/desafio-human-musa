@@ -147,8 +147,8 @@ export default function CopyOutput({ copy }: CopyOutputProps) {
                 className={cn(
                   "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
                   selectedHook === i
-                    ? "bg-primary text-white"
-                    : "bg-surface-2 text-muted-foreground hover:text-foreground"
+                    ? "bg-gradient-to-r from-primary to-orange-400 text-white shadow-sm shadow-primary/20"
+                    : "bg-surface-2 text-muted-foreground hover:text-foreground hover:bg-surface-3"
                 )}
               >
                 Opção {i + 1}

@@ -16,7 +16,7 @@ function formatNumber(n: number): string {
 
 export default function ReferenceCard({ reference }: ReferenceCardProps) {
   return (
-    <div className="card rounded-xl overflow-hidden group transition-all duration-200 flex flex-col">
+    <div className="card rounded-2xl overflow-hidden group transition-all duration-200 flex flex-col hover-lift">
       {/* Thumbnail — 16:9, clicável */}
       <a
         href={reference.url || undefined}

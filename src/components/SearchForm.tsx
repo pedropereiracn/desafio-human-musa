@@ -45,7 +45,7 @@ export default function SearchForm({ onSearch, isLoading, initialTopic = "", ini
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           placeholder="Ex: cuidados com a pele, marketing digital, receitas fit..."
-          className="w-full px-4 py-3 bg-surface-2 border border-border rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-all"
+          className="w-full input-field"
         />
         <p className="text-xs text-muted-foreground/60 mt-2">
           Ex: marketing digital, skincare, receitas fit
@@ -118,10 +118,10 @@ export default function SearchForm({ onSearch, isLoading, initialTopic = "", ini
         type="submit"
         disabled={!topic.trim() || isLoading}
         className={cn(
-          "w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm transition-all",
+          "w-full flex items-center justify-center gap-2 rounded-xl font-semibold text-sm transition-all",
           topic.trim() && !isLoading
-            ? "bg-primary text-white hover:bg-primary/90"
-            : "bg-surface-2 text-muted-foreground cursor-not-allowed border border-border"
+            ? "btn-primary"
+            : "bg-surface-2 text-muted-foreground cursor-not-allowed border border-white/[0.04] px-6 py-3.5"
         )}
       >
         {isLoading ? (

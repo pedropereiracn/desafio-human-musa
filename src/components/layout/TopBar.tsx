@@ -25,7 +25,7 @@ export default function TopBar({ clients, selectedClientId, onSelectClient }: To
   const moduleName = MODULE_NAMES[pathname] || "Musa";
 
   return (
-    <header className="h-14 flex items-center justify-between px-6 border-b border-border bg-background/80 backdrop-blur-sm">
+    <header className="h-14 flex items-center justify-between px-6 border-b border-white/[0.04] bg-[#050507]/80 backdrop-blur-xl">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm">
         <span className="text-muted-foreground">Workspace</span>

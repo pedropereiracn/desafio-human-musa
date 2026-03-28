@@ -49,7 +49,7 @@ export default function StepIndicator({ currentStep, onStepClick, completedSteps
               >
                 <span className={cn(
                   "flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold transition-all",
-                  isActive && "bg-primary text-white",
+                  isActive && "bg-gradient-to-br from-primary to-orange-400 text-white shadow-sm shadow-primary/20",
                   isCompleted && "bg-green-500/20 text-green-400",
                   !isActive && !isCompleted && "bg-surface-2 text-muted-foreground/40"
                 )}>

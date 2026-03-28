@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -7,11 +7,6 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
-});
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
@@ -28,7 +23,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   other: {
-    "theme-color": "#09090b",
+    "theme-color": "#050507",
   },
 };
 
@@ -40,11 +35,24 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+      className={`${inter.variable} ${geistMono.variable}`}
     >
-      <body className="min-h-screen bg-background text-foreground">
-        {children}
-        <Toaster theme="dark" position="bottom-right" richColors />
+      <body className="min-h-screen bg-background text-foreground antialiased relative">
+        <div className="relative z-10">
+          {children}
+        </div>
+        <Toaster
+          theme="dark"
+          position="bottom-right"
+          richColors
+          toastOptions={{
+            style: {
+              background: 'rgba(12, 12, 16, 0.9)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255,255,255,0.07)',
+            },
+          }}
+        />
       </body>
     </html>
   );

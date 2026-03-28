@@ -3,15 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useInView } from "motion/react";
-import { ArrowRight, Sparkles, PenTool, FileText, Users, BarChart3, CalendarDays } from "lucide-react";
+import { ArrowRight, Sparkles, PenTool, FileText, Users, BarChart3, CalendarDays, Zap } from "lucide-react";
 
 const FEATURES = [
-  { icon: Sparkles, title: "Musa Pipeline", desc: "Busque referências virais reais e gere copy com IA" },
-  { icon: PenTool, title: "Copy Lab", desc: "Gere copy standalone para qualquer formato em segundos" },
-  { icon: FileText, title: "Central de Briefs", desc: "Decodifique briefings bagunçados de clientes com IA" },
-  { icon: Users, title: "Hub de Clientes", desc: "Gerencie brand voice e perfis de todos os seus clientes" },
-  { icon: BarChart3, title: "Relatórios", desc: "Transforme métricas brutas em relatórios profissionais" },
-  { icon: CalendarDays, title: "Calendário", desc: "Visualize seu pipeline de conteúdo no calendário" },
+  { icon: Sparkles, title: "Musa Pipeline", desc: "Busque referências virais reais e gere copy com IA", accent: "from-primary/20 to-orange-500/20 text-primary" },
+  { icon: PenTool, title: "Copy Lab", desc: "Gere copy standalone para qualquer formato em segundos", accent: "from-violet-500/20 to-fuchsia-500/20 text-violet-400" },
+  { icon: FileText, title: "Central de Briefs", desc: "Decodifique briefings bagunçados de clientes com IA", accent: "from-amber-500/20 to-yellow-500/20 text-amber-400" },
+  { icon: Users, title: "Hub de Clientes", desc: "Gerencie brand voice e perfis de todos os seus clientes", accent: "from-emerald-500/20 to-teal-500/20 text-emerald-400" },
+  { icon: BarChart3, title: "Relatórios", desc: "Transforme métricas brutas em relatórios profissionais", accent: "from-blue-500/20 to-cyan-500/20 text-blue-400" },
+  { icon: CalendarDays, title: "Calendário", desc: "Visualize seu pipeline de conteúdo no calendário", accent: "from-rose-500/20 to-pink-500/20 text-rose-400" },
 ];
 
 const STATS = [
@@ -59,22 +59,28 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
       {/* Scroll Progress */}
       <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} />
 
+      {/* Ambient background blobs */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-primary/[0.03] blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full bg-accent/[0.03] blur-[100px]" />
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
+      <header className="sticky top-0 z-50 backdrop-blur-2xl bg-background/60 border-b border-white/[0.04]">
         <div className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto w-full">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-orange-400 flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-white font-bold text-sm">M</span>
             </div>
             <span className="font-bold text-lg text-foreground tracking-tight">Musa</span>
           </div>
           <Link
             href="/"
-            className="flex items-center gap-2 px-5 py-2 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors"
+            className="btn-primary flex items-center gap-2 !py-2 !px-5 text-sm"
           >
             Entrar
             <ArrowRight size={14} />
@@ -83,34 +89,33 @@ export default function LandingPage() {
       </header>
 
       {/* Hero */}
-      <main className="flex-1 flex flex-col items-center px-6">
-        <div className="flex flex-col items-center justify-center min-h-[80vh] text-center max-w-3xl">
+      <main className="flex-1 flex flex-col items-center px-6 relative z-10">
+        <div className="flex flex-col items-center justify-center min-h-[85vh] text-center max-w-3xl">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs text-muted-foreground border border-border mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs text-muted-foreground border border-white/[0.06] bg-white/[0.02] mb-8"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            <Zap size={12} className="text-accent" />
             Workspace completo para agências
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
             className="text-display text-foreground mb-6 relative"
           >
-            <span className="light-sweep rounded-2xl absolute inset-0 pointer-events-none" />
             O workspace que sua<br />
             agência <span className="gradient-text">precisava.</span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed mb-10"
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed mb-12"
           >
             Referências virais, geração de copy, gestão de clientes e relatórios — tudo com IA nativa, num lugar só.
           </motion.p>
@@ -119,14 +124,14 @@ export default function LandingPage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.55 }}
             className="flex items-center justify-center gap-3 mb-10"
           >
             <div className="flex -space-x-2">
-              <div className="w-7 h-7 rounded-full bg-indigo-500 border-2 border-background" />
-              <div className="w-7 h-7 rounded-full bg-violet-500 border-2 border-background" />
-              <div className="w-7 h-7 rounded-full bg-blue-500 border-2 border-background" />
-              <div className="w-7 h-7 rounded-full bg-cyan-500 border-2 border-background" />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-orange-400 border-2 border-background" />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 border-2 border-background" />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-accent to-cyan-400 border-2 border-background" />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-2 border-background" />
             </div>
             <span className="text-sm text-muted-foreground">Usado por agências em todo Brasil</span>
           </motion.div>
@@ -134,59 +139,59 @@ export default function LandingPage() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 0.65 }}
           >
             <Link
               href="/"
-              className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-white font-semibold text-base hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5"
+              className="group btn-primary inline-flex items-center gap-2 !px-8 !py-4 !text-base !shadow-xl !shadow-primary/20"
             >
               Entrar no Workspace
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
             </Link>
           </motion.div>
         </div>
 
-        {/* Stats with Counter Animations */}
+        {/* Stats */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="flex items-center justify-center gap-12 py-12 border-y border-border/50 w-full max-w-3xl"
+          className="flex items-center justify-center gap-16 py-14 border-y border-white/[0.04] w-full max-w-3xl"
         >
           {STATS.map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="text-3xl font-extrabold text-foreground tracking-tight">
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} />
               </div>
-              <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
+              <div className="text-xs text-muted-foreground mt-1.5 tracking-wide">{stat.label}</div>
             </div>
           ))}
         </motion.div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mt-16 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mt-16 mb-20 w-full">
           {FEATURES.map((f, i) => (
             <motion.div
               key={f.title}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="card hover-lift p-5 flex flex-col gap-3"
+              className="card hover-lift p-6 flex flex-col gap-4"
             >
-              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                <f.icon size={18} className="text-primary" />
+              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${f.accent} flex items-center justify-center`}>
+                <f.icon size={20} />
               </div>
-              <h3 className="font-semibold text-foreground text-sm">{f.title}</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
+              <h3 className="font-semibold text-foreground">{f.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between text-xs text-muted-foreground/60">
+      <footer className="border-t border-white/[0.04] relative z-10">
+        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between text-xs text-muted-foreground/50">
           <span>Musa — Feito para o desafio Human Academy</span>
           <span>Powered by Claude AI</span>
         </div>

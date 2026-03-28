@@ -7,8 +7,8 @@ const anthropic = new Anthropic({
 type ModelTier = "fast" | "creative";
 
 const MODELS: Record<ModelTier, string> = {
-  fast: "claude-haiku-4-5-20251001",
-  creative: "claude-sonnet-4-20250514",
+  fast: "claude-sonnet-4-6-20250610",
+  creative: "claude-opus-4-6-20250610",
 };
 
 export async function askClaude(

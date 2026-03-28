@@ -10,8 +10,8 @@ import { storage } from "@/lib/storage";
 import type { SavedBrief, CopyHistoryItem, ActivityItem } from "@/lib/types";
 
 const QUICK_ACTIONS = [
-  { href: "/musa", icon: Sparkles, label: "Nova Busca", color: "bg-indigo-500/10 text-indigo-400" },
-  { href: "/copy-lab", icon: PenTool, label: "Gerar Copy", color: "bg-pink-500/10 text-pink-400" },
+  { href: "/musa", icon: Sparkles, label: "Nova Busca", color: "bg-primary/10 text-primary" },
+  { href: "/copy-lab", icon: PenTool, label: "Gerar Copy", color: "bg-violet-500/10 text-violet-400" },
   { href: "/briefs", icon: FileText, label: "Novo Brief", color: "bg-amber-500/10 text-amber-400" },
   { href: "/clients", icon: UserPlus, label: "Add Cliente", color: "bg-emerald-500/10 text-emerald-400" },
 ];

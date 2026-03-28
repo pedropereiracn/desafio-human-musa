@@ -25,15 +25,15 @@ export default function IdeaCard({ idea, index, selected, onSelect }: IdeaCardPr
     <button
       onClick={() => onSelect(idea)}
       className={cn(
-        "w-full text-left p-5 rounded-xl transition-all duration-200 card hover-lift",
-        selected && "border-l-2 border-l-primary bg-primary/5"
+        "w-full text-left p-5 rounded-2xl transition-all duration-200 card hover-lift",
+        selected && "!border-l-2 !border-l-primary !bg-primary/[0.04]"
       )}
     >
       <div className="flex items-start gap-3">
         <div className={cn(
           "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all",
           selected
-            ? "bg-primary text-white"
+            ? "bg-gradient-to-br from-primary to-orange-400 text-white shadow-sm shadow-primary/20"
             : "bg-surface-2 text-muted-foreground"
         )}>
           {index + 1}

@@ -328,7 +328,7 @@ export default function MusaPage() {
                     <h2 className="text-xl font-bold text-foreground">Referências encontradas</h2>
                     <p className="text-sm text-muted-foreground">{references.length} posts sobre &quot;{topic}&quot; no {platform}</p>
                   </div>
-                  <motion.button whileTap={{ scale: 0.98 }} onClick={handleGenerateIdeas} disabled={ideasLoading} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50">
+                  <motion.button whileTap={{ scale: 0.98 }} onClick={handleGenerateIdeas} disabled={ideasLoading} className="flex items-center gap-2 btn-primary !py-2.5 !px-5 disabled:opacity-50">
                     {ideasLoading ? <Loader2 size={16} className="animate-spin" /> : <Lightbulb size={16} />}
                     Gerar Ideias
                     <ArrowRight size={14} />
@@ -411,7 +411,7 @@ export default function MusaPage() {
                     <p className="text-sm text-muted-foreground">Selecione uma ideia para gerar o copy completo</p>
                   </div>
                   {selectedIdea && (
-                    <motion.button whileTap={{ scale: 0.98 }} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} onClick={handleGenerateCopy} disabled={copyLoading} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50">
+                    <motion.button whileTap={{ scale: 0.98 }} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} onClick={handleGenerateCopy} disabled={copyLoading} className="flex items-center gap-2 btn-primary !py-2.5 !px-5 disabled:opacity-50">
                       {copyLoading ? <Loader2 size={16} className="animate-spin" /> : <PenTool size={16} />}
                       Gerar Copy
                       <ArrowRight size={14} />
