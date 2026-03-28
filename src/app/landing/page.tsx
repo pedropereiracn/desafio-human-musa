@@ -6,8 +6,8 @@ import { motion, useInView } from "motion/react";
 import { ArrowRight, Sparkles, PenTool, FileText, Users, BarChart3, CalendarDays, Zap } from "lucide-react";
 
 const FEATURES = [
-  { icon: Sparkles, title: "Musa Pipeline", desc: "Busque referências virais reais e gere copy com IA", accent: "from-primary/20 to-orange-500/20 text-primary" },
-  { icon: PenTool, title: "Copy Lab", desc: "Gere copy standalone para qualquer formato em segundos", accent: "from-violet-500/20 to-fuchsia-500/20 text-violet-400" },
+  { icon: Sparkles, title: "Musa Pipeline", desc: "Busque referências virais reais e gere copy com IA", accent: "from-green-500/20 to-emerald-500/20 text-green-400" },
+  { icon: PenTool, title: "Copy Lab", desc: "Gere copy standalone para qualquer formato em segundos", accent: "from-violet-500/20 to-purple-500/20 text-violet-400" },
   { icon: FileText, title: "Central de Briefs", desc: "Decodifique briefings bagunçados de clientes com IA", accent: "from-amber-500/20 to-yellow-500/20 text-amber-400" },
   { icon: Users, title: "Hub de Clientes", desc: "Gerencie brand voice e perfis de todos os seus clientes", accent: "from-emerald-500/20 to-teal-500/20 text-emerald-400" },
   { icon: BarChart3, title: "Relatórios", desc: "Transforme métricas brutas em relatórios profissionais", accent: "from-blue-500/20 to-cyan-500/20 text-blue-400" },
@@ -45,6 +45,31 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
+/* Inline Musa lyre icon */
+function MusaLogo({ size = 36 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hero-lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#4ADE80"/>
+          <stop offset="100%" stopColor="#22C55E"/>
+        </linearGradient>
+        <linearGradient id="hero-lg2" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stopColor="#22C55E" stopOpacity="0.3"/>
+          <stop offset="100%" stopColor="#4ADE80" stopOpacity="0.8"/>
+        </linearGradient>
+      </defs>
+      <path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="url(#hero-lg1)" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+      <line x1="16" y1="12" x2="48" y2="12" stroke="url(#hero-lg1)" strokeWidth="3.5" strokeLinecap="round"/>
+      <line x1="24" y1="16" x2="24" y2="44" stroke="url(#hero-lg2)" strokeWidth="2" strokeLinecap="round" strokeDasharray="2 4"/>
+      <line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" opacity="0.9"/>
+      <line x1="40" y1="16" x2="40" y2="44" stroke="url(#hero-lg2)" strokeWidth="2" strokeLinecap="round" strokeDasharray="2 4"/>
+      <circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/>
+      <circle cx="32" cy="30" r="7" fill="none" stroke="#4ADE80" strokeWidth="1" opacity="0.4"/>
+    </svg>
+  );
+}
+
 export default function LandingPage() {
   const [scrollProgress, setScrollProgress] = useState(0);
 
@@ -65,18 +90,16 @@ export default function LandingPage() {
 
       {/* Ambient background blobs */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-primary/[0.03] blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full bg-accent/[0.03] blur-[100px]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-green-500/[0.03] blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full bg-violet-400/[0.03] blur-[100px]" />
       </div>
 
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-2xl bg-background/60 border-b border-white/[0.04]">
         <div className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto w-full">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-orange-400 flex items-center justify-center shadow-lg shadow-primary/20">
-              <span className="text-white font-bold text-sm">M</span>
-            </div>
-            <span className="font-bold text-lg text-foreground tracking-tight">Musa</span>
+            <MusaLogo size={36} />
+            <span className="font-bold text-lg text-foreground tracking-tight" style={{ fontFamily: "var(--font-display)" }}>musa</span>
           </div>
           <Link
             href="/"
@@ -97,7 +120,7 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs text-muted-foreground border border-white/[0.06] bg-white/[0.02] mb-8"
           >
-            <Zap size={12} className="text-accent" />
+            <Zap size={12} className="text-green-400" />
             Workspace completo para agências
           </motion.div>
 
@@ -128,10 +151,10 @@ export default function LandingPage() {
             className="flex items-center justify-center gap-3 mb-10"
           >
             <div className="flex -space-x-2">
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-orange-400 border-2 border-background" />
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 border-2 border-background" />
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-accent to-cyan-400 border-2 border-background" />
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-2 border-background" />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-green-400 to-green-600 border-2 border-background" />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-violet-600 border-2 border-background" />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 border-2 border-background" />
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-green-300 to-emerald-500 border-2 border-background" />
             </div>
             <span className="text-sm text-muted-foreground">Usado por agências em todo Brasil</span>
           </motion.div>
@@ -143,7 +166,7 @@ export default function LandingPage() {
           >
             <Link
               href="/"
-              className="group btn-primary inline-flex items-center gap-2 !px-8 !py-4 !text-base !shadow-xl !shadow-primary/20"
+              className="group btn-primary inline-flex items-center gap-2 !px-8 !py-4 !text-base !shadow-xl !shadow-green-500/20"
             >
               Entrar no Workspace
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />

@@ -45,28 +45,28 @@ function engagementScore(ref: Reference): number {
   return (ref.views * 0.1) + ref.likes + (ref.comments * 2) + (ref.shares * 3);
 }
 
-function filterAndSort(refs: Reference[]): Reference[] {
-  // Sort by engagement first
+function filterViralAndSort(refs: Reference[]): Reference[] {
   refs.sort((a, b) => engagementScore(b) - engagementScore(a));
 
-  // Filter for viral content (high engagement)
   const viral = refs.filter(r =>
     r.likes >= MIN_LIKES || r.views >= MIN_VIEWS
   );
 
-  // If we have enough viral posts, return those; otherwise return top by engagement
   const pool = viral.length >= 5 ? viral : refs;
   return pool.slice(0, RETURN_LIMIT);
 }
 
 export async function searchInstagram(topic: string, limit = FETCH_LIMIT): Promise<Reference[]> {
-  // Use hashtag scraper with TOP posts (not recent)
+  // Instagram hashtag scraper only returns recent (low-engagement) posts.
+  // Strategy: scrape hashtag for content, but also search TikTok-style
+  // using the apify/instagram-scraper with profile URLs of top creators.
+  // For now, use hashtag scraper and rely on volume to find some good posts.
+
   const hashtag = topic.replace(/\s+/g, "").toLowerCase();
 
   const input = {
     hashtags: [hashtag],
     resultsLimit: limit,
-    searchType: "TOP",
   };
 
   const results = await runApifyActor("apify/instagram-hashtag-scraper", input);
@@ -85,7 +85,7 @@ export async function searchInstagram(topic: string, limit = FETCH_LIMIT): Promi
     platform: "instagram" as Platform,
   }));
 
-  return filterAndSort(refs);
+  return filterViralAndSort(refs);
 }
 
 export async function searchTikTok(topic: string, limit = FETCH_LIMIT): Promise<Reference[]> {
@@ -112,7 +112,7 @@ export async function searchTikTok(topic: string, limit = FETCH_LIMIT): Promise<
     platform: "tiktok" as Platform,
   }));
 
-  return filterAndSort(refs);
+  return filterViralAndSort(refs);
 }
 
 async function runApifyActor(actorId: string, input: Record<string, unknown>): Promise<unknown[]> {

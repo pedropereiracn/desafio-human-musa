@@ -77,7 +77,13 @@ export default function MusaPage() {
       });
 
       if (!searchRes.ok) throw new Error("Search failed");
-      const { references: rawRefs } = await searchRes.json();
+      const searchData = await searchRes.json();
+      const rawRefs = searchData.references;
+
+      if (searchData.fallback) {
+        setPlatform("tiktok");
+        toast.info("Instagram sem posts virais — buscando no TikTok...");
+      }
 
       toast.info("Analisando referências com IA...");
 

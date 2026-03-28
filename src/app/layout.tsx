@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import { Inter, Space_Grotesk, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -7,6 +7,13 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -23,7 +30,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   other: {
-    "theme-color": "#050507",
+    "theme-color": "#09090b",
   },
 };
 
@@ -35,7 +42,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${inter.variable} ${geistMono.variable}`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${geistMono.variable}`}
     >
       <body className="min-h-screen bg-background text-foreground antialiased relative">
         <div className="relative z-10">
@@ -47,7 +54,7 @@ export default function RootLayout({
           richColors
           toastOptions={{
             style: {
-              background: 'rgba(12, 12, 16, 0.9)',
+              background: 'rgba(15, 15, 18, 0.9)',
               backdropFilter: 'blur(12px)',
               border: '1px solid rgba(255,255,255,0.07)',
             },
