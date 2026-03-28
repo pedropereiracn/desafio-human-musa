@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Briefing é obrigatório" }, { status: 400 });
     }
 
-    const result = await askClaude(SYSTEM_PROMPT, briefing);
+    const result = await askClaude(SYSTEM_PROMPT, briefing, { tier: "fast", maxTokens: 500 });
     const parsed = parseClaudeJSON(result);
 
     return NextResponse.json(parsed);

@@ -4,10 +4,24 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
 });
 
-export async function askClaude(systemPrompt: string, userMessage: string): Promise<string> {
+type ModelTier = "fast" | "creative";
+
+const MODELS: Record<ModelTier, string> = {
+  fast: "claude-haiku-4-5-20251001",
+  creative: "claude-sonnet-4-20250514",
+};
+
+export async function askClaude(
+  systemPrompt: string,
+  userMessage: string,
+  options?: { tier?: ModelTier; maxTokens?: number }
+): Promise<string> {
+  const tier = options?.tier ?? "creative";
+  const maxTokens = options?.maxTokens ?? 4096;
+
   const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 4096,
+    model: MODELS[tier],
+    max_tokens: maxTokens,
     system: systemPrompt,
     messages: [{ role: "user", content: userMessage }],
   });

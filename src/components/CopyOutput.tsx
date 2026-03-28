@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Copy, Check, Video, Hash, MessageSquare, Lightbulb, ClipboardCheck } from "lucide-react";
+import { Copy, Check, Video, Hash, MessageSquare, Lightbulb, ClipboardCheck, Zap, Clock, Sparkles } from "lucide-react";
 import { CopyResult } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -76,9 +76,68 @@ function CopyButton({ text, large }: { text: string; large?: boolean }) {
 
 export default function CopyOutput({ copy }: CopyOutputProps) {
   const typedCaption = useTypewriter(copy.caption);
+  const [selectedHook, setSelectedHook] = useState(0);
 
   return (
     <div className="space-y-4">
+      {/* Engagement Score + Best Time */}
+      {(copy.engagementScore || copy.bestTimeToPost) && (
+        <div className="flex flex-wrap gap-3">
+          {copy.engagementScore && (
+            <div className={cn(
+              "flex items-center gap-2 px-4 py-2.5 rounded-xl border",
+              copy.engagementScore >= 8 ? "border-green-500/30 bg-green-500/5" :
+              copy.engagementScore >= 5 ? "border-yellow-500/30 bg-yellow-500/5" :
+              "border-red-500/30 bg-red-500/5"
+            )}>
+              <Zap size={16} className={cn(
+                copy.engagementScore >= 8 ? "text-green-400" :
+                copy.engagementScore >= 5 ? "text-yellow-400" :
+                "text-red-400"
+              )} />
+              <span className="text-sm font-semibold text-foreground">
+                Engagement Score: {copy.engagementScore}/10
+              </span>
+            </div>
+          )}
+          {copy.bestTimeToPost && (
+            <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-primary/20 bg-primary/5">
+              <Clock size={16} className="text-primary" />
+              <span className="text-sm text-foreground">{copy.bestTimeToPost}</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Hook Variations */}
+      {copy.hookVariations && copy.hookVariations.length > 0 && (
+        <div className="card rounded-xl p-5">
+          <h3 className="font-semibold text-foreground flex items-center gap-2 mb-3">
+            <Sparkles size={16} className="text-primary" />
+            Variações de Gancho
+          </h3>
+          <div className="flex flex-wrap gap-2 mb-3">
+            {copy.hookVariations.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setSelectedHook(i)}
+                className={cn(
+                  "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
+                  selectedHook === i
+                    ? "bg-primary text-white"
+                    : "bg-surface-2 text-muted-foreground hover:text-foreground"
+                )}
+              >
+                Opção {i + 1}
+              </button>
+            ))}
+          </div>
+          <p className="text-sm text-foreground/90 bg-surface-2 rounded-lg p-3">
+            &quot;{copy.hookVariations[selectedHook]}&quot;
+          </p>
+        </div>
+      )}
+
       {/* Caption */}
       <div className="card rounded-xl p-5">
         <div className="flex items-center justify-between mb-3">
@@ -168,7 +227,10 @@ export default function CopyOutput({ copy }: CopyOutputProps) {
             "CTA:",
             copy.cta,
             "",
-            copy.script ? `ROTEIRO:\n${copy.script}` : "",
+            copy.hookVariations?.length ? `VARIAÇÕES DE GANCHO:\n${copy.hookVariations.map((h, i) => `${i + 1}. ${h}`).join("\n")}` : "",
+            copy.engagementScore ? `\nENGAGEMENT SCORE: ${copy.engagementScore}/10` : "",
+            copy.bestTimeToPost ? `MELHOR HORÁRIO: ${copy.bestTimeToPost}` : "",
+            copy.script ? `\nROTEIRO:\n${copy.script}` : "",
             copy.notes ? `\nNOTAS DE PRODUÇÃO:\n${copy.notes}` : "",
           ].filter(Boolean).join("\n")}
         />

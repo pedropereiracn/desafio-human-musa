@@ -4,7 +4,11 @@ import { AnalyzedReference } from "@/lib/types";
 
 const SYSTEM_PROMPT = `Você é um diretor criativo de uma agência de marketing digital. Com base nas referências de conteúdo viral analisadas, gere 5 ideias criativas e originais de conteúdo.
 
-Cada ideia deve ser prática, executável e inspirada nos padrões que funcionaram nas referências.
+Regras:
+- Cada ideia DEVE usar uma fórmula de hook DIFERENTE (curiosity gap, pain point, social proof, controversial opinion, before/after, direct challenge, insider secret, time pressure, confession, question hook, number hook, POV hook)
+- Explique POR QUE a ideia funciona baseado nos padrões virais detectados nas referências
+- Classifique a dificuldade de produção de cada ideia
+- Cada ideia deve ser prática, executável e inspirada nos padrões que funcionaram
 
 Responda em JSON com este formato exato (array):
 [
@@ -14,7 +18,9 @@ Responda em JSON com este formato exato (array):
     "angle": "ângulo/perspectiva única do conteúdo",
     "format": "formato sugerido (ex: Reels 30s, Carrossel 7 slides)",
     "hook": "gancho dos primeiros 3 segundos ou primeira frase",
-    "description": "descrição detalhada de 3-4 frases de como executar"
+    "description": "descrição detalhada de 3-4 frases de como executar",
+    "difficultyLevel": "fácil|médio|avançado",
+    "whyItWorks": "1-2 frases explicando o padrão viral que sustenta esta ideia"
   }
 ]
 

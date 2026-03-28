@@ -2,16 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 import { askClaude, parseClaudeJSON } from "@/lib/claude";
 import { Reference } from "@/lib/types";
 
-const SYSTEM_PROMPT = `Você é um analista de conteúdo viral especializado em redes sociais. Analise os posts fornecidos e explique por que cada um funcionou (gancho, formato, timing, emoção, técnica de storytelling).
+const SYSTEM_PROMPT = `Você é um analista de conteúdo viral especializado em redes sociais. Analise cada post nas 7 dimensões de viralidade:
 
-Para cada post, forneça uma análise concisa e uma nota de relevância de 1-10.
+1. **Hook** — Tipo de gancho usado (curiosity gap, pain point, social proof, controversial opinion, before/after, direct challenge, insider secret, time pressure, confession, question hook, number hook, POV hook)
+2. **Emoção** — Gatilho emocional principal (FOMO, aspiração, indignação, nostalgia, humor, pertencimento, empoderamento)
+3. **Formato** — Estrutura que impulsiona a retenção (listicle, antes/depois, POV, tutorial, story arc, challenge)
+4. **Storytelling** — Arco narrativo: setup → tensão → payoff. Fator de identificação
+5. **Visual** — Qualidade do thumbnail, text overlay, transições, pacing
+6. **Comunidade** — Potencial de reply-bait, save, share, duet/stitch
+7. **Timing** — Relevância de tendência, sazonalidade, momento cultural
+
+Para cada post, forneça análise detalhada com scoring por dimensão.
 
 Responda em JSON com este formato exato (array):
 [
   {
     "id": "id do post original",
-    "analysis": "análise de 2-3 frases sobre por que viralizou",
-    "relevanceScore": 8
+    "analysis": "análise detalhada de 3-4 frases cobrindo as dimensões mais relevantes",
+    "relevanceScore": 8,
+    "hookType": "curiosity gap",
+    "emotionalTrigger": "FOMO"
   }
 ]
 
@@ -26,11 +36,11 @@ export async function POST(request: NextRequest) {
     };
 
     const postsDescription = references.map(r =>
-      `[ID: ${r.id}] @${r.author} - "${r.caption?.slice(0, 200)}" | Likes: ${r.likes} | Comentários: ${r.comments}`
+      `[ID: ${r.id}] @${r.author} - "${r.caption?.slice(0, 100)}" | Likes: ${r.likes} | Comentários: ${r.comments}`
     ).join("\n\n");
 
     const userMessage = `Tema buscado: "${topic}" | Formato: ${format}\n\nPosts encontrados:\n${postsDescription}`;
-    const result = await askClaude(SYSTEM_PROMPT, userMessage);
+    const result = await askClaude(SYSTEM_PROMPT, userMessage, { tier: "fast", maxTokens: 1000 });
     const analyses = parseClaudeJSON(result);
 
     return NextResponse.json({ analyses });

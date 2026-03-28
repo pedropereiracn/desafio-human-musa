@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Musa — Referências de Conteúdo Viral",
-  description: "Encontre referências de conteúdo viral, gere ideias criativas e produza copy pronto para suas redes sociais com inteligência artificial.",
+  title: "Musa — Workspace de Conteúdo para Agências",
+  description: "O workspace completo que sua agência precisava. Referências virais, geração de copy, gestão de clientes e relatórios — tudo com IA nativa.",
   openGraph: {
-    title: "Musa — Referências de Conteúdo Viral",
-    description: "Transforme briefings em conteúdo viral com IA. Referências reais, ideias criativas e copy pronto para postar.",
+    title: "Musa — Workspace de Conteúdo para Agências",
+    description: "Referências virais, Copy Lab, gestão de clientes e relatórios — tudo com IA nativa, num lugar só.",
     type: "website",
   },
   other: {
