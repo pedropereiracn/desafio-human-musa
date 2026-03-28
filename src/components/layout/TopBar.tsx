@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight, User } from "lucide-react";
 import type { ClientProfile } from "@/lib/types";
@@ -23,14 +24,26 @@ const MODULE_NAMES: Record<string, string> = {
 export default function TopBar({ clients, selectedClientId, onSelectClient }: TopBarProps) {
   const pathname = usePathname();
   const moduleName = MODULE_NAMES[pathname] || "Musa";
+  const isHome = pathname === "/";
 
   return (
     <header className="h-14 flex items-center justify-between px-6 border-b border-white/[0.04] bg-[#050507]/80 backdrop-blur-xl">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm">
-        <span className="text-muted-foreground">Workspace</span>
-        <ChevronRight size={14} className="text-muted-foreground/50" />
-        <span className="text-foreground font-medium">{moduleName}</span>
+        {isHome ? (
+          <span className="text-foreground font-medium">Dashboard</span>
+        ) : (
+          <>
+            <Link
+              href="/"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Workspace
+            </Link>
+            <ChevronRight size={14} className="text-muted-foreground/50" />
+            <span className="text-foreground font-medium">{moduleName}</span>
+          </>
+        )}
       </div>
 
       {/* Client Selector */}
@@ -39,7 +52,7 @@ export default function TopBar({ clients, selectedClientId, onSelectClient }: To
           <select
             value={selectedClientId || ""}
             onChange={(e) => onSelectClient(e.target.value || undefined)}
-            className="appearance-none bg-surface-2 border border-border rounded-lg pl-8 pr-8 py-1.5 text-sm text-foreground cursor-pointer hover:border-primary/30 transition-colors focus:outline-none focus:border-primary/50"
+            className="appearance-none bg-surface-2 border border-white/[0.06] rounded-xl pl-8 pr-8 py-1.5 text-sm text-foreground cursor-pointer hover:border-primary/30 transition-colors focus:outline-none focus:border-primary/40"
           >
             <option value="">Todos os clientes</option>
             {clients.map((c) => (

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { BarChart3, Loader2, TrendingUp, TrendingDown, Users, Eye, Heart, ArrowUpRight } from "lucide-react";
+import { BarChart3, Loader2, FileBarChart } from "lucide-react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+
 
 interface ReportResult {
   title: string;
@@ -60,14 +61,6 @@ export default function ReportsPage() {
     setClientName("Clínica Derma Glow");
   };
 
-  // Demo stats
-  const demoStats = [
-    { label: "Impressões", value: "245.8K", change: "+12%", up: true, icon: Eye },
-    { label: "Alcance", value: "89.3K", change: "+8%", up: true, icon: Users },
-    { label: "Engajamento", value: "5.07%", change: "+0.3%", up: true, icon: Heart },
-    { label: "Seguidores", value: "+1.234", change: "+15%", up: true, icon: ArrowUpRight },
-  ];
-
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
@@ -82,28 +75,22 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      {/* Demo Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {demoStats.map((stat, i) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="card p-4"
-          >
-            <div className="flex items-center justify-between mb-2">
-              <stat.icon size={16} className="text-muted-foreground" />
-              <span className={cn("text-xs font-medium flex items-center gap-0.5", stat.up ? "text-green-400" : "text-red-400")}>
-                {stat.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                {stat.change}
-              </span>
-            </div>
-            <p className="text-xl font-bold text-foreground">{stat.value}</p>
-            <p className="text-xs text-muted-foreground">{stat.label}</p>
-          </motion.div>
-        ))}
-      </div>
+      {/* Empty State */}
+      {!report && !loading && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="card p-8 flex flex-col items-center text-center"
+        >
+          <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
+            <FileBarChart size={28} className="text-accent" />
+          </div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">Relatórios com IA</h2>
+          <p className="text-sm text-muted-foreground max-w-sm">
+            Cole métricas de qualquer plataforma e gere relatórios profissionais com IA — pronto para enviar ao cliente.
+          </p>
+        </motion.div>
+      )}
 
       {/* Generator */}
       <div className="card p-6 space-y-4">
@@ -126,7 +113,7 @@ export default function ReportsPage() {
             value={clientName}
             onChange={(e) => setClientName(e.target.value)}
             placeholder="Nome do cliente"
-            className="w-full px-3 py-2 bg-surface-2 border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 transition-colors"
+            className="input-field"
           />
         </div>
 
@@ -137,7 +124,7 @@ export default function ReportsPage() {
             onChange={(e) => setMetricsText(e.target.value)}
             placeholder="Cole aqui as métricas brutas do período — pode ser texto livre, tabela, ou dados copiados de qualquer ferramenta..."
             rows={6}
-            className="w-full px-3 py-2 bg-surface-2 border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 transition-colors resize-none font-mono"
+            className="input-field resize-none font-mono"
           />
         </div>
 
@@ -146,10 +133,8 @@ export default function ReportsPage() {
           onClick={handleGenerate}
           disabled={!metricsText.trim() || loading}
           className={cn(
-            "w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all",
-            metricsText.trim() && !loading
-              ? "bg-primary text-white hover:bg-primary/90"
-              : "bg-surface-2 text-muted-foreground cursor-not-allowed border border-border"
+            "w-full btn-primary justify-center",
+            (!metricsText.trim() || loading) && "opacity-50 cursor-not-allowed"
           )}
         >
           {loading ? (

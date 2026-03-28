@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Lightbulb, PenTool, Loader2, RotateCcw, ArrowRight, Eye, Heart, MessageCircle, Trophy } from "lucide-react";
+import { Lightbulb, PenTool, Loader2, RotateCcw, RefreshCw, ArrowRight, Eye, Heart, MessageCircle, Trophy } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import SearchForm from "@/components/SearchForm";
@@ -12,9 +12,9 @@ import IdeaCard from "@/components/IdeaCard";
 import CopyOutput from "@/components/CopyOutput";
 import ExportButton from "@/components/ExportButton";
 import { SkeletonGrid, SkeletonIdea } from "@/components/ui/Skeleton";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { storage } from "@/lib/storage";
-import type { Platform, Format, Step, AnalyzedReference, Idea, CopyResult, ActivityItem, CopyHistoryItem } from "@/lib/types";
+import { useActivities } from "@/hooks/useActivities";
+import { useCopyHistory } from "@/hooks/useCopyHistory";
+import type { Platform, Format, Step, AnalyzedReference, Idea, CopyResult } from "@/lib/types";
 
 function formatNumber(n: number): string {
   if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
@@ -50,23 +50,12 @@ export default function MusaPage() {
   const [copyResult, setCopyResult] = useState<CopyResult | null>(null);
   const [copyLoading, setCopyLoading] = useState(false);
 
-  const [, setActivities] = useLocalStorage<ActivityItem[]>(storage.keys.activities, []);
-  const [, setCopyHistory] = useLocalStorage<CopyHistoryItem[]>(storage.keys.copyHistory, []);
+  const { addActivity } = useActivities();
+  const { addCopy } = useCopyHistory();
 
-  const logActivity = useCallback((type: ActivityItem["type"], title: string) => {
-    setActivities((prev) => {
-      const item: ActivityItem = {
-        id: crypto.randomUUID(),
-        type,
-        title,
-        module: "Musa Pipeline",
-        createdAt: new Date().toISOString(),
-      };
-      const next = [item, ...prev];
-      if (next.length > 50) next.length = 50;
-      return next;
-    });
-  }, [setActivities]);
+  const logActivity = useCallback((type: "search" | "copy" | "brief" | "client", title: string) => {
+    addActivity({ type, title, module: "Musa Pipeline" });
+  }, [addActivity]);
 
   const handleSearch = useCallback(async (searchTopic: string, searchPlatform: Platform, searchFormat: Format) => {
     setTopic(searchTopic);
@@ -182,18 +171,11 @@ export default function MusaPage() {
       toast.success("Copy pronto para produção!");
       logActivity("copy", `Copy: "${selectedIdea.title}"`);
 
-      setCopyHistory((prev) => {
-        const item: CopyHistoryItem = {
-          id: crypto.randomUUID(),
-          module: "musa",
-          prompt: topic,
-          result: copy,
-          platform,
-          createdAt: new Date().toISOString(),
-        };
-        const next = [item, ...prev];
-        if (next.length > 100) next.length = 100;
-        return next;
+      await addCopy({
+        module: "musa",
+        prompt: topic,
+        result: copy,
+        platform,
       });
     } catch (error) {
       console.error("Copy error:", error);
@@ -201,7 +183,7 @@ export default function MusaPage() {
     } finally {
       setCopyLoading(false);
     }
-  }, [selectedIdea, topic, platform, format, logActivity, setCopyHistory]);
+  }, [selectedIdea, topic, platform, format, logActivity, addCopy]);
 
   const handleReset = useCallback(() => {
     setCurrentStep("search");
@@ -410,13 +392,19 @@ export default function MusaPage() {
                     <h2 className="text-xl font-bold text-foreground">Ideias de Conteúdo</h2>
                     <p className="text-sm text-muted-foreground">Selecione uma ideia para gerar o copy completo</p>
                   </div>
-                  {selectedIdea && (
-                    <motion.button whileTap={{ scale: 0.98 }} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} onClick={handleGenerateCopy} disabled={copyLoading} className="flex items-center gap-2 btn-primary !py-2.5 !px-5 disabled:opacity-50">
-                      {copyLoading ? <Loader2 size={16} className="animate-spin" /> : <PenTool size={16} />}
-                      Gerar Copy
-                      <ArrowRight size={14} />
+                  <div className="flex items-center gap-2">
+                    <motion.button whileTap={{ scale: 0.98 }} onClick={handleGenerateIdeas} disabled={ideasLoading} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors disabled:opacity-50">
+                      {ideasLoading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+                      Novas ideias
                     </motion.button>
-                  )}
+                    {selectedIdea && (
+                      <motion.button whileTap={{ scale: 0.98 }} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} onClick={handleGenerateCopy} disabled={copyLoading} className="flex items-center gap-2 btn-primary !py-2.5 !px-5 disabled:opacity-50">
+                        {copyLoading ? <Loader2 size={16} className="animate-spin" /> : <PenTool size={16} />}
+                        Gerar Copy
+                        <ArrowRight size={14} />
+                      </motion.button>
+                    )}
+                  </div>
                 </div>
                 {ideasLoading ? (
                   <div className="max-w-2xl mx-auto space-y-3">
@@ -441,7 +429,13 @@ export default function MusaPage() {
                     <h2 className="text-xl font-bold text-foreground">Copy Pronto</h2>
                     <p className="text-sm text-muted-foreground">Baseado em: &quot;{selectedIdea?.title}&quot;</p>
                   </div>
-                  <ExportButton copy={copyResult} topic={topic} ideaTitle={selectedIdea?.title || ""} />
+                  <div className="flex items-center gap-2">
+                    <motion.button whileTap={{ scale: 0.98 }} onClick={handleGenerateCopy} disabled={copyLoading} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors disabled:opacity-50">
+                      {copyLoading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+                      Outra versão
+                    </motion.button>
+                    <ExportButton copy={copyResult} topic={topic} ideaTitle={selectedIdea?.title || ""} />
+                  </div>
                 </div>
                 <div className="max-w-2xl mx-auto">
                   <CopyOutput copy={copyResult} />

@@ -6,10 +6,10 @@ import { PenTool, Loader2, Copy, RefreshCw, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useClients } from "@/hooks/useClients";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { storage } from "@/lib/storage";
+import { useCopyHistory } from "@/hooks/useCopyHistory";
+import { useActivities } from "@/hooks/useActivities";
 import { cn } from "@/lib/utils";
-import type { CopyType, Tone, Platform, CopyResult, CopyHistoryItem, ActivityItem, UserPreferences } from "@/lib/types";
+import type { CopyType, Tone, Platform, CopyResult } from "@/lib/types";
 
 const COPY_TYPES: { value: CopyType; label: string; desc: string }[] = [
   { value: "ad", label: "Ad Copy", desc: "Anúncios patrocinados" },
@@ -43,12 +43,12 @@ function CopyLabContent() {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<CopyResult[]>([]);
 
-  const { clients, getClient } = useClients();
-  const [prefs] = useLocalStorage<UserPreferences>(storage.keys.preferences, { sidebarCollapsed: false });
-  const [, setCopyHistory] = useLocalStorage<CopyHistoryItem[]>(storage.keys.copyHistory, []);
-  const [, setActivities] = useLocalStorage<ActivityItem[]>(storage.keys.activities, []);
+  const { clients } = useClients();
+  const { addCopy } = useCopyHistory();
+  const { addActivity } = useActivities();
 
-  const selectedClient = prefs.selectedClientId ? getClient(prefs.selectedClientId) : undefined;
+  // Use first client as default for now (no global selector needed)
+  const selectedClient = clients.length > 0 ? clients[0] : undefined;
 
   const handleGenerate = useCallback(async () => {
     if (!prompt.trim()) return;
@@ -75,38 +75,23 @@ function CopyLabContent() {
       setResults(copies);
       toast.success(`${copies.length} copy${copies.length > 1 ? "s" : ""} gerado${copies.length > 1 ? "s" : ""}!`);
 
-      // Save to history
       for (const copy of copies) {
-        setCopyHistory((prev) => {
-          const item: CopyHistoryItem = {
-            id: crypto.randomUUID(),
-            clientId: selectedClient?.id,
-            module: "copy-lab",
-            prompt: prompt.trim(),
-            result: copy,
-            copyType,
-            tone,
-            platform,
-            createdAt: new Date().toISOString(),
-          };
-          const next = [item, ...prev];
-          if (next.length > 100) next.length = 100;
-          return next;
+        await addCopy({
+          clientId: selectedClient?.id,
+          module: "copy-lab",
+          prompt: prompt.trim(),
+          result: copy,
+          copyType,
+          tone,
+          platform,
         });
       }
 
-      setActivities((prev) => {
-        const item: ActivityItem = {
-          id: crypto.randomUUID(),
-          type: "copy",
-          title: `Copy Lab: ${prompt.trim().slice(0, 50)}`,
-          clientId: selectedClient?.id,
-          module: "Copy Lab",
-          createdAt: new Date().toISOString(),
-        };
-        const next = [item, ...prev];
-        if (next.length > 50) next.length = 50;
-        return next;
+      await addActivity({
+        type: "copy",
+        title: `Copy Lab: ${prompt.trim().slice(0, 50)}`,
+        clientId: selectedClient?.id,
+        module: "Copy Lab",
       });
     } catch (error) {
       console.error("CopyLab error:", error);
@@ -114,7 +99,7 @@ function CopyLabContent() {
     } finally {
       setLoading(false);
     }
-  }, [prompt, copyType, tone, platform, selectedClient, variations, setCopyHistory, setActivities]);
+  }, [prompt, copyType, tone, platform, selectedClient, variations, addCopy, addActivity]);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);

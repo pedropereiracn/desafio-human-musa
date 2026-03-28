@@ -1,9 +1,8 @@
 "use client";
 
-import { useCallback } from "react";
-import { useLocalStorage } from "./useLocalStorage";
-import { storage } from "@/lib/storage";
-import type { ClientProfile } from "@/lib/types";
+import { useState, useEffect, useCallback } from "react";
+import { fetchClients, insertClient, updateClientById, deleteClientById } from "@/lib/db";
+import type { ClientProfile, Platform } from "@/lib/types";
 
 const SEGMENT_COLORS: Record<string, string> = {
   "moda": "#ec4899",
@@ -29,43 +28,45 @@ function getColorForSegment(segment: string): string {
 }
 
 export function useClients() {
-  const [clients, setClients] = useLocalStorage<ClientProfile[]>(
-    storage.keys.clients,
-    []
-  );
+  const [clients, setClients] = useState<ClientProfile[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    fetchClients()
+      .then(setClients)
+      .catch(console.error)
+      .finally(() => setIsLoaded(true));
+  }, []);
 
   const addClient = useCallback(
-    (data: Omit<ClientProfile, "id" | "createdAt" | "color">) => {
-      const client: ClientProfile = {
-        ...data,
-        id: crypto.randomUUID(),
-        color: getColorForSegment(data.segment),
-        createdAt: new Date().toISOString(),
-      };
+    async (data: Omit<ClientProfile, "id" | "createdAt" | "color">) => {
+      const color = getColorForSegment(data.segment);
+      const client = await insertClient({ ...data, color });
       setClients((prev) => [client, ...prev]);
       return client;
     },
-    [setClients]
+    []
   );
 
   const updateClient = useCallback(
-    (id: string, data: Partial<ClientProfile>) => {
+    async (id: string, data: Partial<ClientProfile>) => {
+      const updates = data.segment
+        ? { ...data, color: getColorForSegment(data.segment) }
+        : data;
+      await updateClientById(id, updates);
       setClients((prev) =>
-        prev.map((c) =>
-          c.id === id
-            ? { ...c, ...data, color: data.segment ? getColorForSegment(data.segment) : c.color }
-            : c
-        )
+        prev.map((c) => (c.id === id ? { ...c, ...updates } : c))
       );
     },
-    [setClients]
+    []
   );
 
   const deleteClient = useCallback(
-    (id: string) => {
+    async (id: string) => {
+      await deleteClientById(id);
       setClients((prev) => prev.filter((c) => c.id !== id));
     },
-    [setClients]
+    []
   );
 
   const getClient = useCallback(
@@ -73,5 +74,5 @@ export function useClients() {
     [clients]
   );
 
-  return { clients, addClient, updateClient, deleteClient, getClient };
+  return { clients, isLoaded, addClient, updateClient, deleteClient, getClient };
 }

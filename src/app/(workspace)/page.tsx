@@ -5,9 +5,9 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { Sparkles, PenTool, FileText, UserPlus, Clock, Users, BarChart3 } from "lucide-react";
 import { useClients } from "@/hooks/useClients";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { storage } from "@/lib/storage";
-import type { SavedBrief, CopyHistoryItem, ActivityItem } from "@/lib/types";
+import { useBriefs } from "@/hooks/useBriefs";
+import { useCopyHistory } from "@/hooks/useCopyHistory";
+import { useActivities } from "@/hooks/useActivities";
 
 const QUICK_ACTIONS = [
   { href: "/musa", icon: Sparkles, label: "Nova Busca", color: "bg-primary/10 text-primary" },
@@ -36,9 +36,9 @@ function timeAgo(dateStr: string): string {
 
 export default function DashboardPage() {
   const { clients } = useClients();
-  const [briefs] = useLocalStorage<SavedBrief[]>(storage.keys.briefs, []);
-  const [copies] = useLocalStorage<CopyHistoryItem[]>(storage.keys.copyHistory, []);
-  const [activities] = useLocalStorage<ActivityItem[]>(storage.keys.activities, []);
+  const { briefs } = useBriefs();
+  const { copies } = useCopyHistory();
+  const { activities } = useActivities();
 
   const stats = useMemo(() => ({
     clients: clients.length,

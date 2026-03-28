@@ -5,10 +5,10 @@ import { FileText, Loader2, CheckCircle, AlertCircle, ArrowRight, Sparkles, PenT
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { storage } from "@/lib/storage";
+import { useBriefs } from "@/hooks/useBriefs";
+import { useActivities } from "@/hooks/useActivities";
 import { cn } from "@/lib/utils";
-import type { BriefResult, Platform, Format, SavedBrief, ActivityItem } from "@/lib/types";
+import type { BriefResult, Platform, Format } from "@/lib/types";
 
 const TEMPLATES = [
   { label: "Campanha Instagram", placeholder: "Preciso de conteúdo para campanha no Instagram do cliente X. Objetivo: awareness. Público: mulheres 25-40. Tom: aspiracional." },
@@ -33,8 +33,8 @@ export default function BriefsPage() {
   const [error, setError] = useState("");
   const [activeTemplate, setActiveTemplate] = useState(3);
 
-  const [briefs, setBriefs] = useLocalStorage<SavedBrief[]>(storage.keys.briefs, []);
-  const [, setActivities] = useLocalStorage<ActivityItem[]>(storage.keys.activities, []);
+  const { briefs, addBrief, deleteBrief } = useBriefs();
+  const { addActivity } = useActivities();
 
   const handleDecode = useCallback(async () => {
     if (!briefing.trim()) return;
@@ -53,30 +53,15 @@ export default function BriefsPage() {
       const data: BriefResult = await res.json();
       setResult(data);
 
-      // Save to history
-      const savedBrief: SavedBrief = {
-        id: crypto.randomUUID(),
+      await addBrief({
         rawBriefing: briefing.trim(),
         decodedResult: data,
-        createdAt: new Date().toISOString(),
-      };
-      setBriefs((prev) => {
-        const next = [savedBrief, ...prev];
-        if (next.length > 50) next.length = 50;
-        return next;
       });
 
-      setActivities((prev) => {
-        const item: ActivityItem = {
-          id: crypto.randomUUID(),
-          type: "brief",
-          title: `Brief: ${data.topic}`,
-          module: "Central de Briefs",
-          createdAt: new Date().toISOString(),
-        };
-        const next = [item, ...prev];
-        if (next.length > 50) next.length = 50;
-        return next;
+      await addActivity({
+        type: "brief",
+        title: `Brief: ${data.topic}`,
+        module: "Central de Briefs",
       });
 
       toast.success("Briefing decodificado com sucesso!");
@@ -85,12 +70,12 @@ export default function BriefsPage() {
     } finally {
       setDecoding(false);
     }
-  }, [briefing, setBriefs, setActivities]);
+  }, [briefing, addBrief, addActivity]);
 
-  const handleDeleteBrief = useCallback((id: string) => {
-    setBriefs((prev) => prev.filter((b) => b.id !== id));
+  const handleDeleteBrief = useCallback(async (id: string) => {
+    await deleteBrief(id);
     toast.success("Brief removido");
-  }, [setBriefs]);
+  }, [deleteBrief]);
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">

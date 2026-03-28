@@ -5,10 +5,9 @@ import { Users, Plus, X, Trash2, Edit3, Check, MessageSquare } from "lucide-reac
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useClients } from "@/hooks/useClients";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { storage } from "@/lib/storage";
+import { useActivities } from "@/hooks/useActivities";
 import { cn } from "@/lib/utils";
-import type { Platform, Format, ClientProfile, ActivityItem } from "@/lib/types";
+import type { Platform, Format, ClientProfile } from "@/lib/types";
 
 const PLATFORM_OPTIONS: Platform[] = ["instagram", "tiktok"];
 const FORMAT_OPTIONS: Format[] = ["reels", "carrossel", "post", "stories"];
@@ -41,7 +40,7 @@ const EMPTY_FORM: FormData = {
 
 export default function ClientsPage() {
   const { clients, addClient, updateClient, deleteClient } = useClients();
-  const [, setActivities] = useLocalStorage<ActivityItem[]>(storage.keys.activities, []);
+  const { addActivity } = useActivities();
 
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -70,39 +69,32 @@ export default function ClientsPage() {
     setShowForm(true);
   };
 
-  const handleSave = useCallback(() => {
+  const handleSave = useCallback(async () => {
     if (!form.name.trim() || !form.segment.trim()) {
       toast.error("Nome e segmento são obrigatórios");
       return;
     }
 
     if (editingId) {
-      updateClient(editingId, form);
+      await updateClient(editingId, form);
       toast.success(`${form.name} atualizado`);
     } else {
-      addClient(form);
+      await addClient(form);
       toast.success(`${form.name} adicionado`);
-      setActivities((prev) => {
-        const item: ActivityItem = {
-          id: crypto.randomUUID(),
-          type: "client",
-          title: `Novo cliente: ${form.name}`,
-          module: "Hub de Clientes",
-          createdAt: new Date().toISOString(),
-        };
-        const next = [item, ...prev];
-        if (next.length > 50) next.length = 50;
-        return next;
+      await addActivity({
+        type: "client",
+        title: `Novo cliente: ${form.name}`,
+        module: "Hub de Clientes",
       });
     }
 
     setShowForm(false);
     setForm(EMPTY_FORM);
     setEditingId(null);
-  }, [form, editingId, addClient, updateClient, setActivities]);
+  }, [form, editingId, addClient, updateClient, addActivity]);
 
-  const handleDelete = (id: string, name: string) => {
-    deleteClient(id);
+  const handleDelete = async (id: string, name: string) => {
+    await deleteClient(id);
     toast.success(`${name} removido`);
   };
 

@@ -22,7 +22,7 @@ interface SidebarProps {
 }
 
 const NAV_ITEMS = [
-  { href: "/", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/", icon: LayoutDashboard, label: "Início" },
   { href: "/musa", icon: Sparkles, label: "Musa" },
   { href: "/copy-lab", icon: PenTool, label: "Copy Lab" },
   { href: "/briefs", icon: FileText, label: "Briefs" },

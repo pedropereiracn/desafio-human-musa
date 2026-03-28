@@ -3,25 +3,29 @@ import { Platform, Reference } from "./types";
 const APIFY_TOKEN = process.env.APIFY_API_TOKEN!;
 const APIFY_BASE = "https://api.apify.com/v2";
 const POLL_INTERVAL = 2000;
-const MAX_TIMEOUT = 55000;
+const MAX_TIMEOUT = 90000;
 
-const MIN_LIKES = 100;
-const MIN_VIEWS = 1000;
-const FETCH_LIMIT = 30;
+const MIN_LIKES = 500;
+const MIN_VIEWS = 5000;
+const FETCH_LIMIT = 50;
 const RETURN_LIMIT = 12;
 
 interface ApifyInstagramPost {
   url?: string;
+  shortCode?: string;
   displayUrl?: string;
   caption?: string;
   likesCount?: number;
   commentsCount?: number;
   videoPlayCount?: number;
+  videoViewCount?: number;
   sharesCount?: number;
   timestamp?: string;
   ownerUsername?: string;
   videoUrl?: string;
   imageUrl?: string;
+  type?: string;
+  productType?: string;
 }
 
 interface ApifyTikTokPost {
@@ -42,29 +46,37 @@ function engagementScore(ref: Reference): number {
 }
 
 function filterAndSort(refs: Reference[]): Reference[] {
-  const filtered = refs.filter(r =>
+  // Sort by engagement first
+  refs.sort((a, b) => engagementScore(b) - engagementScore(a));
+
+  // Filter for viral content (high engagement)
+  const viral = refs.filter(r =>
     r.likes >= MIN_LIKES || r.views >= MIN_VIEWS
   );
 
-  const pool = filtered.length >= 5 ? filtered : refs;
-  pool.sort((a, b) => engagementScore(b) - engagementScore(a));
+  // If we have enough viral posts, return those; otherwise return top by engagement
+  const pool = viral.length >= 5 ? viral : refs;
   return pool.slice(0, RETURN_LIMIT);
 }
 
 export async function searchInstagram(topic: string, limit = FETCH_LIMIT): Promise<Reference[]> {
+  // Use hashtag scraper with TOP posts (not recent)
+  const hashtag = topic.replace(/\s+/g, "").toLowerCase();
+
   const input = {
-    hashtags: [topic.replace(/\s+/g, "").toLowerCase()],
+    hashtags: [hashtag],
     resultsLimit: limit,
+    searchType: "TOP",
   };
 
   const results = await runApifyActor("apify/instagram-hashtag-scraper", input);
 
   const refs = (results as ApifyInstagramPost[]).map((post, i) => ({
-    id: `ig-${i}`,
+    id: `ig-${post.shortCode || i}`,
     url: post.url || "",
     thumbnail: post.displayUrl || post.imageUrl || "",
     caption: post.caption || "",
-    views: post.videoPlayCount || 0,
+    views: post.videoPlayCount || post.videoViewCount || 0,
     likes: post.likesCount || 0,
     comments: post.commentsCount || 0,
     shares: post.sharesCount || 0,
@@ -81,6 +93,7 @@ export async function searchTikTok(topic: string, limit = FETCH_LIMIT): Promise<
     searchQueries: [topic],
     resultsPerPage: limit,
     shouldDownloadVideos: false,
+    sortBy: "relevance",
   };
 
   const results = await runApifyActor("clockworks/tiktok-scraper", input);

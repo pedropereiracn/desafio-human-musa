@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" fill="none">
+  <defs>
+    <linearGradient id="fg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#22C55E"/>
+    </linearGradient>
+    <linearGradient id="fg2" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#22C55E" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#4ADE80" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="fwg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#22C55E"/>
+    </linearGradient>
+  </defs>
+  <!-- Icon -->
+  <g transform="translate(4,4) scale(0.75)">
+    <path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="url(#fg1)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <line x1="16" y1="12" x2="48" y2="12" stroke="url(#fg1)" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="24" y1="16" x2="24" y2="44" stroke="url(#fg2)" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 4"/>
+    <line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+    <line x1="40" y1="16" x2="40" y2="44" stroke="url(#fg2)" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 4"/>
+    <circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/>
+    <circle cx="32" cy="30" r="7" fill="none" stroke="#4ADE80" stroke-width="1" opacity="0.4"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="60" y="40" font-family="'Space Grotesk', 'Inter', system-ui, sans-serif" font-size="36" font-weight="700" fill="url(#fwg)" letter-spacing="-1">musa</text>
+</svg>
