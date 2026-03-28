@@ -179,7 +179,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       <motion.aside
         animate={{ width: collapsed ? 64 : 240 }}
         transition={{ duration: 0.2, ease: "easeInOut" }}
-        className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-50 bg-[#09090b]/40 backdrop-blur-3xl border-r border-white/[0.06]"
+        className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-50 bg-[#09090b]/50 backdrop-blur-2xl border-r border-white/[0.07]"
       >
         {/* Logo */}
         <div className="h-14 flex items-center px-4 border-b border-white/[0.04] gap-2">
@@ -254,7 +254,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </motion.aside>
 
       {/* Mobile Bottom Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#09090b]/40 backdrop-blur-3xl border-t border-white/[0.06]">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#09090b]/50 backdrop-blur-2xl border-t border-white/[0.07]">
         <div className="flex items-center justify-around py-2 px-1">
           {[...NAV_ITEMS.slice(0, 4), NAV_ITEMS[5]].map((item) => (
             <Link

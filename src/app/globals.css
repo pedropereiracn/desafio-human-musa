@@ -84,31 +84,37 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ═══ AURORA BOREAL — green ambient light ═══ */
+/* ═══ AURORA BOREAL — smooth CSS-only, GPU-composited ═══ */
 body::before {
   content: '';
   position: fixed;
-  top: -30%;
-  left: -20%;
-  width: 90%;
-  height: 90%;
-  background: radial-gradient(ellipse at 30% 50%, rgba(34, 197, 94, 0.07) 0%, rgba(16, 185, 129, 0.04) 40%, transparent 70%);
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background:
+    radial-gradient(ellipse 40% 35% at 25% 35%, rgba(34, 197, 94, 0.16) 0%, transparent 70%),
+    radial-gradient(ellipse 35% 40% at 70% 65%, rgba(74, 222, 128, 0.10) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 25% at 50% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
-  animation: aurora 30s ease-in-out infinite;
+  animation: aurora 25s ease-in-out infinite;
   will-change: transform;
 }
 body::after {
   content: '';
   position: fixed;
-  bottom: -25%;
-  right: -15%;
-  width: 80%;
-  height: 80%;
-  background: radial-gradient(ellipse at 60% 50%, rgba(74, 222, 128, 0.05) 0%, rgba(5, 150, 105, 0.03) 40%, transparent 70%);
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background:
+    radial-gradient(ellipse 35% 45% at 65% 45%, rgba(34, 197, 94, 0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 30% at 30% 70%, rgba(5, 150, 105, 0.09) 0%, transparent 70%),
+    radial-gradient(ellipse 25% 20% at 80% 25%, rgba(167, 139, 250, 0.06) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
-  animation: aurora-2 25s ease-in-out infinite;
+  animation: aurora-2 20s ease-in-out infinite;
   will-change: transform;
 }
 
@@ -173,18 +179,86 @@ body::after {
 }
 
 @keyframes aurora {
-  0%   { transform: translate(0, 0) scale(1); }
-  25%  { transform: translate(5%, -8%) scale(1.05); }
-  50%  { transform: translate(-3%, -4%) scale(0.97); }
-  75%  { transform: translate(8%, 3%) scale(1.03); }
-  100% { transform: translate(0, 0) scale(1); }
+  0%   { transform: translate3d(0, 0, 0); }
+  20%  { transform: translate3d(8%, -12%, 0); }
+  40%  { transform: translate3d(-6%, 5%, 0); }
+  60%  { transform: translate3d(12%, 8%, 0); }
+  80%  { transform: translate3d(-10%, -6%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }
 
 @keyframes aurora-2 {
-  0%   { transform: translate(0, 0) scale(1); }
-  30%  { transform: translate(-6%, 5%) scale(1.04); }
-  60%  { transform: translate(4%, -6%) scale(0.96); }
-  100% { transform: translate(0, 0) scale(1); }
+  0%   { transform: translate3d(0, 0, 0); }
+  25%  { transform: translate3d(-10%, 8%, 0); }
+  50%  { transform: translate3d(6%, -10%, 0); }
+  75%  { transform: translate3d(-8%, -5%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+/* ═══ AURORA CONTAINER — landing page blobs (CSS-only, GPU-composited) ═══ */
+
+.aurora-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.aurora-blob-1 {
+  top: -30%;
+  left: -20%;
+  width: 70vmax;
+  height: 70vmax;
+  background: radial-gradient(circle at center, rgba(34, 197, 94, 0.18) 0%, rgba(16, 185, 129, 0.08) 40%, transparent 70%);
+  animation: aurora-blob-1 22s ease-in-out infinite;
+}
+
+.aurora-blob-2 {
+  bottom: -25%;
+  right: -15%;
+  width: 65vmax;
+  height: 65vmax;
+  background: radial-gradient(circle at center, rgba(74, 222, 128, 0.14) 0%, rgba(5, 150, 105, 0.06) 45%, transparent 70%);
+  animation: aurora-blob-2 18s ease-in-out infinite;
+}
+
+.aurora-blob-3 {
+  top: 15%;
+  left: 25%;
+  width: 50vmax;
+  height: 50vmax;
+  background: radial-gradient(circle at center, rgba(167, 139, 250, 0.07) 0%, rgba(34, 197, 94, 0.05) 40%, transparent 65%);
+  animation: aurora-blob-3 26s ease-in-out infinite;
+}
+
+@keyframes aurora-blob-1 {
+  0%   { transform: translate3d(0, 0, 0); }
+  25%  { transform: translate3d(12vw, -8vh, 0); }
+  50%  { transform: translate3d(-5vw, 10vh, 0); }
+  75%  { transform: translate3d(8vw, 5vh, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes aurora-blob-2 {
+  0%   { transform: translate3d(0, 0, 0); }
+  30%  { transform: translate3d(-10vw, -6vh, 0); }
+  60%  { transform: translate3d(8vw, 8vh, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes aurora-blob-3 {
+  0%   { transform: translate3d(0, 0, 0); }
+  20%  { transform: translate3d(6vw, 10vh, 0); }
+  45%  { transform: translate3d(-10vw, -4vh, 0); }
+  70%  { transform: translate3d(4vw, -8vh, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }
 
 /* ═══ ANIMATION CLASSES ═══ */
@@ -218,18 +292,18 @@ body::after {
 /* ═══ CARD — glass with visible frosted effect ═══ */
 
 .card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
-  backdrop-filter: blur(40px) saturate(1.8);
-  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(40px) saturate(1.6);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 8px -2px rgba(0, 0, 0, 0.3);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 12px -4px rgba(0, 0, 0, 0.3);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
   border-color: rgba(34, 197, 94, 0.18);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 1px rgba(34, 197, 94, 0.06), 0 8px 32px -4px rgba(0, 0, 0, 0.5), 0 0 20px -8px rgba(34, 197, 94, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 32px -4px rgba(0, 0, 0, 0.4), 0 0 20px -8px rgba(34, 197, 94, 0.10);
 }
 
 .card-solid {
@@ -241,10 +315,10 @@ body::after {
 /* ═══ GLASS SURFACE — Apple-style frosted panels ═══ */
 
 .glass-surface {
-  background: rgba(9, 9, 11, 0.4);
-  backdrop-filter: blur(40px) saturate(1.6);
-  -webkit-backdrop-filter: blur(40px) saturate(1.6);
-  border-color: rgba(255, 255, 255, 0.06);
+  background: rgba(9, 9, 11, 0.5);
+  backdrop-filter: blur(40px) saturate(1.4);
+  -webkit-backdrop-filter: blur(40px) saturate(1.4);
+  border-color: rgba(255, 255, 255, 0.07);
 }
 
 /* ═══ GRADIENT TEXT — green spectrum ═══ */

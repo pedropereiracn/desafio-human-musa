@@ -200,35 +200,10 @@ function DotGrid() {
 /* Aurora Boreal — green ambient light animation */
 function AuroraBackground() {
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden">
-      {/* Primary aurora — large green */}
-      <motion.div
-        animate={{ y: [0, -40, 10, -20, 0], x: [0, 20, -10, 15, 0] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[-20%] left-[-10%] w-[900px] h-[900px] rounded-full blur-[180px]"
-        style={{ background: "radial-gradient(circle, rgba(34,197,94,0.08) 0%, rgba(16,185,129,0.04) 50%, transparent 70%)" }}
-      />
-      {/* Secondary aurora — emerald drift */}
-      <motion.div
-        animate={{ y: [0, 30, -20, 0], x: [0, -25, 10, 0] }}
-        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-[-15%] right-[-10%] w-[700px] h-[700px] rounded-full blur-[150px]"
-        style={{ background: "radial-gradient(circle, rgba(74,222,128,0.06) 0%, rgba(5,150,105,0.03) 50%, transparent 70%)" }}
-      />
-      {/* Tertiary — mid-screen accent */}
-      <motion.div
-        animate={{ y: [0, -25, 15, 0], x: [0, 15, -20, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[30%] left-[40%] w-[500px] h-[500px] rounded-full blur-[130px]"
-        style={{ background: "radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 60%)" }}
-      />
-      {/* Violet depth accent */}
-      <motion.div
-        animate={{ y: [0, 20, -10, 0], x: [0, -15, 5, 0] }}
-        transition={{ duration: 35, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[10%] right-[5%] w-[400px] h-[400px] rounded-full blur-[120px]"
-        style={{ background: "radial-gradient(circle, rgba(167,139,250,0.03) 0%, transparent 60%)" }}
-      />
+    <div className="aurora-container" aria-hidden="true">
+      <div className="aurora-blob aurora-blob-1" />
+      <div className="aurora-blob aurora-blob-2" />
+      <div className="aurora-blob aurora-blob-3" />
     </div>
   );
 }
