@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     ).join("\n\n");
 
     const userMessage = `Tema buscado: "${topic}" | Formato: ${format}\n\nPosts encontrados:\n${postsDescription}`;
-    const result = await askClaude(SYSTEM_PROMPT, userMessage, { tier: "fast", maxTokens: 1000 });
+    const result = await askClaude(SYSTEM_PROMPT, userMessage, { tier: "fast", maxTokens: 4096 });
     const analyses = parseClaudeJSON(result);
 
     return NextResponse.json({ analyses });
