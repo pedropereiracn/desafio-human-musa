@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { askClaude } from "@/lib/claude";
+import { askClaude, parseClaudeJSON } from "@/lib/claude";
 import { AnalyzedReference } from "@/lib/types";
 
 const SYSTEM_PROMPT = `Você é um diretor criativo de uma agência de marketing digital. Com base nas referências de conteúdo viral analisadas, gere 5 ideias criativas e originais de conteúdo.
@@ -41,7 +41,7 @@ ${refsDescription}
 Gere 5 ideias de conteúdo criativas baseadas nesses padrões virais.`;
 
     const result = await askClaude(SYSTEM_PROMPT, userMessage);
-    const ideas = JSON.parse(result);
+    const ideas = parseClaudeJSON(result);
 
     return NextResponse.json({ ideas });
   } catch (error) {

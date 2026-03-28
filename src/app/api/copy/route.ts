@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { askClaude } from "@/lib/claude";
+import { askClaude, parseClaudeJSON } from "@/lib/claude";
 import { Idea } from "@/lib/types";
 
 const SYSTEM_PROMPT = `Você é um copywriter sênior especializado em redes sociais. Crie copy/roteiro completo e profissional para a plataforma indicada.
@@ -38,7 +38,7 @@ Ideia selecionada:
 Crie o copy/roteiro completo e pronto para produção.`;
 
     const result = await askClaude(SYSTEM_PROMPT, userMessage);
-    const copy = JSON.parse(result);
+    const copy = parseClaudeJSON(result);
 
     return NextResponse.json(copy);
   } catch (error) {

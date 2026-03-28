@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Loader2, Camera, Sparkles } from "lucide-react";
+import { Search, Loader2, Camera, ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
 import { Platform, Format } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -12,17 +13,6 @@ interface SearchFormProps {
   initialPlatform?: Platform;
   initialFormat?: Format;
 }
-
-const trendingTopics = [
-  "Skincare",
-  "Marketing Digital",
-  "Receitas Fit",
-  "Finanças Pessoais",
-  "Moda Sustentável",
-  "Produtividade",
-  "Pets",
-  "Viagens",
-];
 
 const formats: { value: Format; label: string }[] = [
   { value: "reels", label: "Reels / Vídeo" },
@@ -55,28 +45,11 @@ export default function SearchForm({ onSearch, isLoading, initialTopic = "", ini
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           placeholder="Ex: cuidados com a pele, marketing digital, receitas fit..."
-          className="w-full px-4 py-3 glass-input rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-none transition-all"
+          className="w-full px-4 py-3 bg-surface-2 border border-border rounded-xl text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-all"
         />
-      </div>
-
-      {/* Trending Chips */}
-      <div className="flex flex-wrap gap-2">
-        {trendingTopics.map((t, i) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setTopic(t)}
-            className={cn(
-              "animate-scale-in px-3 py-1.5 rounded-full text-xs font-medium transition-all",
-              "bg-white/5 text-muted-foreground hover:bg-primary/10 hover:text-primary border border-transparent hover:border-primary/20",
-              topic === t && "bg-primary/10 text-primary border-primary/20"
-            )}
-            style={{ animationDelay: `${i * 50}ms` }}
-          >
-            <Sparkles size={10} className="inline mr-1 opacity-50" />
-            {t}
-          </button>
-        ))}
+        <p className="text-xs text-muted-foreground/60 mt-2">
+          Ex: marketing digital, skincare, receitas fit
+        </p>
       </div>
 
       {/* Platform & Format */}
@@ -92,8 +65,8 @@ export default function SearchForm({ onSearch, isLoading, initialTopic = "", ini
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all",
                 platform === "instagram"
-                  ? "glass border-primary/30 text-primary glow-border"
-                  : "glass text-muted-foreground hover:border-primary/20 hover:text-foreground"
+                  ? "bg-primary/10 border-primary/30 text-primary"
+                  : "bg-surface-2 border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
               )}
             >
               <Camera size={16} />
@@ -105,8 +78,8 @@ export default function SearchForm({ onSearch, isLoading, initialTopic = "", ini
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all",
                 platform === "tiktok"
-                  ? "glass border-primary/30 text-primary glow-border"
-                  : "glass text-muted-foreground hover:border-primary/20 hover:text-foreground"
+                  ? "bg-primary/10 border-primary/30 text-primary"
+                  : "bg-surface-2 border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
               )}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.88 2.89 2.89 0 0 1 2.88-2.88c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.6a8.24 8.24 0 0 0 4.76 1.5v-3.4a4.85 4.85 0 0 1-1-.01z"/></svg>
@@ -128,8 +101,8 @@ export default function SearchForm({ onSearch, isLoading, initialTopic = "", ini
                 className={cn(
                   "px-3 py-2 rounded-lg text-xs font-medium border transition-all",
                   format === f.value
-                    ? "glass border-primary/30 text-primary"
-                    : "glass text-muted-foreground hover:text-foreground hover:border-white/10"
+                    ? "bg-primary/10 border-primary/30 text-primary"
+                    : "bg-surface-2 border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
                 )}
               >
                 {f.label}
@@ -140,14 +113,15 @@ export default function SearchForm({ onSearch, isLoading, initialTopic = "", ini
       </div>
 
       {/* Submit */}
-      <button
+      <motion.button
+        whileTap={{ scale: 0.98 }}
         type="submit"
         disabled={!topic.trim() || isLoading}
         className={cn(
           "w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm transition-all",
           topic.trim() && !isLoading
-            ? "bg-gradient-to-r from-primary to-accent text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.01] active:scale-[0.99]"
-            : "glass text-muted-foreground cursor-not-allowed"
+            ? "bg-primary text-white hover:bg-primary/90"
+            : "bg-surface-2 text-muted-foreground cursor-not-allowed border border-border"
         )}
       >
         {isLoading ? (
@@ -159,9 +133,10 @@ export default function SearchForm({ onSearch, isLoading, initialTopic = "", ini
           <>
             <Search size={18} />
             Buscar Referências
+            <ArrowRight size={14} />
           </>
         )}
-      </button>
+      </motion.button>
     </form>
   );
 }

@@ -1,13 +1,13 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Search, Lightbulb, PenTool, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { Step } from "@/lib/types";
 
-const steps: { id: Step; label: string; icon: React.ReactNode }[] = [
-  { id: "references", label: "Referências", icon: <Search size={14} /> },
-  { id: "ideas", label: "Ideias", icon: <Lightbulb size={14} /> },
-  { id: "copy", label: "Copy", icon: <PenTool size={14} /> },
+const steps: { id: Step; label: string; number: number }[] = [
+  { id: "references", label: "Referências", number: 1 },
+  { id: "ideas", label: "Ideias", number: 2 },
+  { id: "copy", label: "Copy", number: 3 },
 ];
 
 interface StepIndicatorProps {
@@ -22,7 +22,7 @@ export default function StepIndicator({ currentStep, onStepClick, completedSteps
 
   return (
     <div className="flex items-center justify-center mb-10">
-      <div className="glass rounded-2xl px-2 py-2 flex items-center gap-1">
+      <div className="flex items-center gap-0">
         {steps.map((step, i) => {
           const isActive = currentStep === step.id;
           const isCompleted = completedSteps.includes(step.id) && !isActive;
@@ -30,35 +30,30 @@ export default function StepIndicator({ currentStep, onStepClick, completedSteps
           const isPast = i < currentIndex;
 
           return (
-            <div key={step.id} className="flex items-center gap-1">
+            <div key={step.id} className="flex items-center">
               {i > 0 && (
-                <div className="w-8 h-[2px] mx-1 rounded-full overflow-hidden bg-white/5">
-                  <div
-                    className={cn(
-                      "h-full rounded-full transition-all duration-700",
-                      isPast || isActive
-                        ? "w-full bg-gradient-to-r from-primary to-accent"
-                        : "w-0"
-                    )}
-                  />
-                </div>
+                <div className={cn(
+                  "w-12 h-px mx-1",
+                  isPast || isActive ? "bg-primary/40" : "bg-border"
+                )} />
               )}
               <button
                 onClick={() => isClickable && onStepClick(step.id)}
                 disabled={!isClickable}
                 className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300",
-                  isActive && "bg-gradient-to-r from-primary to-accent text-white shadow-lg shadow-primary/25 glow-border",
-                  isCompleted && "bg-white/5 text-foreground hover:bg-white/10 cursor-pointer",
-                  !isActive && !isCompleted && "text-muted-foreground/50 cursor-not-allowed"
+                  "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+                  isActive && "text-foreground",
+                  isCompleted && "text-muted-foreground hover:text-foreground cursor-pointer",
+                  !isActive && !isCompleted && "text-muted-foreground/40 cursor-not-allowed"
                 )}
               >
                 <span className={cn(
-                  "flex items-center justify-center w-5 h-5 rounded-full text-xs transition-all",
-                  isActive && "bg-white/20",
-                  isCompleted && "bg-primary/20 text-primary"
+                  "flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold transition-all",
+                  isActive && "bg-primary text-white",
+                  isCompleted && "bg-green-500/20 text-green-400",
+                  !isActive && !isCompleted && "bg-surface-2 text-muted-foreground/40"
                 )}>
-                  {isCompleted ? <Check size={12} /> : step.icon}
+                  {isCompleted ? <Check size={12} /> : step.number}
                 </span>
                 {step.label}
               </button>

@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Sparkles, Lightbulb, PenTool, Loader2, RotateCcw } from "lucide-react";
+import { Lightbulb, PenTool, Loader2, RotateCcw, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { toast } from "sonner";
 import SearchForm from "@/components/SearchForm";
 import BriefDecoder from "@/components/BriefDecoder";
 import StepIndicator from "@/components/StepIndicator";
@@ -10,32 +12,33 @@ import IdeaCard from "@/components/IdeaCard";
 import CopyOutput from "@/components/CopyOutput";
 import ExportButton from "@/components/ExportButton";
 import { SkeletonGrid, SkeletonIdea } from "@/components/ui/Skeleton";
-import { useToast } from "@/components/ui/Toast";
 import { Platform, Format, Step, AnalyzedReference, Idea, CopyResult } from "@/lib/types";
 
 type InputTab = "quick" | "brief";
 
+const staggerContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.04 } },
+};
+const staggerItem = {
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0 },
+};
+
 export default function Home() {
-  const { toast } = useToast();
   const [inputTab, setInputTab] = useState<InputTab>("quick");
   const [currentStep, setCurrentStep] = useState<Step>("search");
   const [completedSteps, setCompletedSteps] = useState<Step[]>([]);
 
-  // Search state
   const [topic, setTopic] = useState("");
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [format, setFormat] = useState<Format>("reels");
   const [searchLoading, setSearchLoading] = useState(false);
 
-  // References
   const [references, setReferences] = useState<AnalyzedReference[]>([]);
-
-  // Ideas
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null);
   const [ideasLoading, setIdeasLoading] = useState(false);
-
-  // Copy
   const [copyResult, setCopyResult] = useState<CopyResult | null>(null);
   const [copyLoading, setCopyLoading] = useState(false);
 
@@ -58,6 +61,8 @@ export default function Home() {
 
       if (!searchRes.ok) throw new Error("Search failed");
       const { references: rawRefs } = await searchRes.json();
+
+      toast.info("Analisando referências com IA...");
 
       const analyzeRes = await fetch("/api/analyze", {
         method: "POST",
@@ -86,14 +91,14 @@ export default function Home() {
       setReferences(analyzed);
       setCurrentStep("references");
       setCompletedSteps(["references"]);
-      toast(`${analyzed.length} referências encontradas`, "success");
+      toast.success(`${analyzed.length} referências encontradas`);
     } catch (error) {
       console.error("Search error:", error);
-      toast("Erro ao buscar referências. Verifique a conexão e tente novamente.", "error");
+      toast.error("Erro ao buscar referências. Verifique a conexão e tente novamente.");
     } finally {
       setSearchLoading(false);
     }
-  }, [toast]);
+  }, []);
 
   const handleGenerateIdeas = useCallback(async () => {
     setIdeasLoading(true);
@@ -114,14 +119,14 @@ export default function Home() {
       setIdeas(generatedIdeas);
       setCurrentStep("ideas");
       setCompletedSteps(prev => prev.includes("ideas") ? prev : [...prev, "ideas" as Step]);
-      toast("5 ideias criativas geradas", "success");
+      toast.success("5 ideias criativas geradas");
     } catch (error) {
       console.error("Ideas error:", error);
-      toast("Erro ao gerar ideias. Tente novamente.", "error");
+      toast.error("Erro ao gerar ideias. Tente novamente.");
     } finally {
       setIdeasLoading(false);
     }
-  }, [references, topic, platform, format, toast]);
+  }, [references, topic, platform, format]);
 
   const handleSelectIdea = useCallback((idea: Idea) => {
     setSelectedIdea(idea);
@@ -145,14 +150,14 @@ export default function Home() {
       setCopyResult(copy);
       setCurrentStep("copy");
       setCompletedSteps(prev => prev.includes("copy") ? prev : [...prev, "copy" as Step]);
-      toast("Copy pronto para produção!", "success");
+      toast.success("Copy pronto para produção!");
     } catch (error) {
       console.error("Copy error:", error);
-      toast("Erro ao gerar copy. Tente novamente.", "error");
+      toast.error("Erro ao gerar copy. Tente novamente.");
     } finally {
       setCopyLoading(false);
     }
-  }, [selectedIdea, topic, platform, format, toast]);
+  }, [selectedIdea, topic, platform, format]);
 
   const handleReset = useCallback(() => {
     setCurrentStep("search");
@@ -168,26 +173,24 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header - Glassmorphism */}
-      <header className="sticky top-0 z-40 glass border-b border-white/5">
+      {/* Header */}
+      <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
-              <Sparkles size={18} className="text-white" />
+            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+              <span className="text-white font-bold text-sm">M</span>
             </div>
-            <div>
-              <h1 className="font-bold text-lg text-foreground tracking-tight">Musa</h1>
-              <p className="text-[11px] text-muted-foreground/60">Powered by Claude AI</p>
-            </div>
+            <h1 className="font-bold text-lg text-foreground tracking-tight">Musa</h1>
           </div>
           {showResults && (
-            <button
+            <motion.button
+              whileTap={{ scale: 0.98 }}
               onClick={handleReset}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-muted-foreground hover:text-foreground glass hover:bg-white/5 transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-muted-foreground hover:text-foreground border border-border hover:border-primary/20 transition-colors"
             >
               <RotateCcw size={14} />
               Nova busca
-            </button>
+            </motion.button>
           )}
         </div>
       </header>
@@ -197,53 +200,62 @@ export default function Home() {
         {currentStep === "search" && !references.length && (
           <div className="max-w-xl mx-auto">
             {/* Hero */}
-            <div className="aurora-bg text-center mb-10 py-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 glass rounded-full text-xs text-muted-foreground mb-6">
-                <Sparkles size={12} className="text-primary" />
+            <div className="text-center mb-12 pt-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs text-muted-foreground border border-border mb-8">
                 Pipeline de 4 etapas com IA
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight leading-tight">
-                Encontre referências<br />
-                que <span className="gradient-text">viralizam</span>
+              <h2 className="text-display text-foreground mb-5">
+                Encontre o que<br />
+                <span className="gradient-text">viraliza.</span>
               </h2>
-              <p className="text-muted-foreground/70 max-w-md mx-auto leading-relaxed">
-                Busque conteúdo viral real, gere ideias criativas e produza copy pronto para postar — tudo com inteligência artificial.
+              <p className="text-muted-foreground max-w-md mx-auto leading-relaxed mb-8">
+                Busque conteúdo viral real, gere ideias criativas e produza copy pronto para postar.
               </p>
 
-              {/* Decorative particles */}
-              <div className="relative mt-2">
-                <div className="absolute -top-20 left-1/4 w-1 h-1 rounded-full bg-primary/30 animate-float" style={{ animationDelay: "0s" }} />
-                <div className="absolute -top-16 right-1/3 w-1.5 h-1.5 rounded-full bg-accent/20 animate-float" style={{ animationDelay: "1s" }} />
-                <div className="absolute -top-24 right-1/4 w-1 h-1 rounded-full bg-primary/20 animate-float" style={{ animationDelay: "2s" }} />
+              {/* Social proof */}
+              <div className="flex items-center justify-center gap-3 mb-10">
+                <div className="flex -space-x-2">
+                  <div className="w-7 h-7 rounded-full bg-indigo-500 border-2 border-background" />
+                  <div className="w-7 h-7 rounded-full bg-violet-500 border-2 border-background" />
+                  <div className="w-7 h-7 rounded-full bg-blue-500 border-2 border-background" />
+                  <div className="w-7 h-7 rounded-full bg-cyan-500 border-2 border-background" />
+                </div>
+                <span className="text-sm text-muted-foreground">Usado por agências em todo Brasil</span>
               </div>
             </div>
 
-            {/* Tabs */}
-            <div className="flex gap-1 mb-6 glass rounded-xl p-1">
+            {/* Tabs — underline style */}
+            <div className="flex gap-6 mb-6 border-b border-border">
               <button
                 onClick={() => setInputTab("quick")}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                className={`pb-3 text-sm font-medium transition-colors relative ${
                   inputTab === "quick"
-                    ? "bg-white/10 text-foreground shadow-sm"
+                    ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Busca Rápida
+                {inputTab === "quick" && (
+                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />
+                )}
               </button>
               <button
                 onClick={() => setInputTab("brief")}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                className={`pb-3 text-sm font-medium transition-colors relative ${
                   inputTab === "brief"
-                    ? "bg-white/10 text-foreground shadow-sm"
+                    ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Colar Briefing
+                {inputTab === "brief" && (
+                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />
+                )}
               </button>
             </div>
 
             {/* Input Forms */}
-            <div className="glass-card rounded-2xl p-6">
+            <div className="card p-6">
               {inputTab === "quick" ? (
                 <SearchForm onSearch={handleSearch} isLoading={searchLoading} />
               ) : (
@@ -253,22 +265,23 @@ export default function Home() {
           </div>
         )}
 
-        {/* Loading State - Skeleton */}
+        {/* Loading State */}
         {searchLoading && (
-          <div className="animate-fade-in">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
             <div className="flex flex-col items-center justify-center py-12 gap-4 mb-8">
-              <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center animate-glow-pulse">
-                <Loader2 size={28} className="text-primary animate-spin" />
-              </div>
+              <Loader2 size={28} className="text-primary animate-spin" />
               <div className="text-center">
                 <p className="font-medium text-foreground">Buscando referências virais...</p>
-                <p className="text-sm text-muted-foreground/60 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   Analisando conteúdo sobre &quot;{topic}&quot; no {platform}
                 </p>
               </div>
             </div>
             <SkeletonGrid count={8} />
-          </div>
+          </motion.div>
         )}
 
         {/* Results */}
@@ -280,126 +293,162 @@ export default function Home() {
               completedSteps={completedSteps}
             />
 
-            {/* Step: References */}
-            {currentStep === "references" && (
-              <div className="animate-fade-in">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground">
-                      Referências encontradas
-                    </h2>
-                    <p className="text-sm text-muted-foreground/60">
-                      {references.length} posts sobre &quot;{topic}&quot; no {platform}
-                    </p>
-                  </div>
-                  <button
-                    onClick={handleGenerateIdeas}
-                    disabled={ideasLoading}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-medium text-sm shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:hover:scale-100"
-                  >
-                    {ideasLoading ? (
-                      <Loader2 size={16} className="animate-spin" />
-                    ) : (
-                      <Lightbulb size={16} />
-                    )}
-                    Gerar Ideias
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {references.map((ref, i) => (
-                    <ReferenceCard key={ref.id} reference={ref} index={i} />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Step: Ideas */}
-            {currentStep === "ideas" && (
-              <div className="animate-fade-in">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground">
-                      Ideias de Conteúdo
-                    </h2>
-                    <p className="text-sm text-muted-foreground/60">
-                      Selecione uma ideia para gerar o copy completo
-                    </p>
-                  </div>
-                  {selectedIdea && (
-                    <button
-                      onClick={handleGenerateCopy}
-                      disabled={copyLoading}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-accent text-white font-medium text-sm shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:hover:scale-100"
+            <AnimatePresence mode="wait">
+              {/* Step: References */}
+              {currentStep === "references" && (
+                <motion.div
+                  key="refs"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-xl font-bold text-foreground">
+                        Referências encontradas
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {references.length} posts sobre &quot;{topic}&quot; no {platform}
+                      </p>
+                    </div>
+                    <motion.button
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleGenerateIdeas}
+                      disabled={ideasLoading}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary/90 active:bg-primary/80 transition-colors disabled:opacity-50"
                     >
-                      {copyLoading ? (
+                      {ideasLoading ? (
                         <Loader2 size={16} className="animate-spin" />
                       ) : (
-                        <PenTool size={16} />
+                        <Lightbulb size={16} />
                       )}
-                      Gerar Copy
-                    </button>
+                      Gerar Ideias
+                      <ArrowRight size={14} />
+                    </motion.button>
+                  </div>
+
+                  <motion.div
+                    variants={staggerContainer}
+                    initial="hidden"
+                    animate="show"
+                    className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                  >
+                    {references.map((ref) => (
+                      <motion.div key={ref.id} variants={staggerItem}>
+                        <ReferenceCard reference={ref} />
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </motion.div>
+              )}
+
+              {/* Step: Ideas */}
+              {currentStep === "ideas" && (
+                <motion.div
+                  key="ideas"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-xl font-bold text-foreground">
+                        Ideias de Conteúdo
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        Selecione uma ideia para gerar o copy completo
+                      </p>
+                    </div>
+                    {selectedIdea && (
+                      <motion.button
+                        whileTap={{ scale: 0.98 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        onClick={handleGenerateCopy}
+                        disabled={copyLoading}
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
+                      >
+                        {copyLoading ? (
+                          <Loader2 size={16} className="animate-spin" />
+                        ) : (
+                          <PenTool size={16} />
+                        )}
+                        Gerar Copy
+                        <ArrowRight size={14} />
+                      </motion.button>
+                    )}
+                  </div>
+
+                  {ideasLoading ? (
+                    <div className="max-w-2xl mx-auto space-y-3">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <SkeletonIdea key={i} />
+                      ))}
+                    </div>
+                  ) : (
+                    <motion.div
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="show"
+                      className="max-w-2xl mx-auto space-y-3"
+                    >
+                      {ideas.map((idea, i) => (
+                        <motion.div key={idea.id} variants={staggerItem}>
+                          <IdeaCard
+                            idea={idea}
+                            index={i}
+                            selected={selectedIdea?.id === idea.id}
+                            onSelect={handleSelectIdea}
+                          />
+                        </motion.div>
+                      ))}
+                    </motion.div>
                   )}
-                </div>
+                </motion.div>
+              )}
 
-                {ideasLoading ? (
-                  <div className="max-w-2xl mx-auto space-y-3">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <SkeletonIdea key={i} />
-                    ))}
+              {/* Step: Copy */}
+              {currentStep === "copy" && copyResult && (
+                <motion.div
+                  key="copy"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-xl font-bold text-foreground">
+                        Copy Pronto
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        Baseado em: &quot;{selectedIdea?.title}&quot;
+                      </p>
+                    </div>
+                    <ExportButton
+                      copy={copyResult}
+                      topic={topic}
+                      ideaTitle={selectedIdea?.title || ""}
+                    />
                   </div>
-                ) : (
-                  <div className="max-w-2xl mx-auto space-y-3">
-                    {ideas.map((idea, i) => (
-                      <IdeaCard
-                        key={idea.id}
-                        idea={idea}
-                        index={i}
-                        selected={selectedIdea?.id === idea.id}
-                        onSelect={handleSelectIdea}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
 
-            {/* Step: Copy */}
-            {currentStep === "copy" && copyResult && (
-              <div className="animate-fade-in">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground">
-                      Copy Pronto
-                    </h2>
-                    <p className="text-sm text-muted-foreground/60">
-                      Baseado em: &quot;{selectedIdea?.title}&quot;
-                    </p>
+                  <div className="max-w-2xl mx-auto">
+                    <CopyOutput copy={copyResult} />
                   </div>
-                  <ExportButton
-                    copy={copyResult}
-                    topic={topic}
-                    ideaTitle={selectedIdea?.title || ""}
-                  />
-                </div>
-
-                <div className="max-w-2xl mx-auto">
-                  <CopyOutput copy={copyResult} />
-                </div>
-              </div>
-            )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </>
         )}
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 mt-auto">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between text-xs text-muted-foreground/40">
+      <footer className="border-t border-border mt-auto">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between text-xs text-muted-foreground/60">
           <span>Musa — Feito para o desafio Human Academy</span>
-          <span className="flex items-center gap-1.5">
-            <Sparkles size={10} className="text-primary/40" />
-            Powered by Claude AI
-          </span>
+          <span>Powered by Claude AI</span>
         </div>
       </footer>
     </div>

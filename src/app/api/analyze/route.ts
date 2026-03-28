@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { askClaude } from "@/lib/claude";
+import { askClaude, parseClaudeJSON } from "@/lib/claude";
 import { Reference } from "@/lib/types";
 
 const SYSTEM_PROMPT = `Você é um analista de conteúdo viral especializado em redes sociais. Analise os posts fornecidos e explique por que cada um funcionou (gancho, formato, timing, emoção, técnica de storytelling).
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     const userMessage = `Tema buscado: "${topic}" | Formato: ${format}\n\nPosts encontrados:\n${postsDescription}`;
     const result = await askClaude(SYSTEM_PROMPT, userMessage);
-    const analyses = JSON.parse(result);
+    const analyses = parseClaudeJSON(result);
 
     return NextResponse.json({ analyses });
   } catch (error) {

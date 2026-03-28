@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Download, Check } from "lucide-react";
+import { motion } from "motion/react";
 import { CopyResult } from "@/lib/types";
 
 interface ExportButtonProps {
@@ -77,9 +78,10 @@ export default function ExportButton({ copy, topic, ideaTitle }: ExportButtonPro
   };
 
   return (
-    <button
+    <motion.button
+      whileTap={{ scale: 0.98 }}
       onClick={handleExport}
-      className="flex items-center gap-2 px-4 py-2 rounded-xl glass-card text-sm text-muted-foreground hover:text-foreground transition-all hover:border-primary/30"
+      className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground border border-border hover:border-primary/20 transition-colors"
     >
       {exported ? (
         <>
@@ -92,6 +94,6 @@ export default function ExportButton({ copy, topic, ideaTitle }: ExportButtonPro
           Exportar .txt
         </>
       )}
-    </button>
+    </motion.button>
   );
 }

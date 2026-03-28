@@ -12,7 +12,7 @@ export function Skeleton({ className }: SkeletonProps) {
 
 export function SkeletonCard() {
   return (
-    <div className="glass-card rounded-xl overflow-hidden">
+    <div className="card rounded-xl overflow-hidden">
       <div className="skeleton aspect-square" />
       <div className="p-3 space-y-2">
         <div className="flex gap-3">
@@ -40,9 +40,9 @@ export function SkeletonGrid({ count = 8 }: { count?: number }) {
 
 export function SkeletonIdea() {
   return (
-    <div className="glass-card rounded-xl p-5">
+    <div className="card rounded-xl p-5">
       <div className="flex items-start gap-3">
-        <Skeleton className="w-8 h-8 rounded-lg flex-shrink-0" />
+        <Skeleton className="w-8 h-8 rounded-full flex-shrink-0" />
         <div className="flex-1 space-y-2">
           <Skeleton className="h-5 w-2/3" />
           <Skeleton className="h-3 w-24" />

@@ -18,3 +18,12 @@ export async function askClaude(systemPrompt: string, userMessage: string): Prom
   }
   throw new Error("Unexpected response type from Claude");
 }
+
+export function parseClaudeJSON<T>(raw: string): T {
+  let cleaned = raw.trim();
+  // Strip markdown code blocks if present
+  if (cleaned.startsWith("```")) {
+    cleaned = cleaned.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+  }
+  return JSON.parse(cleaned);
+}

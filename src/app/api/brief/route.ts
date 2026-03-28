@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { askClaude } from "@/lib/claude";
+import { askClaude, parseClaudeJSON } from "@/lib/claude";
 
 const SYSTEM_PROMPT = `Você é um especialista em marketing digital e social media. Sua tarefa é decodificar briefings de clientes, que costumam ser bagunçados e incompletos.
 
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await askClaude(SYSTEM_PROMPT, briefing);
-    const parsed = JSON.parse(result);
+    const parsed = parseClaudeJSON(result);
 
     return NextResponse.json(parsed);
   } catch (error) {
