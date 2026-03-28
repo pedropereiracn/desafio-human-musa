@@ -144,43 +144,54 @@ function Typewriter({ words }: { words: string[] }) {
   );
 }
 
-/* Inline Musa lyre icon */
+/* Inline Musa logo — speech bubble + creative spark + AI circuits */
 function MusaLogo({ size = 36 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="hero-lg1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#4ADE80" />
-          <stop offset="100%" stopColor="#22C55E" />
+        <linearGradient id="hero-g1" x1="10%" y1="90%" x2="90%" y2="10%">
+          <stop offset="0%" stopColor="#16A34A" />
+          <stop offset="50%" stopColor="#22C55E" />
+          <stop offset="100%" stopColor="#4ADE80" />
         </linearGradient>
-        <linearGradient id="hero-lg2" x1="0%" y1="100%" x2="0%" y2="0%">
-          <stop offset="0%" stopColor="#22C55E" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#4ADE80" stopOpacity="0.8" />
+        <linearGradient id="hero-g2" x1="50%" y1="100%" x2="50%" y2="0%">
+          <stop offset="0%" stopColor="#22C55E" />
+          <stop offset="100%" stopColor="#86EFAC" />
         </linearGradient>
       </defs>
-      <path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="url(#hero-lg1)" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-      <line x1="16" y1="12" x2="48" y2="12" stroke="url(#hero-lg1)" strokeWidth="3.5" strokeLinecap="round" />
-      <line x1="24" y1="16" x2="24" y2="44" stroke="url(#hero-lg2)" strokeWidth="2" strokeLinecap="round" strokeDasharray="2 4" />
-      <line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" opacity="0.9" />
-      <line x1="40" y1="16" x2="40" y2="44" stroke="url(#hero-lg2)" strokeWidth="2" strokeLinecap="round" strokeDasharray="2 4" />
-      <circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9" />
-      <circle cx="32" cy="30" r="7" fill="none" stroke="#4ADE80" strokeWidth="1" opacity="0.4" />
+      {/* Speech bubble body */}
+      <path d="M12 28C12 18.06 20.06 10 30 10H34C43.94 10 52 18.06 52 28V30C52 39.94 43.94 48 34 48H28L18 54V46.5C14.4 43.3 12 38.9 12 34V28Z" fill="url(#hero-g1)" />
+      <path d="M16 27C16 20.37 21.37 15 28 15H36C42.63 15 48 20.37 48 27V30C48 36.63 42.63 42 36 42H28C21.37 42 16 36.63 16 30V27Z" fill="white" opacity="0.06" />
+      {/* Main spark */}
+      <path d="M46 12L48.5 7L51 12L56 14.5L51 17L48.5 22L46 17L41 14.5Z" fill="url(#hero-g2)" />
+      {/* Secondary spark */}
+      <path d="M38 6L39.2 3.5L40.4 6L43 7.2L40.4 8.4L39.2 11L38 8.4L35.5 7.2Z" fill="#4ADE80" opacity="0.7" />
+      <circle cx="55" cy="9" r="1.5" fill="#86EFAC" opacity="0.5" />
+      {/* AI circuit lines inside bubble */}
+      <g opacity="0.35" stroke="#052e16" strokeWidth="1.2" strokeLinecap="round">
+        <path d="M24 26H32L36 30" />
+        <path d="M28 32H36" />
+        <circle cx="24" cy="26" r="1.5" fill="#052e16" />
+        <circle cx="36" cy="30" r="1.5" fill="#052e16" />
+        <circle cx="28" cy="32" r="1.5" fill="#052e16" />
+        <circle cx="36" cy="32" r="1.5" fill="#052e16" />
+      </g>
     </svg>
   );
 }
 
-/* Grid background pattern */
-function GridPattern() {
+/* Dot grid background pattern — ClickMax inspired */
+function DotGrid() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: "64px 64px",
+          backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)`,
+          backgroundSize: "24px 24px",
         }}
       />
-      {/* Radial fade */}
+      {/* Radial fade to edges */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_70%)]" />
     </div>
   );
@@ -456,7 +467,7 @@ export default function LandingPage() {
       <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} />
 
       <AmbientOrbs />
-      <GridPattern />
+      <DotGrid />
 
       {/* ─── Header ─── */}
       <header className="sticky top-0 z-50 backdrop-blur-2xl bg-background/60 border-b border-white/[0.04]">

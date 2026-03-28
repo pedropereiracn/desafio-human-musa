@@ -1,14 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" fill="none">
   <!-- Icon -->
-  <g transform="translate(4,4) scale(0.75)">
-    <path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="#09090b" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-    <line x1="16" y1="12" x2="48" y2="12" stroke="#09090b" stroke-width="3.5" stroke-linecap="round"/>
-    <line x1="24" y1="16" x2="24" y2="44" stroke="#09090b" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 4" opacity="0.5"/>
-    <line x1="32" y1="14" x2="32" y2="48" stroke="#09090b" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
-    <line x1="40" y1="16" x2="40" y2="44" stroke="#09090b" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 4" opacity="0.5"/>
-    <circle cx="32" cy="30" r="4" fill="#09090b" opacity="0.9"/>
-    <circle cx="32" cy="30" r="7" fill="none" stroke="#09090b" stroke-width="1" opacity="0.4"/>
+  <g transform="translate(2, 2) scale(0.78)">
+    <path d="M12 28C12 18.06 20.06 10 30 10H34C43.94 10 52 18.06 52 28V30C52 39.94 43.94 48 34 48H28L18 54V46.5C14.4 43.3 12 38.9 12 34V28Z" fill="#09090b"/>
+    <path d="M46 12L48.5 7L51 12L56 14.5L51 17L48.5 22L46 17L41 14.5Z" fill="#09090b"/>
+    <path d="M38 6L39.2 3.5L40.4 6L43 7.2L40.4 8.4L39.2 11L38 8.4L35.5 7.2Z" fill="#09090b" opacity="0.7"/>
+    <circle cx="55" cy="9" r="1.5" fill="#09090b" opacity="0.5"/>
+    <g opacity="0.15" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round">
+      <path d="M24 26H32L36 30"/>
+      <path d="M28 32H36"/>
+      <circle cx="24" cy="26" r="1.5" fill="#ffffff"/>
+      <circle cx="36" cy="30" r="1.5" fill="#ffffff"/>
+      <circle cx="28" cy="32" r="1.5" fill="#ffffff"/>
+      <circle cx="36" cy="32" r="1.5" fill="#ffffff"/>
+    </g>
   </g>
   <!-- Wordmark -->
-  <text x="60" y="40" font-family="'Space Grotesk', 'Inter', system-ui, sans-serif" font-size="36" font-weight="700" fill="#09090b" letter-spacing="-1">musa</text>
+  <text x="58" y="40" font-family="'Space Grotesk', 'Inter', system-ui, sans-serif" font-size="34" font-weight="700" fill="#09090b" letter-spacing="-0.5">musa</text>
 </svg>

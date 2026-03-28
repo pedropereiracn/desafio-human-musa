@@ -1,15 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
   <defs>
-    <linearGradient id="fv" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4ADE80"/>
-      <stop offset="100%" stop-color="#22C55E"/>
+    <linearGradient id="fvg" x1="10%" y1="90%" x2="90%" y2="10%">
+      <stop offset="0%" stop-color="#16A34A"/>
+      <stop offset="50%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#4ADE80"/>
     </linearGradient>
   </defs>
   <rect width="32" height="32" rx="8" fill="#09090b"/>
-  <g transform="translate(4,3) scale(0.375)">
-    <path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="url(#fv)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
-    <line x1="16" y1="12" x2="48" y2="12" stroke="url(#fv)" stroke-width="4.5" stroke-linecap="round"/>
-    <line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
-    <circle cx="32" cy="30" r="5" fill="#22C55E"/>
+  <!-- Speech bubble scaled for 32px -->
+  <g transform="translate(3, 4) scale(0.4)">
+    <path d="M12 28C12 18.06 20.06 10 30 10H34C43.94 10 52 18.06 52 28V30C52 39.94 43.94 48 34 48H28L18 54V46.5C14.4 43.3 12 38.9 12 34V28Z" fill="url(#fvg)"/>
+    <path d="M46 12L48.5 7L51 12L56 14.5L51 17L48.5 22L46 17L41 14.5Z" fill="#4ADE80"/>
+    <path d="M38 6L39.2 3.5L40.4 6L43 7.2L40.4 8.4L39.2 11L38 8.4L35.5 7.2Z" fill="#86EFAC" opacity="0.6"/>
   </g>
 </svg>

@@ -1,9 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 48" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" fill="none">
   <defs>
-    <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="wmg" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="60%" stop-color="#22C55E"/>
       <stop offset="100%" stop-color="#22C55E"/>
     </linearGradient>
   </defs>
-  <text x="0" y="36" font-family="'Space Grotesk', 'Inter', system-ui, sans-serif" font-size="38" font-weight="700" fill="url(#wg)" letter-spacing="-1">musa</text>
+  <text x="0" y="36" font-family="'Space Grotesk', 'Inter', system-ui, sans-serif" font-size="38" font-weight="700" fill="url(#wmg)" letter-spacing="-0.5">musa</text>
 </svg>
