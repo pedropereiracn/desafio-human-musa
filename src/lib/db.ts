@@ -259,6 +259,70 @@ export async function insertActivity(item: {
   if (error) throw error;
 }
 
+// ═══ FILTERED QUERIES (by client) ═══
+
+export async function fetchCopyHistoryByClient(clientId: string): Promise<CopyHistoryItem[]> {
+  const { data, error } = await supabase
+    .from("copy_history")
+    .select("*")
+    .eq("client_id", clientId)
+    .order("created_at", { ascending: false })
+    .limit(100);
+
+  if (error) throw error;
+
+  return ((data || []) as CopyHistoryRow[]).map((row) => ({
+    id: row.id,
+    clientId: row.client_id || undefined,
+    module: row.module as "musa" | "copy-lab",
+    prompt: row.prompt,
+    result: row.result as unknown as CopyResult,
+    copyType: (row.copy_type as CopyType) || undefined,
+    tone: (row.tone as Tone) || undefined,
+    platform: row.platform as Platform,
+    createdAt: row.created_at,
+  }));
+}
+
+export async function fetchBriefsByClient(clientId: string): Promise<SavedBrief[]> {
+  const { data, error } = await supabase
+    .from("briefs")
+    .select("*")
+    .eq("client_id", clientId)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (error) throw error;
+
+  return ((data || []) as BriefRow[]).map((row) => ({
+    id: row.id,
+    clientId: row.client_id || undefined,
+    rawBriefing: row.raw_briefing,
+    decodedResult: row.decoded_result as unknown as BriefResult,
+    createdAt: row.created_at,
+  }));
+}
+
+export async function fetchActivitiesByClient(clientId: string): Promise<ActivityItem[]> {
+  const { data, error } = await supabase
+    .from("activities")
+    .select("*")
+    .eq("client_id", clientId)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (error) throw error;
+
+  return ((data || []) as ActivityRow[]).map((row) => ({
+    id: row.id,
+    type: row.type as ActivityItem["type"],
+    title: row.title,
+    clientId: row.client_id || undefined,
+    module: row.module,
+    createdAt: row.created_at,
+  }));
+}
+
 // ═══ CALENDAR ═══
 
 export interface CalendarEntryRow {

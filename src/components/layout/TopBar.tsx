@@ -34,6 +34,7 @@ export default function TopBar({ clients, selectedClientId, onSelectClient }: To
   const pathname = usePathname();
   const moduleName = MODULE_NAMES[pathname] || "Musa";
   const isHome = pathname === "/";
+  const isClientDetail = pathname.startsWith("/clients/") && pathname !== "/clients";
 
   return (
     <header className="h-14 flex items-center justify-between px-6 border-b border-white/[0.04] bg-[#050507]/80 backdrop-blur-xl">
@@ -41,6 +42,24 @@ export default function TopBar({ clients, selectedClientId, onSelectClient }: To
       <div className="flex items-center gap-2 text-sm">
         {isHome ? (
           <span className="text-foreground font-medium">Dashboard</span>
+        ) : isClientDetail ? (
+          <>
+            <Link
+              href="/"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Workspace
+            </Link>
+            <ChevronRight size={14} className="text-muted-foreground/50" />
+            <Link
+              href="/clients"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Clientes
+            </Link>
+            <ChevronRight size={14} className="text-muted-foreground/50" />
+            <span className="text-foreground font-medium">Perfil</span>
+          </>
         ) : (
           <>
             <Link

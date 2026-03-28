@@ -272,7 +272,7 @@ export default function DashboardPage() {
               {clients.slice(0, 6).map((client) => (
                 <Link
                   key={client.id}
-                  href="/clients"
+                  href={`/clients/${client.id}`}
                   className="card px-4 py-3 flex items-center gap-3 shrink-0 hover:border-primary/20 transition-all"
                 >
                   <div

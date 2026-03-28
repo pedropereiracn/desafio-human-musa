@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Link from "next/link";
 import { Users, Plus, X, Trash2, Edit3, Check, MessageSquare, Loader2, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
@@ -96,7 +97,8 @@ export default function ClientsPage() {
       setShowForm(false);
       setForm(EMPTY_FORM);
       setEditingId(null);
-    } catch {
+    } catch (err) {
+      console.error("Erro ao salvar cliente:", err);
       toast.error("Erro ao salvar cliente. Verifique a conexão.");
     } finally {
       setSaving(false);
@@ -329,7 +331,7 @@ export default function ClientsPage() {
               layout
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="card p-5 space-y-3"
+              className="card p-5 space-y-3 cursor-pointer hover:border-primary/20 transition-all"
             >
               <AnimatePresence mode="wait">
                 {confirmDeleteId === client.id ? (
@@ -375,62 +377,63 @@ export default function ClientsPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="space-y-3"
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
-                          style={{ backgroundColor: client.color }}
-                        >
-                          {client.name.charAt(0).toUpperCase()}
+                    <Link href={`/clients/${client.id}`} className="block space-y-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
+                            style={{ backgroundColor: client.color }}
+                          >
+                            {client.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-foreground">{client.name}</h3>
+                            <p className="text-xs text-muted-foreground">{client.segment}</p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-foreground">{client.name}</h3>
-                          <p className="text-xs text-muted-foreground">{client.segment}</p>
+                        <div className="flex gap-1" onClick={(e) => e.preventDefault()}>
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleEdit(client); }}
+                            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-2 transition-colors"
+                          >
+                            <Edit3 size={14} />
+                          </button>
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setConfirmDeleteId(client.id); }}
+                            className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-surface-2 transition-colors"
+                          >
+                            <Trash2 size={14} />
+                          </button>
                         </div>
                       </div>
-                      <div className="flex gap-1">
-                        <button
-                          onClick={() => handleEdit(client)}
-                          className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-2 transition-colors"
-                        >
-                          <Edit3 size={14} />
-                        </button>
-                        <button
-                          onClick={() => setConfirmDeleteId(client.id)}
-                          className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-surface-2 transition-colors"
-                        >
-                          <Trash2 size={14} />
-                        </button>
+
+                      {client.brandVoice && (
+                        <div className="bg-surface-2 rounded-lg p-3">
+                          <span className="text-xs text-muted-foreground">Brand Voice</span>
+                          <p className="text-sm text-foreground mt-1 line-clamp-2">{client.brandVoice}</p>
+                        </div>
+                      )}
+
+                      {client.targetAudience && (
+                        <p className="text-xs text-muted-foreground">
+                          <span className="font-medium">Público:</span> {client.targetAudience}
+                        </p>
+                      )}
+
+                      <div className="flex gap-1.5 flex-wrap">
+                        {client.platforms.map((p) => (
+                          <span key={p} className="px-2 py-0.5 rounded text-[10px] bg-primary/10 text-primary font-medium capitalize">
+                            {p}
+                          </span>
+                        ))}
+                        {client.preferredFormats.map((f) => (
+                          <span key={f} className="px-2 py-0.5 rounded text-[10px] bg-surface-2 text-muted-foreground capitalize">
+                            {f}
+                          </span>
+                        ))}
                       </div>
-                    </div>
-
-                    {client.brandVoice && (
-                      <div className="bg-surface-2 rounded-lg p-3">
-                        <span className="text-xs text-muted-foreground">Brand Voice</span>
-                        <p className="text-sm text-foreground mt-1 line-clamp-2">{client.brandVoice}</p>
-                      </div>
-                    )}
-
-                    {client.targetAudience && (
-                      <p className="text-xs text-muted-foreground">
-                        <span className="font-medium">Público:</span> {client.targetAudience}
-                      </p>
-                    )}
-
-                    <div className="flex gap-1.5 flex-wrap">
-                      {client.platforms.map((p) => (
-                        <span key={p} className="px-2 py-0.5 rounded text-[10px] bg-primary/10 text-primary font-medium capitalize">
-                          {p}
-                        </span>
-                      ))}
-                      {client.preferredFormats.map((f) => (
-                        <span key={f} className="px-2 py-0.5 rounded text-[10px] bg-surface-2 text-muted-foreground capitalize">
-                          {f}
-                        </span>
-                      ))}
-                    </div>
+                    </Link>
                   </motion.div>
                 )}
               </AnimatePresence>
