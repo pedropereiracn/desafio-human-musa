@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Copy, Check, Video, Hash, MessageSquare, Lightbulb, ClipboardCheck, Zap, Clock, Sparkles } from "lucide-react";
 import { CopyResult } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -21,6 +21,28 @@ function useTypewriter(text: string, speed = 15) {
     return () => clearInterval(timer);
   }, [text, speed]);
   return display;
+}
+
+function useAnimatedCounter(target: number, duration = 1200) {
+  const [count, setCount] = useState(0);
+  const started = useRef(false);
+  useEffect(() => {
+    if (started.current || !target) return;
+    started.current = true;
+    let start = 0;
+    const step = Math.max(0.1, target / (duration / 16));
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.round(start * 10) / 10);
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [target, duration]);
+  return count;
 }
 
 function CopyButton({ text, large }: { text: string; large?: boolean }) {
@@ -77,6 +99,7 @@ function CopyButton({ text, large }: { text: string; large?: boolean }) {
 export default function CopyOutput({ copy }: CopyOutputProps) {
   const typedCaption = useTypewriter(copy.caption);
   const [selectedHook, setSelectedHook] = useState(0);
+  const animatedScore = useAnimatedCounter(copy.engagementScore || 0);
 
   return (
     <div className="space-y-4">
@@ -96,7 +119,7 @@ export default function CopyOutput({ copy }: CopyOutputProps) {
                 "text-red-400"
               )} />
               <span className="text-sm font-semibold text-foreground">
-                Engagement Score: {copy.engagementScore}/10
+                Engagement Score: {animatedScore}/10
               </span>
             </div>
           )}

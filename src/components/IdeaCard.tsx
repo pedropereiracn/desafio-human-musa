@@ -25,7 +25,7 @@ export default function IdeaCard({ idea, index, selected, onSelect }: IdeaCardPr
     <button
       onClick={() => onSelect(idea)}
       className={cn(
-        "w-full text-left p-5 rounded-xl transition-all duration-200 card",
+        "w-full text-left p-5 rounded-xl transition-all duration-200 card hover-lift",
         selected && "border-l-2 border-l-primary bg-primary/5"
       )}
     >

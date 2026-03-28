@@ -104,28 +104,38 @@ body {
 /* ═══ TYPOGRAPHY ═══ */
 
 .text-display {
+  font-family: var(--font-inter), var(--font-geist-sans), system-ui, sans-serif;
   font-size: 3.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
 }
 
 .text-heading {
+  font-family: var(--font-inter), var(--font-geist-sans), system-ui, sans-serif;
   font-size: 1.875rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 /* ═══ CARD ═══ */
 
 .card {
-  background: var(--surface-1);
+  background: rgba(15, 15, 18, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
   border-radius: 12px;
 }
 
 .card:hover {
   border-color: rgba(99, 102, 241, 0.15);
+}
+
+.card-solid {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
 }
 
 /* ═══ GRADIENT TEXT ═══ */
@@ -135,6 +145,55 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* ═══ LIGHT SWEEP ═══ */
+
+@keyframes light-sweep {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.light-sweep {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(99, 102, 241, 0.08) 25%,
+    rgba(129, 140, 248, 0.15) 50%,
+    rgba(99, 102, 241, 0.08) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: light-sweep 4s ease-in-out infinite;
+}
+
+/* ═══ COUNTER GLOW ═══ */
+
+.score-glow {
+  box-shadow: 0 0 20px -4px currentColor;
+}
+
+/* ═══ SCROLL PROGRESS ═══ */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  z-index: 100;
+  transition: width 0.1s linear;
+}
+
+/* ═══ PREMIUM HOVER LIFT ═══ */
+
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px rgba(99, 102, 241, 0.15);
 }
 
 /* ═══ SKELETON ═══ */

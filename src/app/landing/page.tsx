@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { ArrowRight, Sparkles, PenTool, FileText, Users, BarChart3, CalendarDays } from "lucide-react";
 
 const FEATURES = [
@@ -13,49 +14,114 @@ const FEATURES = [
   { icon: CalendarDays, title: "Calendário", desc: "Visualize seu pipeline de conteúdo no calendário" },
 ];
 
+const STATS = [
+  { value: 500, suffix: "+", label: "copies gerados" },
+  { value: 12, suffix: "x", label: "mais rápido" },
+  { value: 7, suffix: "", label: "módulos integrados" },
+];
+
+function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (!inView) return;
+    let start = 0;
+    const duration = 1500;
+    const step = Math.max(1, Math.floor(value / (duration / 16)));
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= value) {
+        setCount(value);
+        clearInterval(timer);
+      } else {
+        setCount(start);
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [inView, value]);
+
+  return <span ref={ref}>{count}{suffix}</span>;
+}
+
 export default function LandingPage() {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? (scrollTop / docHeight) * 100 : 0);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Scroll Progress */}
+      <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} />
+
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto w-full">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-            <span className="text-white font-bold text-sm">M</span>
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
+        <div className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto w-full">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+              <span className="text-white font-bold text-sm">M</span>
+            </div>
+            <span className="font-bold text-lg text-foreground tracking-tight">Musa</span>
           </div>
-          <span className="font-bold text-lg text-foreground tracking-tight">Musa</span>
+          <Link
+            href="/"
+            className="flex items-center gap-2 px-5 py-2 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors"
+          >
+            Entrar
+            <ArrowRight size={14} />
+          </Link>
         </div>
-        <Link
-          href="/"
-          className="flex items-center gap-2 px-5 py-2 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors"
-        >
-          Entrar
-          <ArrowRight size={14} />
-        </Link>
       </header>
 
       {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs text-muted-foreground border border-border mb-8">
+      <main className="flex-1 flex flex-col items-center px-6">
+        <div className="flex flex-col items-center justify-center min-h-[80vh] text-center max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs text-muted-foreground border border-border mb-8"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             Workspace completo para agências
-          </div>
+          </motion.div>
 
-          <h1 className="text-display text-foreground mb-6">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-display text-foreground mb-6 relative"
+          >
+            <span className="light-sweep rounded-2xl absolute inset-0 pointer-events-none" />
             O workspace que sua<br />
             agência <span className="gradient-text">precisava.</span>
-          </h1>
+          </motion.h1>
 
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed mb-10">
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed mb-10"
+          >
             Referências virais, geração de copy, gestão de clientes e relatórios — tudo com IA nativa, num lugar só.
-          </p>
+          </motion.p>
 
           {/* Social proof */}
-          <div className="flex items-center justify-center gap-3 mb-10">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="flex items-center justify-center gap-3 mb-10"
+          >
             <div className="flex -space-x-2">
               <div className="w-7 h-7 rounded-full bg-indigo-500 border-2 border-background" />
               <div className="w-7 h-7 rounded-full bg-violet-500 border-2 border-background" />
@@ -63,31 +129,50 @@ export default function LandingPage() {
               <div className="w-7 h-7 rounded-full bg-cyan-500 border-2 border-background" />
             </div>
             <span className="text-sm text-muted-foreground">Usado por agências em todo Brasil</span>
-          </div>
+          </motion.div>
 
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-white font-semibold text-base hover:bg-primary/90 transition-colors shadow-lg shadow-primary/25"
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
           >
-            Entrar no Workspace
-            <ArrowRight size={16} />
-          </Link>
+            <Link
+              href="/"
+              className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-white font-semibold text-base hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5"
+            >
+              Entrar no Workspace
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Stats with Counter Animations */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="flex items-center justify-center gap-12 py-12 border-y border-border/50 w-full max-w-3xl"
+        >
+          {STATS.map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className="text-3xl font-extrabold text-foreground tracking-tight">
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
+            </div>
+          ))}
         </motion.div>
 
         {/* Features Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mt-20 mb-12"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mt-16 mb-12">
           {FEATURES.map((f, i) => (
             <motion.div
               key={f.title}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 + i * 0.08 }}
-              className="card p-5 flex flex-col gap-3"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="card hover-lift p-5 flex flex-col gap-3"
             >
               <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <f.icon size={18} className="text-primary" />
@@ -96,7 +181,7 @@ export default function LandingPage() {
               <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </main>
 
       {/* Footer */}
