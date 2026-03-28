@@ -10,6 +10,7 @@ import {
   Users,
   BarChart3,
   CalendarDays,
+  Layers,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -27,6 +28,7 @@ const NAV_ITEMS = [
   { href: "/copy-lab", icon: PenTool, label: "Copy Lab" },
   { href: "/briefs", icon: FileText, label: "Briefs" },
   { href: "/clients", icon: Users, label: "Clientes" },
+  { href: "/carousel", icon: Layers, label: "Carrossel" },
 ];
 
 const BETA_ITEMS = [
@@ -162,7 +164,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* Mobile Bottom Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#08080c]/90 backdrop-blur-xl border-t border-white/[0.04]">
         <div className="flex items-center justify-around py-2 px-1">
-          {[...NAV_ITEMS.slice(0, 4), NAV_ITEMS[4]].map((item) => (
+          {[...NAV_ITEMS.slice(0, 4), NAV_ITEMS[5]].map((item) => (
             <Link
               key={item.href}
               href={item.href}

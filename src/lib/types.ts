@@ -139,3 +139,44 @@ export interface ReportData {
   };
   insights: string;
 }
+
+// ═══ CAROUSEL TYPES ═══
+
+export type SlideLayout = "centered" | "left" | "split";
+export type SlideBackgroundType = "solid" | "gradient";
+
+export interface CarouselSlide {
+  id: string;
+  order: number;
+  headline: string;
+  body?: string;
+  footnote?: string;
+  backgroundType: SlideBackgroundType;
+  colors: {
+    background: string;
+    backgroundEnd?: string;
+    text: string;
+    accent: string;
+  };
+  layout: SlideLayout;
+}
+
+export interface CarouselProject {
+  id: string;
+  title: string;
+  platform: Platform;
+  slides: CarouselSlide[];
+  templateId: string;
+  brandHandle?: string;
+}
+
+export interface CarouselTemplate {
+  id: string;
+  name: string;
+  defaults: {
+    backgroundType: SlideBackgroundType;
+    colors: CarouselSlide["colors"];
+    layout: SlideLayout;
+  };
+  slideSize: { width: number; height: number };
+}

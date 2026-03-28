@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Lightbulb, PenTool, Loader2, RotateCcw, RefreshCw, ArrowRight, Eye, Heart, MessageCircle, Trophy } from "lucide-react";
+import { Lightbulb, PenTool, Loader2, RotateCcw, RefreshCw, ArrowRight, Eye, Heart, MessageCircle, Trophy, Layers } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import SearchForm from "@/components/SearchForm";
@@ -50,6 +51,7 @@ export default function MusaPage() {
   const [copyResult, setCopyResult] = useState<CopyResult | null>(null);
   const [copyLoading, setCopyLoading] = useState(false);
 
+  const router = useRouter();
   const { addActivity } = useActivities();
   const { addCopy } = useCopyHistory();
 
@@ -437,6 +439,27 @@ export default function MusaPage() {
                     <ExportButton copy={copyResult} topic={topic} ideaTitle={selectedIdea?.title || ""} />
                   </div>
                 </div>
+                {format === "carrossel" && (
+                  <motion.button
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      sessionStorage.setItem("carousel-context", JSON.stringify({
+                        caption: copyResult.caption,
+                        hashtags: copyResult.hashtags,
+                        cta: copyResult.cta,
+                        notes: copyResult.notes,
+                      }));
+                      router.push(`/carousel?topic=${encodeURIComponent(topic)}&platform=${platform}`);
+                    }}
+                    className="w-full max-w-2xl mx-auto flex items-center justify-center gap-2 btn-primary !py-3 mb-4"
+                  >
+                    <Layers size={18} />
+                    Criar Carrossel Visual
+                    <ArrowRight size={16} />
+                  </motion.button>
+                )}
                 <div className="max-w-2xl mx-auto">
                   <CopyOutput copy={copyResult} />
                 </div>
