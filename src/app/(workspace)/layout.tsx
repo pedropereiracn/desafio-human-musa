@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import TopBar from "@/components/layout/TopBar";
 import { useClients } from "@/hooks/useClients";
@@ -10,21 +10,16 @@ export default function WorkspaceLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [collapsed, setCollapsed] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState<string | undefined>();
   const { clients } = useClients();
 
-  const toggleSidebar = useCallback(() => {
-    setCollapsed((c) => !c);
-  }, []);
-
   return (
     <div className="min-h-screen flex">
-      <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
+      <Sidebar />
 
       <div
-        className="flex-1 flex flex-col transition-all duration-200 workspace-content"
-        style={{ marginLeft: collapsed ? 64 : 240 }}
+        className="flex-1 flex flex-col workspace-content"
+        style={{ marginLeft: 272 }}
       >
         <TopBar
           clients={clients}

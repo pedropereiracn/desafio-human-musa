@@ -12,41 +12,21 @@ import {
   CalendarDays,
   Layers,
   BookOpen,
-  ChevronLeft,
-  ChevronRight,
+  ArrowRight,
 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Separator } from "@/components/ui/separator";
 
-interface SidebarProps {
-  collapsed: boolean;
-  onToggle: () => void;
-}
-
-const NAV_ITEMS = [
-  { href: "/", icon: LayoutDashboard, label: "Inicio", color: "text-white", bg: "bg-white/[0.06]" },
-  { href: "/musa", icon: Sparkles, label: "Musa Pipeline", color: "text-green-400", bg: "bg-green-500/10" },
-  { href: "/copy-lab", icon: PenTool, label: "Copy Lab", color: "text-violet-400", bg: "bg-violet-500/10" },
-  { href: "/briefs", icon: FileText, label: "Briefs", color: "text-amber-400", bg: "bg-amber-500/10" },
-  { href: "/clients", icon: Users, label: "Clientes", color: "text-emerald-400", bg: "bg-emerald-500/10" },
-  { href: "/carousel", icon: Layers, label: "Carrossel", color: "text-blue-400", bg: "bg-blue-500/10" },
-];
-
-const BETA_ITEMS = [
-  { href: "/reports", icon: BarChart3, label: "Relatorios", color: "text-rose-400", bg: "bg-rose-500/10" },
-  { href: "/calendar", icon: CalendarDays, label: "Calendario", color: "text-cyan-400", bg: "bg-cyan-500/10" },
-];
-
-const INTERNAL_ITEMS = [
-  { href: "/brand", icon: BookOpen, label: "Brand Book", color: "text-purple-400", bg: "bg-purple-500/10" },
+const TOOLS = [
+  { href: "/", icon: LayoutDashboard, label: "Inicio", desc: "Visao geral do workspace", color: "text-white", bg: "bg-white/[0.06]", border: "hover:border-white/[0.10]" },
+  { href: "/musa", icon: Sparkles, label: "Musa Pipeline", desc: "Busque referencias e gere copy", color: "text-green-400", bg: "bg-green-500/10", border: "hover:border-green-500/20" },
+  { href: "/copy-lab", icon: PenTool, label: "Copy Lab", desc: "Copy standalone para qualquer formato", color: "text-violet-400", bg: "bg-violet-500/10", border: "hover:border-violet-500/20" },
+  { href: "/briefs", icon: FileText, label: "Briefs", desc: "Decodifique briefings de clientes", color: "text-amber-400", bg: "bg-amber-500/10", border: "hover:border-amber-500/20" },
+  { href: "/clients", icon: Users, label: "Clientes", desc: "Gerencie perfis e brand voice", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "hover:border-emerald-500/20" },
+  { href: "/carousel", icon: Layers, label: "Carrossel", desc: "Crie carrosseis visuais", color: "text-blue-400", bg: "bg-blue-500/10", border: "hover:border-blue-500/20" },
+  { href: "/reports", icon: BarChart3, label: "Relatorios", desc: "Metricas e relatorios com IA", color: "text-rose-400", bg: "bg-rose-500/10", border: "hover:border-rose-500/20", badge: "Beta" },
+  { href: "/calendar", icon: CalendarDays, label: "Calendario", desc: "Pipeline de conteudo visual", color: "text-cyan-400", bg: "bg-cyan-500/10", border: "hover:border-cyan-500/20", badge: "Beta" },
+  { href: "/brand", icon: BookOpen, label: "Brand Book", desc: "Identidade visual e guidelines", color: "text-purple-400", bg: "bg-purple-500/10", border: "hover:border-purple-500/20", badge: "Interno" },
 ];
 
 /* Inline Musa logo — speech bubble + spark */
@@ -81,92 +61,7 @@ function MusaIcon({ size = 32 }: { size?: number }) {
   );
 }
 
-type NavItemType = { href: string; icon: React.ComponentType<{ size?: number; className?: string }>; label: string; color: string; bg: string };
-
-function NavItem({
-  item,
-  isActive,
-  collapsed,
-  badge,
-}: {
-  item: NavItemType;
-  isActive: boolean;
-  collapsed: boolean;
-  badge?: { text: string; variant: "green" | "violet" };
-}) {
-  const content = (
-    <Link
-      href={item.href}
-      className={cn(
-        "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all relative group",
-        isActive
-          ? "text-foreground font-medium"
-          : "text-muted-foreground hover:text-foreground hover:bg-white/[0.03]"
-      )}
-    >
-      {isActive && (
-        <motion.div
-          layoutId="sidebar-active"
-          className="absolute inset-0 rounded-xl bg-white/[0.06]"
-          transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
-        />
-      )}
-      <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0 relative z-10", item.bg)}>
-        <item.icon size={16} className={item.color} />
-      </div>
-      <AnimatePresence>
-        {!collapsed && (
-          <motion.span
-            initial={{ opacity: 0, width: 0 }}
-            animate={{ opacity: 1, width: "auto" }}
-            exit={{ opacity: 0, width: 0 }}
-            className="overflow-hidden whitespace-nowrap flex items-center gap-2 relative z-10"
-          >
-            {item.label}
-            {badge && (
-              <Badge
-                variant="outline"
-                className={cn(
-                  "text-[9px] px-1.5 py-0 h-4 rounded-full font-semibold uppercase tracking-wider border-0",
-                  badge.variant === "green"
-                    ? "bg-green-500/15 text-green-400"
-                    : "bg-violet-500/15 text-violet-400"
-                )}
-              >
-                {badge.text}
-              </Badge>
-            )}
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </Link>
-  );
-
-  if (collapsed) {
-    return (
-      <Tooltip delayDuration={0}>
-        <TooltipTrigger asChild>{content}</TooltipTrigger>
-        <TooltipContent side="right" className="bg-surface-1 border-white/[0.06] text-foreground">
-          <div className="flex items-center gap-2">
-            {item.label}
-            {badge && (
-              <span className={cn(
-                "text-[9px] px-1 py-0.5 rounded-full font-semibold uppercase",
-                badge.variant === "green" ? "bg-green-500/15 text-green-400" : "bg-violet-500/15 text-violet-400"
-              )}>
-                {badge.text}
-              </span>
-            )}
-          </div>
-        </TooltipContent>
-      </Tooltip>
-    );
-  }
-
-  return content;
-}
-
-export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
+export default function Sidebar() {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
@@ -177,95 +72,69 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <motion.aside
-        animate={{ width: collapsed ? 64 : 240 }}
-        transition={{ duration: 0.2, ease: "easeInOut" }}
-        className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-50 bg-[#09090b]/40 backdrop-blur-2xl border-r border-white/[0.07]"
-      >
+      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-50 w-[272px] bg-[#09090b]/40 backdrop-blur-2xl border-r border-white/[0.07]">
         {/* Logo */}
-        <div className="h-14 flex items-center px-4 border-b border-white/[0.04] gap-2">
-          <div className="shrink-0">
-            <MusaIcon size={collapsed ? 28 : 32} />
-          </div>
-          <AnimatePresence>
-            {!collapsed && (
-              <motion.span
-                initial={{ opacity: 0, width: 0 }}
-                animate={{ opacity: 1, width: "auto" }}
-                exit={{ opacity: 0, width: 0 }}
-                className="font-extrabold text-lg text-foreground tracking-tight overflow-hidden whitespace-nowrap"
-              >
-                MUSA
-              </motion.span>
-            )}
-          </AnimatePresence>
+        <div className="h-14 flex items-center px-5 border-b border-white/[0.04] gap-2.5">
+          <MusaIcon size={32} />
+          <span className="font-extrabold text-lg text-foreground tracking-tight">
+            MUSA
+          </span>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
-          {NAV_ITEMS.map((item) => (
-            <NavItem
-              key={item.href}
-              item={item}
-              isActive={isActive(item.href)}
-              collapsed={collapsed}
-            />
-          ))}
-
-          <div className="py-2 px-1">
-            <Separator className="bg-white/[0.04]" />
-          </div>
-
-          {BETA_ITEMS.map((item) => (
-            <NavItem
-              key={item.href}
-              item={item}
-              isActive={isActive(item.href)}
-              collapsed={collapsed}
-              badge={{ text: "Beta", variant: "green" }}
-            />
-          ))}
-
-          <div className="py-2 px-1">
-            <Separator className="bg-white/[0.04]" />
-          </div>
-
-          {INTERNAL_ITEMS.map((item) => (
-            <NavItem
-              key={item.href}
-              item={item}
-              isActive={isActive(item.href)}
-              collapsed={collapsed}
-              badge={{ text: "Interno", variant: "violet" }}
-            />
+        {/* Tools Nav */}
+        <nav className="flex-1 py-3 px-3 space-y-1 overflow-y-auto">
+          <h2 className="text-[10px] font-semibold text-muted-foreground/50 uppercase tracking-widest px-1 mb-2">
+            Ferramentas
+          </h2>
+          {TOOLS.map((tool) => (
+            <Link
+              key={tool.href}
+              href={tool.href}
+              className={cn(
+                "group flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent transition-all",
+                isActive(tool.href)
+                  ? "bg-white/[0.04] border-white/[0.08]"
+                  : "hover:bg-white/[0.02]",
+                tool.border
+              )}
+            >
+              <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center shrink-0", tool.bg)}>
+                <tool.icon size={16} className={tool.color} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-foreground group-hover:text-white transition-colors truncate">
+                    {tool.label}
+                  </span>
+                  {tool.badge && (
+                    <Badge variant="outline" className={cn(
+                      "text-[8px] px-1.5 py-0 h-3.5 rounded-full border-0 font-semibold uppercase tracking-wider",
+                      tool.badge === "Interno"
+                        ? "bg-violet-500/10 text-violet-400"
+                        : "bg-green-500/10 text-green-400"
+                    )}>
+                      {tool.badge}
+                    </Badge>
+                  )}
+                </div>
+                <span className="text-[11px] text-muted-foreground/60 truncate block">{tool.desc}</span>
+              </div>
+              <ArrowRight size={12} className="text-muted-foreground/0 group-hover:text-muted-foreground/40 transition-all shrink-0" />
+            </Link>
           ))}
         </nav>
-
-        {/* Toggle */}
-        <div className="p-2 border-t border-white/[0.04]">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onToggle}
-            className="w-full justify-center text-muted-foreground hover:text-foreground rounded-xl"
-          >
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-          </Button>
-        </div>
-      </motion.aside>
+      </aside>
 
       {/* Mobile Bottom Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#09090b]/40 backdrop-blur-2xl border-t border-white/[0.07]">
         <div className="flex items-center justify-around py-2 px-1">
-          {[NAV_ITEMS[0], NAV_ITEMS[1], NAV_ITEMS[2], NAV_ITEMS[3], NAV_ITEMS[5]].map((item) => (
+          {[TOOLS[0], TOOLS[1], TOOLS[2], TOOLS[3], TOOLS[5]].map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
                 "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs transition-colors",
-                isActive(item.href)
-                  ? "text-foreground"
-                  : "text-muted-foreground"
+                isActive(item.href) ? "text-foreground" : "text-muted-foreground"
               )}
             >
               <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", isActive(item.href) ? item.bg : "")}>
