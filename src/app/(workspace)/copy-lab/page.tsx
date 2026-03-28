@@ -3,6 +3,7 @@
 import { useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { PenTool, Loader2, Copy, RefreshCw, Sparkles } from "lucide-react";
+import { LoadingPulse, SkeletonCopy } from "@/components/ui/Skeleton";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useClients } from "@/hooks/useClients";
@@ -236,6 +237,21 @@ function CopyLabContent() {
         </motion.button>
         <p className="text-center text-xs text-muted-foreground/40">Custo estimado: ~$0.02 por geração</p>
       </div>
+
+      {/* Loading State */}
+      {loading && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <LoadingPulse
+            message="Gerando copy com IA..."
+            submessage={`Criando ${variations} variação${variations > 1 ? "ões" : ""} em tom ${tone}`}
+          />
+          <div className="space-y-4">
+            {Array.from({ length: variations }).map((_, i) => (
+              <SkeletonCopy key={i} />
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       {/* Results */}
       <AnimatePresence>

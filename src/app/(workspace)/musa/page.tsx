@@ -12,7 +12,7 @@ import ReferenceCard from "@/components/ReferenceCard";
 import IdeaCard from "@/components/IdeaCard";
 import CopyOutput from "@/components/CopyOutput";
 import ExportButton from "@/components/ExportButton";
-import { SkeletonGrid, SkeletonIdea } from "@/components/ui/Skeleton";
+import { SkeletonGrid, SkeletonIdea, SkeletonCopy, LoadingPulse } from "@/components/ui/Skeleton";
 import { useActivities } from "@/hooks/useActivities";
 import { useCopyHistory } from "@/hooks/useCopyHistory";
 import type { Platform, Format, Step, AnalyzedReference, Idea, CopyResult } from "@/lib/types";
@@ -427,6 +427,18 @@ export default function MusaPage() {
                     ))}
                   </motion.div>
                 )}
+              </motion.div>
+            )}
+
+            {currentStep === "ideas" && copyLoading && (
+              <motion.div key="copy-loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <LoadingPulse
+                  message="Gerando copy completo..."
+                  submessage={`Baseado na ideia: "${selectedIdea?.title}"`}
+                />
+                <div className="max-w-2xl mx-auto">
+                  <SkeletonCopy />
+                </div>
               </motion.div>
             )}
 

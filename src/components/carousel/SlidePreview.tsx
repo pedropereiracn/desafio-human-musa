@@ -9,6 +9,9 @@ import {
   getSlideTextColor,
   getDecorativeStyles,
   brandKitFromLegacy,
+  getResolvedHeadlineFont,
+  getResolvedBodyFont,
+  adjustBrightness,
 } from "@/lib/brand-kit";
 
 interface SlidePreviewProps {
@@ -94,9 +97,11 @@ function CoverSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w
 
   return (
     <div style={{ width: w, height: h, background: bg, position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 80, textAlign: "center" }}>
+      {/* Overlay gradient for depth */}
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(transparent 50%, rgba(0,0,0,0.15) 100%)", pointerEvents: "none" }} />
       <DecorationsLayer brandKit={bk} w={w} h={h} />
       <h2 style={{
-        fontFamily: typo.fontFamily,
+        fontFamily: getResolvedHeadlineFont(bk),
         fontWeight: typo.fontWeight,
         fontSize: Math.min(72, getHeadlineSize(bk, slide.headline.length) + 8),
         letterSpacing: typo.letterSpacing,
@@ -107,12 +112,14 @@ function CoverSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w
         marginBottom: slide.body ? 28 : 0,
         maxWidth: "100%",
         wordBreak: "break-word",
+        textShadow: "0 4px 30px rgba(0,0,0,0.4)",
+        position: "relative",
       }}>
         {slide.headline}
       </h2>
       {slide.body && (
         <p style={{
-          fontFamily: getBodyFont(bk),
+          fontFamily: getResolvedBodyFont(bk),
           fontSize: 28,
           fontWeight: 400,
           lineHeight: 1.5,
@@ -120,6 +127,7 @@ function CoverSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w
           opacity: 0.85,
           margin: 0,
           maxWidth: "100%",
+          position: "relative",
         }}>
           {slide.body}
         </p>
@@ -139,10 +147,9 @@ function ContentSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit;
   return (
     <div style={{ width: w, height: h, background: bg, position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", padding: 80 }}>
       <DecorationsLayer brandKit={bk} w={w} h={h} />
-      {/* Accent underline for headline */}
       <div style={{ marginBottom: 12 }}>
         <h2 style={{
-          fontFamily: typo.fontFamily,
+          fontFamily: getResolvedHeadlineFont(bk),
           fontWeight: typo.fontWeight,
           fontSize: getHeadlineSize(bk, slide.headline.length),
           letterSpacing: typo.letterSpacing,
@@ -165,7 +172,7 @@ function ContentSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit;
       </div>
       {slide.body && (
         <p style={{
-          fontFamily: getBodyFont(bk),
+          fontFamily: getResolvedBodyFont(bk),
           fontSize: 26,
           fontWeight: 400,
           lineHeight: 1.55,
@@ -180,7 +187,7 @@ function ContentSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit;
       )}
       {slide.footnote && (
         <p style={{
-          fontFamily: getBodyFont(bk),
+          fontFamily: getResolvedBodyFont(bk),
           fontSize: 18,
           fontWeight: 500,
           color: textColor,
@@ -211,7 +218,7 @@ function StatisticSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKi
       <DecorationsLayer brandKit={bk} w={w} h={h} />
       {slide.statValue && (
         <p style={{
-          fontFamily: typo.fontFamily,
+          fontFamily: getResolvedHeadlineFont(bk),
           fontSize: 14,
           fontWeight: 500,
           letterSpacing: "0.1em",
@@ -225,19 +232,20 @@ function StatisticSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKi
         </p>
       )}
       <span style={{
-        fontFamily: typo.fontFamily,
+        fontFamily: getResolvedHeadlineFont(bk),
         fontWeight: 900,
         fontSize: statValue.length > 8 ? 80 : 110,
         lineHeight: 1,
         color: bk.palette.accent,
         margin: 0,
         letterSpacing: "-0.02em",
+        textShadow: `0 0 60px ${bk.palette.accent}50, 0 0 120px ${bk.palette.accent}20`,
       }}>
         {statValue}
       </span>
       {statLabel && (
         <p style={{
-          fontFamily: getBodyFont(bk),
+          fontFamily: getResolvedBodyFont(bk),
           fontSize: 26,
           fontWeight: 500,
           lineHeight: 1.4,
@@ -265,13 +273,13 @@ function QuoteSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w
     <div style={{ width: w, height: h, background: bg, position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "80px 100px", textAlign: "center" }}>
       <DecorationsLayer brandKit={bk} w={w} h={h} />
       {/* Large quote mark */}
-      <svg width="80" height="60" viewBox="0 0 80 60" style={{ marginBottom: 24, flexShrink: 0 }}>
-        <text x="0" y="55" fontFamily="Georgia, serif" fontSize="80" fontWeight="bold" fill={bk.palette.accent} opacity="0.6">
+      <svg width="100" height="80" viewBox="0 0 100 80" style={{ marginBottom: 24, flexShrink: 0 }}>
+        <text x="0" y="70" fontFamily="Georgia, serif" fontSize="100" fontWeight="bold" fill={bk.palette.accent} opacity="0.5">
           {"\u201C"}
         </text>
       </svg>
       <p style={{
-        fontFamily: "Georgia, 'Times New Roman', serif",
+        fontFamily: getResolvedBodyFont(bk),
         fontSize: slide.headline.length > 80 ? 32 : 38,
         fontWeight: 500,
         fontStyle: "italic",
@@ -285,7 +293,7 @@ function QuoteSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w
       </p>
       {slide.quoteAttribution && (
         <p style={{
-          fontFamily: getBodyFont(bk),
+          fontFamily: getResolvedBodyFont(bk),
           fontSize: 20,
           fontWeight: 600,
           color: bk.palette.accent,
@@ -308,12 +316,13 @@ function ListSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w:
   const bg = getSlideBackground(bk, "list", slide.order);
   const textColor = bk.palette.text;
   const items = slide.listItems?.length ? slide.listItems : (slide.body ? slide.body.split("\n").filter(Boolean) : []);
+  const darkerAccent = adjustBrightness(bk.palette.accent, -40);
 
   return (
     <div style={{ width: w, height: h, background: bg, position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", padding: "70px 80px" }}>
       <DecorationsLayer brandKit={bk} w={w} h={h} />
       <h2 style={{
-        fontFamily: typo.fontFamily,
+        fontFamily: getResolvedHeadlineFont(bk),
         fontWeight: typo.fontWeight,
         fontSize: Math.min(48, getHeadlineSize(bk, slide.headline.length)),
         letterSpacing: typo.letterSpacing,
@@ -331,15 +340,15 @@ function ListSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w:
         {items.map((item, i) => (
           <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
             <span style={{
-              width: 28,
-              height: 28,
+              width: 32,
+              height: 32,
               borderRadius: "50%",
-              background: bk.palette.accent,
+              background: `linear-gradient(135deg, ${bk.palette.accent}, ${darkerAccent})`,
               color: "#ffffff",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 14,
+              fontSize: 15,
               fontWeight: 700,
               flexShrink: 0,
               marginTop: 2,
@@ -348,7 +357,7 @@ function ListSlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w:
               {i + 1}
             </span>
             <p style={{
-              fontFamily: getBodyFont(bk),
+              fontFamily: getResolvedBodyFont(bk),
               fontSize: 24,
               fontWeight: 400,
               lineHeight: 1.45,
@@ -378,7 +387,7 @@ function CTASlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w: 
     <div style={{ width: w, height: h, background: bg, position: "relative", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 80, textAlign: "center" }}>
       <DecorationsLayer brandKit={bk} w={w} h={h} />
       <h2 style={{
-        fontFamily: typo.fontFamily,
+        fontFamily: getResolvedHeadlineFont(bk),
         fontWeight: typo.fontWeight,
         fontSize: Math.min(60, getHeadlineSize(bk, slide.headline.length)),
         letterSpacing: typo.letterSpacing,
@@ -389,12 +398,13 @@ function CTASlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w: 
         marginBottom: slide.body ? 24 : 32,
         maxWidth: "100%",
         wordBreak: "break-word",
+        textShadow: "0 4px 30px rgba(0,0,0,0.4)",
       }}>
         {slide.headline}
       </h2>
       {slide.body && (
         <p style={{
-          fontFamily: getBodyFont(bk),
+          fontFamily: getResolvedBodyFont(bk),
           fontSize: 24,
           fontWeight: 400,
           lineHeight: 1.5,
@@ -407,22 +417,22 @@ function CTASlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w: 
           {slide.body}
         </p>
       )}
-      {/* CTA Button-like element */}
       <div style={{
         padding: "16px 48px",
         borderRadius: 12,
         background: textColor,
         color: bg,
-        fontFamily: "'Inter', system-ui, sans-serif",
+        fontFamily: getResolvedBodyFont(bk),
         fontSize: 20,
         fontWeight: 700,
         letterSpacing: "0.02em",
+        boxShadow: `0 4px 20px ${bk.palette.accent}40`,
       }}>
         {slide.footnote || "Seguir →"}
       </div>
       {bk.handle && (
         <span style={{
-          fontFamily: "'Inter', system-ui, sans-serif",
+          fontFamily: getResolvedBodyFont(bk),
           fontSize: 22,
           fontWeight: 600,
           color: textColor,

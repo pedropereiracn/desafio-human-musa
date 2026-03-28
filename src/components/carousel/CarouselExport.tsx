@@ -18,11 +18,19 @@ export default function CarouselExport({ slides, width, height, title, brandKit 
   const [exporting, setExporting] = useState<"png" | "pdf" | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const waitForFonts = async () => {
+    if (brandKit?.fonts?.url) {
+      await document.fonts.ready;
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+  };
+
   const exportPNG = async () => {
     if (!containerRef.current) return;
     setExporting("png");
 
     try {
+      await waitForFonts();
       const html2canvas = (await import("html2canvas")).default;
       const slideElements = containerRef.current.querySelectorAll("[data-slide-id]");
 
@@ -58,6 +66,7 @@ export default function CarouselExport({ slides, width, height, title, brandKit 
     setExporting("pdf");
 
     try {
+      await waitForFonts();
       const html2canvas = (await import("html2canvas")).default;
       const { jsPDF } = await import("jspdf");
       const slideElements = containerRef.current.querySelectorAll("[data-slide-id]");

@@ -165,6 +165,20 @@ export interface BrandKit {
   visualStyle: VisualStyle;
   decorativeElements: string[];
   handle?: string;
+  fonts?: {
+    url: string;
+    headline: string;
+    body: string;
+  };
+  backgrounds?: {
+    cover: string;
+    content: string;
+    contentAlt: string;
+    statistic: string;
+    quote: string;
+    quoteAlt: string;
+    cta: string;
+  };
 }
 
 export interface CarouselSlide {

@@ -21,6 +21,7 @@ import type {
   VisualStyle,
 } from "@/lib/types";
 import { getTemplate, getSlideSizeForPlatform } from "@/lib/carousel-templates";
+import { useFontLoader } from "@/hooks/useFontLoader";
 import SlidePreview from "./SlidePreview";
 import SlideTemplates from "./SlideTemplates";
 import CarouselExport from "./CarouselExport";
@@ -69,6 +70,7 @@ export default function CarouselEditor({ initialSlides, platform, topic, brandKi
   const [regenerating, setRegenerating] = useState(false);
   const [brandKit, setBrandKit] = useState<BrandKit | undefined>(initialBrandKit);
   const [brandKitOpen, setBrandKitOpen] = useState(false);
+  useFontLoader(brandKit?.fonts?.url);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -446,6 +448,17 @@ export default function CarouselEditor({ initialSlides, platform, topic, brandKi
                     placeholder="@handle"
                   />
                 </div>
+
+                {/* Google Fonts (read-only) */}
+                {brandKit.fonts && (
+                  <div>
+                    <label className="text-[10px] text-muted-foreground mb-1 block">Fontes</label>
+                    <div className="text-xs text-foreground/70 space-y-0.5">
+                      <p>Headline: <span className="font-medium text-foreground">{brandKit.fonts.headline}</span></p>
+                      <p>Body: <span className="font-medium text-foreground">{brandKit.fonts.body}</span></p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Palette Colors */}
                 <div>

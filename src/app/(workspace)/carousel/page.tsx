@@ -3,6 +3,8 @@
 import { useState, useCallback, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Layers, Loader2, Sparkles, ArrowRight, Trash2, Clock, Edit3 } from "lucide-react";
+import { LoadingPulse, SkeletonCarousel } from "@/components/ui/Skeleton";
+import { useActivities } from "@/hooks/useActivities";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -53,6 +55,7 @@ function CarouselPageInner() {
   const searchParams = useSearchParams();
 
   const { carousels, isLoaded, saveCarousel, updateCarousel, deleteCarousel } = useCarousels();
+  const { addActivity } = useActivities();
 
   useEffect(() => {
     const paramTopic = searchParams.get("topic");
@@ -129,13 +132,19 @@ function CarouselPageInner() {
       setActiveCarouselId(id);
       setViewMode("editor");
       toast.success(`${carouselSlides.length} slides gerados e salvos!`);
+
+      await addActivity({
+        type: "copy",
+        title: `Carrossel: ${topic.slice(0, 50)}`,
+        module: "Carrossel",
+      });
     } catch (error) {
       console.error("Carousel generation error:", error);
       toast.error("Erro ao gerar carrossel. Tente novamente.");
     } finally {
       setLoading(false);
     }
-  }, [topic, platform, tone, brandName, saveCarousel]);
+  }, [topic, platform, tone, brandName, saveCarousel, addActivity]);
 
   const handleOpenSaved = useCallback(
     (saved: SavedCarousel) => {
@@ -289,6 +298,17 @@ function CarouselPageInner() {
                 {!loading && <ArrowRight size={16} />}
               </motion.button>
             </div>
+
+            {/* Loading State */}
+            {loading && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6">
+                <LoadingPulse
+                  message="Gerando slides com IA..."
+                  submessage={`Criando carrossel sobre "${topic}" para ${platform}`}
+                />
+                <SkeletonCarousel />
+              </motion.div>
+            )}
 
             {/* Saved Carousels */}
             {isLoaded && carousels.length > 0 && (

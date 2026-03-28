@@ -69,6 +69,20 @@ export function getBodyFont(brandKit: BrandKit) {
   return BODY_FONT_MAP[brandKit.typography.bodyStyle];
 }
 
+export function getResolvedHeadlineFont(brandKit: BrandKit): string {
+  if (brandKit.fonts?.headline) {
+    return `'${brandKit.fonts.headline}', ${TYPOGRAPHY_MAP[brandKit.typography.headlineStyle].fontFamily}`;
+  }
+  return TYPOGRAPHY_MAP[brandKit.typography.headlineStyle].fontFamily;
+}
+
+export function getResolvedBodyFont(brandKit: BrandKit): string {
+  if (brandKit.fonts?.body) {
+    return `'${brandKit.fonts.body}', ${BODY_FONT_MAP[brandKit.typography.bodyStyle]}`;
+  }
+  return BODY_FONT_MAP[brandKit.typography.bodyStyle];
+}
+
 export function getHeadlineSize(brandKit: BrandKit, textLength: number) {
   const sizes = TYPOGRAPHY_MAP[brandKit.typography.headlineStyle].headlineSizes;
   if (textLength > 60) return sizes.small;
@@ -210,8 +224,27 @@ export function getSlideBackground(
   slideType: SlideType | undefined,
   order: number
 ): string {
+  const bg = brandKit.backgrounds;
   const p = brandKit.palette;
   const type = slideType || "content";
+
+  if (bg) {
+    switch (type) {
+      case "cover":
+        return bg.cover;
+      case "cta":
+        return bg.cta;
+      case "statistic":
+        return bg.statistic;
+      case "quote":
+        return order % 2 === 0 ? bg.quote : bg.quoteAlt;
+      case "list":
+        return order % 2 === 0 ? bg.contentAlt : bg.content;
+      case "content":
+      default:
+        return order % 2 === 0 ? bg.content : bg.contentAlt;
+    }
+  }
 
   switch (type) {
     case "cover":
@@ -230,6 +263,11 @@ export function getSlideBackground(
   }
 }
 
+export function extractDominantHex(cssBackground: string): string | null {
+  const match = cssBackground.match(/#[0-9a-fA-F]{6}/);
+  return match ? match[0] : null;
+}
+
 export function getSlideTextColor(
   brandKit: BrandKit,
   slideType: SlideType | undefined,
@@ -237,10 +275,15 @@ export function getSlideTextColor(
   const p = brandKit.palette;
   const type = slideType || "content";
 
-  // For cover/cta/statistic on dark primary/secondary, use white
-  // For light backgrounds, use dark text
   if (type === "cover" || type === "cta" || type === "statistic") {
-    // Determine if the background is light or dark
+    // If we have gradient backgrounds, extract dominant hex from it
+    if (brandKit.backgrounds) {
+      const bgStr = type === "cover" ? brandKit.backgrounds.cover
+        : type === "cta" ? brandKit.backgrounds.cta
+        : brandKit.backgrounds.statistic;
+      const hex = extractDominantHex(bgStr);
+      if (hex) return isLightColor(hex) ? "#0c0c10" : "#ffffff";
+    }
     const bg = type === "statistic" ? p.secondary : p.primary;
     return isLightColor(bg) ? "#0c0c10" : "#ffffff";
   }
@@ -277,7 +320,7 @@ export function brandKitFromLegacy(colors: CarouselSlide["colors"]): BrandKit {
   };
 }
 
-function adjustBrightness(hex: string, amount: number): string {
+export function adjustBrightness(hex: string, amount: number): string {
   const c = hex.replace("#", "");
   const r = Math.min(255, Math.max(0, parseInt(c.substring(0, 2), 16) + amount));
   const g = Math.min(255, Math.max(0, parseInt(c.substring(2, 4), 16) + amount));

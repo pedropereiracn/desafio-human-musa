@@ -5,7 +5,8 @@ import { BarChart3, Loader2, FileBarChart } from "lucide-react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-
+import { useActivities } from "@/hooks/useActivities";
+import { LoadingPulse, SkeletonReport } from "@/components/ui/Skeleton";
 
 interface ReportResult {
   title: string;
@@ -32,6 +33,7 @@ export default function ReportsPage() {
   const [clientName, setClientName] = useState("");
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState<ReportResult | null>(null);
+  const { addActivity } = useActivities();
 
   const handleGenerate = useCallback(async () => {
     if (!metricsText.trim()) return;
@@ -49,12 +51,18 @@ export default function ReportsPage() {
       const data = await res.json();
       setReport(data);
       toast.success("Relatório gerado!");
+
+      await addActivity({
+        type: "copy",
+        title: `Relatório: ${clientName.trim() || "sem cliente"}`,
+        module: "Relatórios",
+      });
     } catch {
       toast.error("Erro ao gerar relatório. Tente novamente.");
     } finally {
       setLoading(false);
     }
-  }, [metricsText, clientName]);
+  }, [metricsText, clientName, addActivity]);
 
   const handleLoadExample = () => {
     setMetricsText(EXAMPLE_METRICS);
@@ -144,6 +152,17 @@ export default function ReportsPage() {
           )}
         </motion.button>
       </div>
+
+      {/* Loading State */}
+      {loading && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <LoadingPulse
+            message="Gerando relatório com IA..."
+            submessage={clientName.trim() ? `Analisando métricas de ${clientName}` : "Analisando métricas e gerando insights"}
+          />
+          <SkeletonReport />
+        </motion.div>
+      )}
 
       {/* Report Result */}
       {report && (
