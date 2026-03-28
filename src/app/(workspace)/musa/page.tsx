@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Lightbulb, PenTool, Loader2, RotateCcw, ArrowRight } from "lucide-react";
+import { Lightbulb, PenTool, Loader2, RotateCcw, ArrowRight, Eye, Heart, MessageCircle, Trophy } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import SearchForm from "@/components/SearchForm";
@@ -15,6 +15,12 @@ import { SkeletonGrid, SkeletonIdea } from "@/components/ui/Skeleton";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { storage } from "@/lib/storage";
 import type { Platform, Format, Step, AnalyzedReference, Idea, CopyResult, ActivityItem, CopyHistoryItem } from "@/lib/types";
+
+function formatNumber(n: number): string {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
+  if (n >= 1000) return (n / 1000).toFixed(1) + "K";
+  return n.toString();
+}
 
 type InputTab = "quick" | "brief";
 
@@ -98,11 +104,13 @@ export default function MusaPage() {
       const { analyses } = await analyzeRes.json();
 
       const analyzed: AnalyzedReference[] = rawRefs.map((ref: AnalyzedReference) => {
-        const analysis = analyses?.find((a: { id: string; analysis: string; relevanceScore: number }) => a.id === ref.id);
+        const analysis = analyses?.find((a: { id: string; analysis: string; relevanceScore: number; hookType?: string; emotionalTrigger?: string }) => a.id === ref.id);
         return {
           ...ref,
           analysis: analysis?.analysis || "",
           relevanceScore: analysis?.relevanceScore || 5,
+          hookType: analysis?.hookType || undefined,
+          emotionalTrigger: analysis?.emotionalTrigger || undefined,
         };
       });
 
@@ -297,9 +305,25 @@ export default function MusaPage() {
           <StepIndicator currentStep={currentStep} onStepClick={setCurrentStep} completedSteps={completedSteps} />
 
           <AnimatePresence mode="wait">
-            {currentStep === "references" && (
+            {currentStep === "references" && (() => {
+              const avgViews = references.length > 0 ? references.reduce((s, r) => s + (r.views || 0), 0) / references.length : 0;
+              const avgLikes = references.length > 0 ? references.reduce((s, r) => s + r.likes, 0) / references.length : 0;
+              const avgComments = references.length > 0 ? references.reduce((s, r) => s + r.comments, 0) / references.length : 0;
+              const topRef = references.length > 0 ? references.reduce((best, r) => ((r.views || 0) + r.likes > (best.views || 0) + best.likes ? r : best), references[0]) : null;
+
+              const hookCounts: Record<string, number> = {};
+              const triggerCounts: Record<string, number> = {};
+              references.forEach(r => {
+                if (r.hookType) hookCounts[r.hookType] = (hookCounts[r.hookType] || 0) + 1;
+                if (r.emotionalTrigger) triggerCounts[r.emotionalTrigger] = (triggerCounts[r.emotionalTrigger] || 0) + 1;
+              });
+              const topHooks = Object.entries(hookCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+              const topTriggers = Object.entries(triggerCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+              const hasPatterns = topHooks.length > 0 || topTriggers.length > 0;
+
+              return (
               <motion.div key="refs" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-4">
                   <div>
                     <h2 className="text-xl font-bold text-foreground">Referências encontradas</h2>
                     <p className="text-sm text-muted-foreground">{references.length} posts sobre &quot;{topic}&quot; no {platform}</p>
@@ -310,13 +334,74 @@ export default function MusaPage() {
                     <ArrowRight size={14} />
                   </motion.button>
                 </div>
+
+                {/* Summary Bar */}
+                <div className="card rounded-xl p-4 mb-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+                  <span className="font-medium text-foreground">{references.length} referências</span>
+                  <span className="text-muted-foreground">Média:</span>
+                  {avgViews > 0 && (
+                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                      <Eye size={14} className="text-blue-400" />
+                      {formatNumber(Math.round(avgViews))}
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1.5 text-muted-foreground">
+                    <Heart size={14} className="text-red-400" />
+                    {formatNumber(Math.round(avgLikes))}
+                  </span>
+                  <span className="flex items-center gap-1.5 text-muted-foreground">
+                    <MessageCircle size={14} className="text-purple-400" />
+                    {formatNumber(Math.round(avgComments))}
+                  </span>
+                  {topRef && (
+                    <span className="flex items-center gap-1.5 text-muted-foreground ml-auto">
+                      <Trophy size={14} className="text-amber-400" />
+                      Top: @{topRef.author} ({formatNumber((topRef.views || 0) + topRef.likes)})
+                    </span>
+                  )}
+                </div>
+
+                {/* Patterns */}
+                {hasPatterns && (
+                  <div className="card rounded-xl p-4 mb-6 space-y-3">
+                    <h3 className="text-sm font-semibold text-foreground">Padrões Detectados</h3>
+                    <div className="flex flex-wrap gap-4">
+                      {topHooks.length > 0 && (
+                        <div>
+                          <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1.5">Top Hooks</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {topHooks.map(([hook, count]) => (
+                              <span key={hook} className="px-2.5 py-1 rounded-full text-xs font-medium bg-primary/15 text-primary">
+                                {hook} ({count})
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {topTriggers.length > 0 && (
+                        <div>
+                          <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1.5">Gatilhos Emocionais</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {topTriggers.map(([trigger, count]) => (
+                              <span key={trigger} className="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/15 text-amber-400">
+                                {trigger} ({count})
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 <motion.div variants={staggerContainer} initial="hidden" animate="show" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {references.map((ref) => (
                     <motion.div key={ref.id} variants={staggerItem}><ReferenceCard reference={ref} /></motion.div>
                   ))}
                 </motion.div>
               </motion.div>
-            )}
+              );
+            })()}
 
             {currentStep === "ideas" && (
               <motion.div key="ideas" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>

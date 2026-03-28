@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     };
 
     const postsDescription = references.map(r =>
-      `[ID: ${r.id}] @${r.author} - "${r.caption?.slice(0, 100)}" | Likes: ${r.likes} | Comentários: ${r.comments}`
+      `[ID: ${r.id}] @${r.author} - "${r.caption?.slice(0, 100)}" | Views: ${r.views || 0} | Likes: ${r.likes} | Comentários: ${r.comments} | Shares: ${r.shares}`
     ).join("\n\n");
 
     const userMessage = `Tema buscado: "${topic}" | Formato: ${format}\n\nPosts encontrados:\n${postsDescription}`;

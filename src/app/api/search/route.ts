@@ -11,12 +11,12 @@ export async function POST(request: NextRequest) {
     }
 
     const searchFn = platform === "tiktok" ? searchTikTok : searchInstagram;
-    const references = await searchFn(topic, 15);
+    const references = await searchFn(topic);
 
-    // Sort by engagement
-    references.sort((a, b) => (b.likes + b.comments) - (a.likes + a.comments));
+    // Filter out zero-engagement posts
+    const filtered = references.filter(r => r.views > 0 || r.likes > 0 || r.comments > 0);
 
-    return NextResponse.json({ references: references.slice(0, 12) });
+    return NextResponse.json({ references: filtered });
   } catch (error) {
     console.error("Search error:", error);
     return NextResponse.json({ error: "Erro ao buscar referências" }, { status: 500 });

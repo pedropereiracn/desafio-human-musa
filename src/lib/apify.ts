@@ -5,12 +5,19 @@ const APIFY_BASE = "https://api.apify.com/v2";
 const POLL_INTERVAL = 2000;
 const MAX_TIMEOUT = 55000;
 
+const MIN_LIKES = 100;
+const MIN_VIEWS = 1000;
+const FETCH_LIMIT = 30;
+const RETURN_LIMIT = 12;
+
 interface ApifyInstagramPost {
   url?: string;
   displayUrl?: string;
   caption?: string;
   likesCount?: number;
   commentsCount?: number;
+  videoPlayCount?: number;
+  sharesCount?: number;
   timestamp?: string;
   ownerUsername?: string;
   videoUrl?: string;
@@ -25,11 +32,26 @@ interface ApifyTikTokPost {
   diggCount?: number;
   commentCount?: number;
   shareCount?: number;
+  playCount?: number;
   createTime?: number;
   authorMeta?: { name?: string };
 }
 
-export async function searchInstagram(topic: string, limit = 20): Promise<Reference[]> {
+function engagementScore(ref: Reference): number {
+  return (ref.views * 0.1) + ref.likes + (ref.comments * 2) + (ref.shares * 3);
+}
+
+function filterAndSort(refs: Reference[]): Reference[] {
+  const filtered = refs.filter(r =>
+    r.likes >= MIN_LIKES || r.views >= MIN_VIEWS
+  );
+
+  const pool = filtered.length >= 5 ? filtered : refs;
+  pool.sort((a, b) => engagementScore(b) - engagementScore(a));
+  return pool.slice(0, RETURN_LIMIT);
+}
+
+export async function searchInstagram(topic: string, limit = FETCH_LIMIT): Promise<Reference[]> {
   const input = {
     hashtags: [topic.replace(/\s+/g, "").toLowerCase()],
     resultsLimit: limit,
@@ -37,21 +59,24 @@ export async function searchInstagram(topic: string, limit = 20): Promise<Refere
 
   const results = await runApifyActor("apify/instagram-hashtag-scraper", input);
 
-  return (results as ApifyInstagramPost[]).map((post, i) => ({
+  const refs = (results as ApifyInstagramPost[]).map((post, i) => ({
     id: `ig-${i}`,
     url: post.url || "",
     thumbnail: post.displayUrl || post.imageUrl || "",
     caption: post.caption || "",
+    views: post.videoPlayCount || 0,
     likes: post.likesCount || 0,
     comments: post.commentsCount || 0,
-    shares: 0,
+    shares: post.sharesCount || 0,
     date: post.timestamp || "",
     author: post.ownerUsername || "",
     platform: "instagram" as Platform,
   }));
+
+  return filterAndSort(refs);
 }
 
-export async function searchTikTok(topic: string, limit = 20): Promise<Reference[]> {
+export async function searchTikTok(topic: string, limit = FETCH_LIMIT): Promise<Reference[]> {
   const input = {
     searchQueries: [topic],
     resultsPerPage: limit,
@@ -60,11 +85,12 @@ export async function searchTikTok(topic: string, limit = 20): Promise<Reference
 
   const results = await runApifyActor("clockworks/tiktok-scraper", input);
 
-  return (results as ApifyTikTokPost[]).map((post, i) => ({
+  const refs = (results as ApifyTikTokPost[]).map((post, i) => ({
     id: `tt-${i}`,
     url: post.webVideoUrl || "",
     thumbnail: post.covers?.[0] || post.videoMeta?.coverUrl || "",
     caption: post.text || "",
+    views: post.playCount || 0,
     likes: post.diggCount || 0,
     comments: post.commentCount || 0,
     shares: post.shareCount || 0,
@@ -72,6 +98,8 @@ export async function searchTikTok(topic: string, limit = 20): Promise<Reference
     author: post.authorMeta?.name || "",
     platform: "tiktok" as Platform,
   }));
+
+  return filterAndSort(refs);
 }
 
 async function runApifyActor(actorId: string, input: Record<string, unknown>): Promise<unknown[]> {
@@ -79,7 +107,6 @@ async function runApifyActor(actorId: string, input: Record<string, unknown>): P
   const timeout = setTimeout(() => controller.abort(), MAX_TIMEOUT);
 
   try {
-    // Step 1: Start the actor run (async)
     const encodedActorId = actorId.replace("/", "~");
     const startRes = await fetch(
       `${APIFY_BASE}/acts/${encodedActorId}/runs?token=${APIFY_TOKEN}`,
@@ -100,7 +127,6 @@ async function runApifyActor(actorId: string, input: Record<string, unknown>): P
     const runId = runData.data?.id;
     if (!runId) throw new Error("Apify: no run ID returned");
 
-    // Step 2: Poll until SUCCEEDED or FAILED
     let status = runData.data?.status;
     let defaultDatasetId = runData.data?.defaultDatasetId;
 
@@ -123,7 +149,6 @@ async function runApifyActor(actorId: string, input: Record<string, unknown>): P
       throw new Error(`Apify actor finished with status: ${status}`);
     }
 
-    // Step 3: Fetch dataset items
     const datasetRes = await fetch(
       `${APIFY_BASE}/datasets/${defaultDatasetId}/items?token=${APIFY_TOKEN}`,
       { signal: controller.signal }

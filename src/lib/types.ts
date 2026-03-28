@@ -14,6 +14,7 @@ export interface Reference {
   url: string;
   thumbnail: string;
   caption: string;
+  views: number;
   likes: number;
   comments: number;
   shares: number;
