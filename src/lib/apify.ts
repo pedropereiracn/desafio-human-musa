@@ -20,6 +20,7 @@ interface ApifyInstagramPost {
 interface ApifyTikTokPost {
   webVideoUrl?: string;
   covers?: string[];
+  videoMeta?: { coverUrl?: string };
   text?: string;
   diggCount?: number;
   commentCount?: number;
@@ -30,13 +31,11 @@ interface ApifyTikTokPost {
 
 export async function searchInstagram(topic: string, limit = 20): Promise<Reference[]> {
   const input = {
-    search: topic,
-    resultsType: "posts",
+    hashtags: [topic.replace(/\s+/g, "").toLowerCase()],
     resultsLimit: limit,
-    searchType: "hashtag",
   };
 
-  const results = await runApifyActor("apify/instagram-scraper", input);
+  const results = await runApifyActor("apify/instagram-hashtag-scraper", input);
 
   return (results as ApifyInstagramPost[]).map((post, i) => ({
     id: `ig-${i}`,
@@ -64,7 +63,7 @@ export async function searchTikTok(topic: string, limit = 20): Promise<Reference
   return (results as ApifyTikTokPost[]).map((post, i) => ({
     id: `tt-${i}`,
     url: post.webVideoUrl || "",
-    thumbnail: post.covers?.[0] || "",
+    thumbnail: post.covers?.[0] || post.videoMeta?.coverUrl || "",
     caption: post.text || "",
     likes: post.diggCount || 0,
     comments: post.commentCount || 0,
@@ -81,8 +80,9 @@ async function runApifyActor(actorId: string, input: Record<string, unknown>): P
 
   try {
     // Step 1: Start the actor run (async)
+    const encodedActorId = actorId.replace("/", "~");
     const startRes = await fetch(
-      `${APIFY_BASE}/acts/${actorId}/runs?token=${APIFY_TOKEN}`,
+      `${APIFY_BASE}/acts/${encodedActorId}/runs?token=${APIFY_TOKEN}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
