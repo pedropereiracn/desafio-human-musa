@@ -2,79 +2,92 @@ import type { CarouselTemplate } from "./types";
 
 export const CAROUSEL_TEMPLATES: CarouselTemplate[] = [
   {
-    id: "obsidian",
-    name: "Obsidian",
+    id: "corporate",
+    name: "Corporate",
+    defaults: {
+      backgroundType: "solid",
+      colors: {
+        background: "#1e293b",
+        text: "#f1f5f9",
+        accent: "#3b82f6",
+      },
+      layout: "centered",
+    },
+    slideSize: { width: 1080, height: 1080 },
+    brandKit: {
+      brandName: "",
+      palette: {
+        primary: "#1e293b",
+        secondary: "#334155",
+        background: "#1e293b",
+        backgroundAlt: "#273548",
+        text: "#f1f5f9",
+        accent: "#3b82f6",
+      },
+      typography: { headlineStyle: "minimal", bodyStyle: "clean" },
+      visualStyle: "corporate",
+      decorativeElements: ["geometric-shapes", "accent-bars"],
+    },
+  },
+  {
+    id: "bold",
+    name: "Bold",
     defaults: {
       backgroundType: "solid",
       colors: {
         background: "#0c0c10",
         text: "#ffffff",
-        accent: "#f97066",
+        accent: "#ef4444",
       },
       layout: "centered",
     },
     slideSize: { width: 1080, height: 1080 },
-  },
-  {
-    id: "sunset",
-    name: "Sunset",
-    defaults: {
-      backgroundType: "gradient",
-      colors: {
-        background: "#f97066",
-        backgroundEnd: "#f59e0b",
+    brandKit: {
+      brandName: "",
+      palette: {
+        primary: "#0c0c10",
+        secondary: "#1a1a24",
+        background: "#0c0c10",
+        backgroundAlt: "#14141c",
         text: "#ffffff",
-        accent: "#ffffff",
+        accent: "#ef4444",
       },
-      layout: "centered",
+      typography: { headlineStyle: "uppercase-bold", bodyStyle: "clean" },
+      visualStyle: "bold",
+      decorativeElements: ["gradient-overlays", "corner-brackets"],
     },
-    slideSize: { width: 1080, height: 1080 },
   },
   {
-    id: "minimal",
-    name: "Minimal",
+    id: "elegant",
+    name: "Elegant",
     defaults: {
       backgroundType: "solid",
       colors: {
-        background: "#ffffff",
+        background: "#faf9f6",
         text: "#1a1a1a",
-        accent: "#f97066",
+        accent: "#92764a",
       },
       layout: "left",
     },
     slideSize: { width: 1080, height: 1080 },
-  },
-  {
-    id: "teal-focus",
-    name: "Teal Focus",
-    defaults: {
-      backgroundType: "solid",
-      colors: {
-        background: "#0f172a",
-        text: "#e2e8f0",
-        accent: "#2dd4bf",
+    brandKit: {
+      brandName: "",
+      palette: {
+        primary: "#92764a",
+        secondary: "#b8a07a",
+        background: "#faf9f6",
+        backgroundAlt: "#f0ede6",
+        text: "#1a1a1a",
+        accent: "#92764a",
       },
-      layout: "centered",
+      typography: { headlineStyle: "elegant", bodyStyle: "serif" },
+      visualStyle: "elegant",
+      decorativeElements: ["accent-bars", "noise-texture"],
     },
-    slideSize: { width: 1080, height: 1080 },
   },
   {
-    id: "bold-contrast",
-    name: "Bold Contrast",
-    defaults: {
-      backgroundType: "solid",
-      colors: {
-        background: "#0c0c10",
-        text: "#ffffff",
-        accent: "#f97066",
-      },
-      layout: "centered",
-    },
-    slideSize: { width: 1080, height: 1080 },
-  },
-  {
-    id: "custom",
-    name: "Custom",
+    id: "creative",
+    name: "Creative",
     defaults: {
       backgroundType: "solid",
       colors: {
@@ -85,6 +98,76 @@ export const CAROUSEL_TEMPLATES: CarouselTemplate[] = [
       layout: "centered",
     },
     slideSize: { width: 1080, height: 1080 },
+    brandKit: {
+      brandName: "",
+      palette: {
+        primary: "#1a1a2e",
+        secondary: "#16213e",
+        background: "#1a1a2e",
+        backgroundAlt: "#222240",
+        text: "#ffffff",
+        accent: "#e94560",
+      },
+      typography: { headlineStyle: "playful", bodyStyle: "clean" },
+      visualStyle: "creative",
+      decorativeElements: ["geometric-shapes", "gradient-overlays"],
+    },
+  },
+  {
+    id: "tech",
+    name: "Tech",
+    defaults: {
+      backgroundType: "solid",
+      colors: {
+        background: "#0a0a0f",
+        text: "#e0e0e0",
+        accent: "#00ff88",
+      },
+      layout: "centered",
+    },
+    slideSize: { width: 1080, height: 1080 },
+    brandKit: {
+      brandName: "",
+      palette: {
+        primary: "#0a0a0f",
+        secondary: "#12121a",
+        background: "#0a0a0f",
+        backgroundAlt: "#101018",
+        text: "#e0e0e0",
+        accent: "#00ff88",
+      },
+      typography: { headlineStyle: "tech", bodyStyle: "mono" },
+      visualStyle: "tech",
+      decorativeElements: ["dot-grid", "diagonal-lines"],
+    },
+  },
+  {
+    id: "editorial",
+    name: "Editorial",
+    defaults: {
+      backgroundType: "solid",
+      colors: {
+        background: "#ffffff",
+        text: "#1a1a1a",
+        accent: "#c72c41",
+      },
+      layout: "left",
+    },
+    slideSize: { width: 1080, height: 1080 },
+    brandKit: {
+      brandName: "",
+      palette: {
+        primary: "#c72c41",
+        secondary: "#a32335",
+        background: "#ffffff",
+        backgroundAlt: "#f5f5f5",
+        text: "#1a1a1a",
+        accent: "#c72c41",
+      },
+      typography: { headlineStyle: "editorial", bodyStyle: "serif" },
+      visualStyle: "editorial",
+      decorativeElements: ["accent-bars", "noise-texture"],
+    },
   },
 ];
 
@@ -94,5 +177,5 @@ export function getTemplate(id: string): CarouselTemplate {
 
 export function getSlideSizeForPlatform(platform: string): { width: number; height: number } {
   if (platform === "instagram") return { width: 1080, height: 1080 };
-  return { width: 1080, height: 1350 }; // LinkedIn, default
+  return { width: 1080, height: 1350 };
 }

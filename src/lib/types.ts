@@ -144,6 +144,28 @@ export interface ReportData {
 
 export type SlideLayout = "centered" | "left" | "split";
 export type SlideBackgroundType = "solid" | "gradient";
+export type SlideType = "cover" | "content" | "statistic" | "quote" | "list" | "cta";
+export type TypographyStyle = "uppercase-bold" | "elegant" | "playful" | "minimal" | "tech" | "editorial";
+export type VisualStyle = "corporate" | "bold" | "elegant" | "creative" | "tech" | "editorial";
+
+export interface BrandKit {
+  brandName: string;
+  palette: {
+    primary: string;
+    secondary: string;
+    background: string;
+    backgroundAlt: string;
+    text: string;
+    accent: string;
+  };
+  typography: {
+    headlineStyle: TypographyStyle;
+    bodyStyle: "clean" | "serif" | "mono";
+  };
+  visualStyle: VisualStyle;
+  decorativeElements: string[];
+  handle?: string;
+}
 
 export interface CarouselSlide {
   id: string;
@@ -159,6 +181,11 @@ export interface CarouselSlide {
     accent: string;
   };
   layout: SlideLayout;
+  slideType?: SlideType;
+  listItems?: string[];
+  statValue?: string;
+  statLabel?: string;
+  quoteAttribution?: string;
 }
 
 export interface CarouselProject {
@@ -168,6 +195,7 @@ export interface CarouselProject {
   slides: CarouselSlide[];
   templateId: string;
   brandHandle?: string;
+  brandKit?: BrandKit;
 }
 
 export interface CarouselTemplate {
@@ -179,4 +207,5 @@ export interface CarouselTemplate {
     layout: SlideLayout;
   };
   slideSize: { width: number; height: number };
+  brandKit: BrandKit;
 }

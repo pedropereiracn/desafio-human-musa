@@ -2,15 +2,11 @@
 
 import { cn } from "@/lib/utils";
 
-interface SkeletonProps {
-  className?: string;
+function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
+  return <div className={cn("skeleton", className)} {...props} />;
 }
 
-export function Skeleton({ className }: SkeletonProps) {
-  return <div className={cn("skeleton", className)} />;
-}
-
-export function SkeletonCard() {
+function SkeletonCard() {
   return (
     <div className="card rounded-xl overflow-hidden">
       <div className="skeleton aspect-square" />
@@ -28,7 +24,7 @@ export function SkeletonCard() {
   );
 }
 
-export function SkeletonGrid({ count = 8 }: { count?: number }) {
+function SkeletonGrid({ count = 8 }: { count?: number }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {Array.from({ length: count }).map((_, i) => (
@@ -38,7 +34,7 @@ export function SkeletonGrid({ count = 8 }: { count?: number }) {
   );
 }
 
-export function SkeletonIdea() {
+function SkeletonIdea() {
   return (
     <div className="card rounded-xl p-5">
       <div className="flex items-start gap-3">
@@ -54,3 +50,5 @@ export function SkeletonIdea() {
     </div>
   );
 }
+
+export { Skeleton, SkeletonCard, SkeletonGrid, SkeletonIdea };

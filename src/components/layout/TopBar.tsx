@@ -3,6 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight, User } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { ClientProfile } from "@/lib/types";
 
 interface TopBarProps {
@@ -17,8 +24,10 @@ const MODULE_NAMES: Record<string, string> = {
   "/copy-lab": "Copy Lab",
   "/briefs": "Central de Briefs",
   "/clients": "Hub de Clientes",
-  "/reports": "Relatórios",
-  "/calendar": "Calendário",
+  "/reports": "Relatorios",
+  "/calendar": "Calendario",
+  "/carousel": "Carrossel",
+  "/brand": "Brand Book",
 };
 
 export default function TopBar({ clients, selectedClientId, onSelectClient }: TopBarProps) {
@@ -48,20 +57,25 @@ export default function TopBar({ clients, selectedClientId, onSelectClient }: To
 
       {/* Client Selector */}
       <div className="flex items-center gap-3">
-        <div className="relative">
-          <select
-            value={selectedClientId || ""}
-            onChange={(e) => onSelectClient(e.target.value || undefined)}
-            className="appearance-none bg-surface-2 border border-white/[0.06] rounded-xl pl-8 pr-8 py-1.5 text-sm text-foreground cursor-pointer hover:border-primary/30 transition-colors focus:outline-none focus:border-primary/40"
-          >
-            <option value="">Todos os clientes</option>
+        <Select
+          value={selectedClientId || "all"}
+          onValueChange={(value) => onSelectClient(value === "all" ? undefined : value)}
+        >
+          <SelectTrigger className="w-[180px] h-9 rounded-xl bg-surface-2 border-white/[0.06] text-sm hover:border-primary/30 transition-colors focus:ring-primary/20">
+            <div className="flex items-center gap-2">
+              <User size={14} className="text-muted-foreground" />
+              <SelectValue placeholder="Todos os clientes" />
+            </div>
+          </SelectTrigger>
+          <SelectContent className="bg-surface-1 border-white/[0.06] rounded-xl">
+            <SelectItem value="all" className="rounded-lg text-sm">Todos os clientes</SelectItem>
             {clients.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <SelectItem key={c.id} value={c.id} className="rounded-lg text-sm">
+                {c.name}
+              </SelectItem>
             ))}
-          </select>
-          <User size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-          <ChevronRight size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none rotate-90" />
-        </div>
+          </SelectContent>
+        </Select>
       </div>
     </header>
   );
