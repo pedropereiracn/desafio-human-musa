@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { FileText, Loader2, CheckCircle, AlertCircle, ArrowRight, Sparkles, PenTool, Clock, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useBriefs } from "@/hooks/useBriefs";
 import { useActivities } from "@/hooks/useActivities";
 import { cn } from "@/lib/utils";
-import type { BriefResult, Platform, Format } from "@/lib/types";
+import type { BriefResult } from "@/lib/types";
 
 const TEMPLATES = [
   { label: "Campanha Instagram", placeholder: "Preciso de conteúdo para campanha no Instagram do cliente X. Objetivo: awareness. Público: mulheres 25-40. Tom: aspiracional." },
@@ -33,8 +33,21 @@ export default function BriefsPage() {
   const [error, setError] = useState("");
   const [activeTemplate, setActiveTemplate] = useState(3);
 
+  const [elapsed, setElapsed] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   const { briefs, addBrief, deleteBrief } = useBriefs();
   const { addActivity } = useActivities();
+
+  useEffect(() => {
+    if (decoding) {
+      setElapsed(0);
+      timerRef.current = setInterval(() => setElapsed((s) => s + 1), 1000);
+    } else {
+      if (timerRef.current) clearInterval(timerRef.current);
+    }
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [decoding]);
 
   const handleDecode = useCallback(async () => {
     if (!briefing.trim()) return;
@@ -131,6 +144,52 @@ export default function BriefsPage() {
             <><FileText size={18} /> Decodificar Briefing</>
           )}
         </motion.button>
+
+        {/* Visual Timer */}
+        <AnimatePresence>
+          {decoding && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="flex items-center gap-4 px-4 py-3 rounded-xl bg-primary/5 border border-primary/10">
+                <div className="relative flex items-center justify-center w-12 h-12 shrink-0">
+                  <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                    <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" className="text-border" strokeWidth="3" />
+                    <circle
+                      cx="24" cy="24" r="20" fill="none" stroke="currentColor" className="text-primary"
+                      strokeWidth="3" strokeLinecap="round"
+                      strokeDasharray={`${Math.min(elapsed / 15, 1) * 125.6} 125.6`}
+                      style={{ transition: "stroke-dasharray 1s linear" }}
+                    />
+                  </svg>
+                  <span className="absolute text-xs font-bold text-primary tabular-nums">
+                    {elapsed}s
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">
+                    {elapsed < 3 ? "Analisando briefing..." : elapsed < 8 ? "Extraindo informações..." : "Estruturando resultado..."}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    IA processando — geralmente leva 5-10s
+                  </p>
+                  {/* Progress bar */}
+                  <div className="mt-2 h-1 bg-border rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full bg-primary rounded-full"
+                      initial={{ width: "0%" }}
+                      animate={{ width: `${Math.min(elapsed * 7, 95)}%` }}
+                      transition={{ duration: 1, ease: "linear" }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {error && (
           <div className="flex items-center gap-2 text-destructive text-sm card px-4 py-3">
