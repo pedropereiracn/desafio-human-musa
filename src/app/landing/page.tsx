@@ -474,8 +474,8 @@ export default function LandingPage() {
         <div className="flex items-center justify-between px-6 py-3.5 max-w-6xl mx-auto w-full">
           <div className="flex items-center gap-3">
             <MusaLogo size={32} />
-            <span className="font-bold text-lg text-foreground tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
-              musa
+            <span className="font-extrabold text-xl text-foreground tracking-tight">
+              MUSA
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
@@ -834,7 +834,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <MusaLogo size={24} />
-              <span className="font-semibold text-foreground text-sm tracking-tight" style={{ fontFamily: "var(--font-display)" }}>musa</span>
+              <span className="font-extrabold text-foreground text-base tracking-tight">MUSA</span>
             </div>
 
             <div className="flex items-center gap-6 text-xs text-muted-foreground/50">

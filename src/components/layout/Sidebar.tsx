@@ -192,10 +192,9 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 initial={{ opacity: 0, width: 0 }}
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
-                className="font-bold text-foreground tracking-tight overflow-hidden whitespace-nowrap"
-                style={{ fontFamily: "var(--font-display)" }}
+                className="font-extrabold text-lg text-foreground tracking-tight overflow-hidden whitespace-nowrap"
               >
-                musa
+                MUSA
               </motion.span>
             )}
           </AnimatePresence>
