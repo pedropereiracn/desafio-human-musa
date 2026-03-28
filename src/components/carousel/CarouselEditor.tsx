@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import {
   Plus,
   Trash2,
@@ -24,15 +24,29 @@ interface CarouselEditorProps {
   initialSlides: CarouselSlide[];
   platform: string;
   topic: string;
+  onSave?: (slides: CarouselSlide[], templateId: string) => void;
 }
 
 let slideCounter = 100;
 
-export default function CarouselEditor({ initialSlides, platform, topic }: CarouselEditorProps) {
+export default function CarouselEditor({ initialSlides, platform, topic, onSave }: CarouselEditorProps) {
   const [slides, setSlides] = useState<CarouselSlide[]>(initialSlides);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [templateId, setTemplateId] = useState("obsidian");
   const [regenerating, setRegenerating] = useState(false);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Debounced auto-save when slides change
+  useEffect(() => {
+    if (!onSave) return;
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    saveTimeoutRef.current = setTimeout(() => {
+      onSave(slides, templateId);
+    }, 1000);
+    return () => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
+  }, [slides, templateId, onSave]);
 
   const { width, height } = getSlideSizeForPlatform(platform);
   const selected = slides[selectedIndex];

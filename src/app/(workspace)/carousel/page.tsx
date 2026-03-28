@@ -2,13 +2,14 @@
 
 import { useState, useCallback, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Layers, Loader2, Sparkles, ArrowRight } from "lucide-react";
+import { Layers, Loader2, Sparkles, ArrowRight, Trash2, Clock, Edit3 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import CarouselEditor from "@/components/carousel/CarouselEditor";
 import type { CarouselSlide, Platform, Tone } from "@/lib/types";
 import { getTemplate } from "@/lib/carousel-templates";
+import { useCarousels, type SavedCarousel } from "@/hooks/useCarousels";
 
 interface GeneratedData {
   slides: { headline: string; body?: string; footnote?: string }[];
@@ -24,6 +25,8 @@ export default function CarouselPage() {
   );
 }
 
+type ViewMode = "home" | "editor";
+
 function CarouselPageInner() {
   const [topic, setTopic] = useState("");
   const [platform, setPlatform] = useState<Platform>("instagram");
@@ -31,7 +34,11 @@ function CarouselPageInner() {
   const [loading, setLoading] = useState(false);
   const [slides, setSlides] = useState<CarouselSlide[] | null>(null);
   const [generatedCaption, setGeneratedCaption] = useState<{ caption: string; hashtags: string[] } | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>("home");
+  const [activeCarouselId, setActiveCarouselId] = useState<string | null>(null);
   const searchParams = useSearchParams();
+
+  const { carousels, isLoaded, saveCarousel, updateCarousel, deleteCarousel, getCarousel } = useCarousels();
 
   // Pre-fill from Musa pipeline URL params
   useEffect(() => {
@@ -53,7 +60,6 @@ function CarouselPageInner() {
     setSlides(null);
 
     try {
-      // Check for existing context from Musa pipeline in sessionStorage
       let context;
       const storedContext = typeof window !== "undefined" ? sessionStorage.getItem("carousel-context") : null;
       if (storedContext) {
@@ -67,7 +73,10 @@ function CarouselPageInner() {
         body: JSON.stringify({ topic, platform, tone, context }),
       });
 
-      if (!res.ok) throw new Error("Generation failed");
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.details || "Generation failed");
+      }
       const data: GeneratedData = await res.json();
 
       const template = getTemplate("obsidian");
@@ -84,25 +93,72 @@ function CarouselPageInner() {
 
       setSlides(carouselSlides);
       setGeneratedCaption({ caption: data.caption, hashtags: data.hashtags });
-      toast.success(`${carouselSlides.length} slides gerados!`);
+
+      // Auto-save
+      const id = saveCarousel({
+        title: topic.slice(0, 60),
+        topic,
+        platform,
+        templateId: "obsidian",
+        slides: carouselSlides,
+        caption: data.caption,
+        hashtags: data.hashtags,
+      });
+      setActiveCarouselId(id);
+      setViewMode("editor");
+      toast.success(`${carouselSlides.length} slides gerados e salvos!`);
     } catch (error) {
       console.error("Carousel generation error:", error);
       toast.error("Erro ao gerar carrossel. Tente novamente.");
     } finally {
       setLoading(false);
     }
-  }, [topic, platform, tone]);
+  }, [topic, platform, tone, saveCarousel]);
+
+  const handleOpenSaved = useCallback(
+    (saved: SavedCarousel) => {
+      setTopic(saved.topic);
+      setPlatform(saved.platform);
+      setSlides(saved.slides);
+      setActiveCarouselId(saved.id);
+      setGeneratedCaption(
+        saved.caption ? { caption: saved.caption, hashtags: saved.hashtags || [] } : null
+      );
+      setViewMode("editor");
+    },
+    []
+  );
 
   const handleReset = useCallback(() => {
     setSlides(null);
     setGeneratedCaption(null);
+    setActiveCarouselId(null);
     setTopic("");
+    setViewMode("home");
   }, []);
+
+  const handleSaveCurrentState = useCallback(
+    (updatedSlides: CarouselSlide[], templateId: string) => {
+      if (activeCarouselId) {
+        updateCarousel(activeCarouselId, { slides: updatedSlides, templateId });
+      }
+    },
+    [activeCarouselId, updateCarousel]
+  );
+
+  const handleDeleteCarousel = useCallback(
+    (id: string, e: React.MouseEvent) => {
+      e.stopPropagation();
+      deleteCarousel(id);
+      toast.success("Carrossel removido");
+    },
+    [deleteCarousel]
+  );
 
   return (
     <div className="max-w-7xl mx-auto h-full flex flex-col">
       <AnimatePresence mode="wait">
-        {!slides ? (
+        {viewMode === "home" && !slides ? (
           <motion.div
             key="input"
             initial={{ opacity: 0, y: 12 }}
@@ -124,7 +180,6 @@ function CarouselPageInner() {
             </div>
 
             <div className="card p-6 space-y-4">
-              {/* Topic */}
               <div>
                 <label className="text-sm font-medium text-foreground mb-1.5 block">
                   Tópico do carrossel
@@ -138,7 +193,6 @@ function CarouselPageInner() {
                 />
               </div>
 
-              {/* Platform */}
               <div>
                 <label className="text-sm font-medium text-foreground mb-1.5 block">
                   Plataforma
@@ -161,7 +215,6 @@ function CarouselPageInner() {
                 </div>
               </div>
 
-              {/* Tone */}
               <div>
                 <label className="text-sm font-medium text-foreground mb-1.5 block">
                   Tom
@@ -184,7 +237,6 @@ function CarouselPageInner() {
                 </div>
               </div>
 
-              {/* Generate */}
               <motion.button
                 whileTap={{ scale: 0.98 }}
                 onClick={handleGenerate}
@@ -200,6 +252,61 @@ function CarouselPageInner() {
                 {!loading && <ArrowRight size={16} />}
               </motion.button>
             </div>
+
+            {/* Saved Carousels */}
+            {isLoaded && carousels.length > 0 && (
+              <div className="mt-8">
+                <h2 className="text-sm font-semibold text-foreground mb-3">
+                  Carrosséis salvos ({carousels.length})
+                </h2>
+                <div className="space-y-2">
+                  {carousels.map((c) => (
+                    <button
+                      key={c.id}
+                      onClick={() => handleOpenSaved(c)}
+                      className="w-full card p-4 flex items-center gap-3 hover:border-primary/30 transition-colors text-left group"
+                    >
+                      {/* Mini preview of first slide */}
+                      <div
+                        className="w-10 h-10 rounded-md shrink-0 flex items-center justify-center"
+                        style={{
+                          background: c.slides[0]?.colors.background || "#0c0c10",
+                        }}
+                      >
+                        <span
+                          style={{ color: c.slides[0]?.colors.text || "#fff" }}
+                          className="text-[8px] font-bold leading-none text-center px-0.5"
+                        >
+                          {c.slides[0]?.headline.slice(0, 12)}
+                        </span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">{c.title}</p>
+                        <p className="text-xs text-muted-foreground flex items-center gap-2">
+                          <span>{c.slides.length} slides</span>
+                          <span className="capitalize">{c.platform}</span>
+                          <span className="flex items-center gap-1">
+                            <Clock size={10} />
+                            {new Date(c.updatedAt).toLocaleDateString("pt-BR")}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="p-1.5 rounded-lg hover:bg-surface-2 text-muted-foreground">
+                          <Edit3 size={14} />
+                        </span>
+                        <span
+                          onClick={(e) => handleDeleteCarousel(c.id, e)}
+                          className="p-1.5 rounded-lg hover:bg-red-500/10 text-muted-foreground hover:text-red-400"
+                        >
+                          <Trash2 size={14} />
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </motion.div>
         ) : (
           <motion.div
@@ -209,11 +316,10 @@ function CarouselPageInner() {
             exit={{ opacity: 0, y: -12 }}
             className="flex-1 flex flex-col min-h-0"
           >
-            {/* Header */}
             <div className="flex items-center justify-between mb-4 shrink-0">
               <div>
                 <h1 className="text-xl font-bold text-foreground">Editor de Carrossel</h1>
-                <p className="text-sm text-muted-foreground">{slides.length} slides &mdash; {topic}</p>
+                <p className="text-sm text-muted-foreground">{slides?.length || 0} slides &mdash; {topic}</p>
               </div>
               <button
                 onClick={handleReset}
@@ -223,16 +329,17 @@ function CarouselPageInner() {
               </button>
             </div>
 
-            {/* Editor */}
             <div className="flex-1 min-h-0">
-              <CarouselEditor
-                initialSlides={slides}
-                platform={platform}
-                topic={topic}
-              />
+              {slides && (
+                <CarouselEditor
+                  initialSlides={slides}
+                  platform={platform}
+                  topic={topic}
+                  onSave={handleSaveCurrentState}
+                />
+              )}
             </div>
 
-            {/* Generated Caption */}
             {generatedCaption && (
               <div className="mt-4 card p-4 shrink-0">
                 <div className="flex items-center justify-between mb-2">

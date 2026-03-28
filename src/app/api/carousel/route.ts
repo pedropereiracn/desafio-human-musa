@@ -67,7 +67,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(parsed);
   } catch (error) {
-    console.error("Carousel error:", error);
-    return NextResponse.json({ error: "Erro ao gerar carrossel" }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Carousel error:", message, error);
+    return NextResponse.json({ error: "Erro ao gerar carrossel", details: message }, { status: 500 });
   }
 }
