@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Musa — Brand Book v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--green-50:#f0fdf4;--green-100:#dcfce7;--green-200:#bbf7d0;--green-300:#86efac;--green-400:#4ade80;--green-500:#22c55e;--green-600:#16a34a;--green-700:#15803d;--green-800:#166534;--green-900:#14532d;--green-950:#052e16;
+--violet-300:#c4b5fd;--violet-400:#a78bfa;--violet-500:#8b5cf6;--violet-600:#7c3aed;
+--neutral-50:#fafafa;--neutral-100:#f5f5f5;--neutral-200:#e5e5e5;--neutral-300:#d4d4d4;--neutral-400:#a1a1aa;--neutral-500:#71717a;--neutral-600:#52525b;--neutral-700:#3f3f46;--neutral-800:#27272a;
+--surface-0:#09090b;--surface-1:#0f0f12;--surface-2:#18181b;--surface-3:#1f1f23;--surface-4:#27272a;
+--red-500:#ef4444;--yellow-500:#eab308;--blue-500:#3b82f6;
+--font-display:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif;--font-mono:'Geist Mono',monospace;
+--shadow-sm:0 1px 2px rgba(0,0,0,.4);--shadow-md:0 4px 6px -1px rgba(0,0,0,.5);--shadow-lg:0 10px 15px -3px rgba(0,0,0,.6);--shadow-xl:0 20px 25px -5px rgba(0,0,0,.7);--shadow-2xl:0 25px 50px -12px rgba(0,0,0,.8);--shadow-glow:0 0 20px rgba(34,197,94,.15);--shadow-glow-lg:0 0 40px rgba(34,197,94,.25);
+--radius-sm:4px;--radius-md:8px;--radius-lg:12px;--radius-xl:16px;--radius-2xl:24px;--radius-full:9999px;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--surface-0);color:var(--neutral-50);font-family:var(--font-body);line-height:1.6;overflow-x:hidden}
+::selection{background:var(--green-500);color:var(--surface-0)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--surface-1)}
+::-webkit-scrollbar-thumb{background:var(--surface-3);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--surface-4)}
+
+/* Progress Bar */
+#progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--green-400),var(--green-500));z-index:1000;transition:width .1s;width:0}
+
+/* Sidebar */
+#sidebar{position:fixed;left:0;top:0;width:260px;height:100vh;background:var(--surface-1);border-right:1px solid var(--surface-3);z-index:100;overflow-y:auto;padding:24px 0;transition:transform .3s}
+#sidebar .logo-area{padding:0 20px 20px;border-bottom:1px solid var(--surface-3);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+#sidebar .logo-area svg{width:32px;height:32px}
+#sidebar .logo-area span{font-family:var(--font-display);font-size:1.25rem;font-weight:700;background:linear-gradient(135deg,var(--green-400),var(--green-500));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#sidebar nav a{display:flex;align-items:center;gap:8px;padding:6px 20px;color:var(--neutral-400);text-decoration:none;font-size:.82rem;transition:all .2s;border-left:2px solid transparent}
+#sidebar nav a:hover{color:var(--neutral-50);background:var(--surface-2)}
+#sidebar nav a.active{color:var(--green-400);border-left-color:var(--green-500);background:rgba(34,197,94,.05)}
+#sidebar nav a .nav-num{font-family:var(--font-mono);font-size:.7rem;color:var(--neutral-600);width:22px}
+#sidebar nav .nav-group{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--neutral-600);padding:12px 20px 4px;font-weight:600}
+#hamburger{display:none;position:fixed;top:16px;left:16px;z-index:200;background:var(--surface-2);border:1px solid var(--surface-3);border-radius:var(--radius-md);width:40px;height:40px;cursor:pointer;color:var(--neutral-50);font-size:1.2rem;align-items:center;justify-content:center}
+
+/* Main Content */
+main{margin-left:260px;max-width:960px;padding:0 48px}
+section{min-height:100vh;padding:80px 0;opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
+section.visible{opacity:1;transform:translateY(0)}
+
+/* Section Headers */
+.section-num{font-family:var(--font-mono);font-size:5rem;font-weight:700;color:var(--surface-3);line-height:1;margin-bottom:-20px;position:relative;z-index:0}
+.section-title{font-family:var(--font-display);font-size:2.5rem;font-weight:700;background:linear-gradient(135deg,var(--green-300),var(--green-500));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px;position:relative;z-index:1}
+.section-subtitle{color:var(--neutral-400);font-size:1.05rem;margin-bottom:48px;max-width:600px}
+
+/* Utility */
+.grid{display:grid;gap:24px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-6{grid-template-columns:repeat(6,1fr)}
+.card{background:var(--surface-2);border:1px solid var(--surface-3);border-radius:var(--radius-lg);padding:24px;transition:all .3s}
+.card:hover{border-color:var(--surface-4);box-shadow:var(--shadow-glow);transform:translateY(-2px)}
+.glass-card{background:rgba(15,15,18,.6);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-lg);padding:24px}
+.tag{display:inline-block;padding:2px 10px;border-radius:var(--radius-full);font-size:.75rem;font-weight:500;background:rgba(34,197,94,.1);color:var(--green-400);border:1px solid rgba(34,197,94,.2)}
+.code-block{background:var(--surface-1);border:1px solid var(--surface-3);border-radius:var(--radius-md);padding:16px;font-family:var(--font-mono);font-size:.82rem;color:var(--green-300);overflow-x:auto;position:relative;line-height:1.7}
+.code-block .copy-btn{position:absolute;top:8px;right:8px;background:var(--surface-3);border:none;color:var(--neutral-400);border-radius:var(--radius-sm);padding:4px 10px;font-size:.7rem;cursor:pointer;opacity:0;transition:opacity .2s}
+.code-block:hover .copy-btn{opacity:1}
+.code-block .copy-btn:hover{color:var(--neutral-50)}
+.divider{height:1px;background:var(--surface-3);margin:48px 0}
+.text-muted{color:var(--neutral-400)}
+.text-green{color:var(--green-400)}
+.text-violet{color:var(--violet-400)}
+.mb-8{margin-bottom:8px}.mb-12{margin-bottom:12px}.mb-16{margin-bottom:16px}.mb-24{margin-bottom:24px}.mb-32{margin-bottom:32px}.mb-48{margin-bottom:48px}.mb-64{margin-bottom:64px}
+.mt-24{margin-top:24px}.mt-32{margin-top:32px}.mt-48{margin-top:48px}
+.flex{display:flex}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}.gap-24{gap:24px}
+
+/* Toast */
+#toast{position:fixed;bottom:32px;right:32px;background:var(--green-500);color:var(--surface-0);padding:10px 20px;border-radius:var(--radius-md);font-size:.85rem;font-weight:600;opacity:0;transform:translateY(10px);transition:all .3s;z-index:1000;pointer-events:none}
+#toast.show{opacity:1;transform:translateY(0)}
+
+/* Cover */
+#cover{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-height:100vh;padding-top:0}
+#cover .cover-title{font-family:var(--font-display);font-size:7rem;font-weight:700;background:linear-gradient(135deg,var(--green-300),var(--green-500),var(--green-600));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:16px}
+#cover .cover-sub{font-size:1.3rem;color:var(--neutral-400);margin-bottom:8px}
+#cover .cover-version{font-family:var(--font-mono);font-size:.85rem;color:var(--neutral-600)}
+.scroll-arrow{margin-top:64px;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+.scroll-arrow svg{width:32px;height:32px;color:var(--neutral-600)}
+
+/* Color Swatch */
+.swatch{border-radius:var(--radius-md);overflow:hidden;cursor:pointer;transition:all .3s;border:1px solid var(--surface-3)}
+.swatch:hover{transform:scale(1.05);box-shadow:var(--shadow-glow)}
+.swatch-color{height:80px;display:flex;align-items:flex-end;padding:8px}
+.swatch-info{padding:10px;background:var(--surface-2);font-size:.75rem}
+.swatch-info .swatch-name{font-weight:600;color:var(--neutral-50);margin-bottom:2px}
+.swatch-info .swatch-hex{font-family:var(--font-mono);color:var(--neutral-400);font-size:.7rem}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-body);font-weight:500;border-radius:var(--radius-md);cursor:pointer;transition:all .2s;border:none;text-decoration:none}
+.btn-primary{background:var(--green-500);color:var(--surface-0);padding:10px 20px;font-size:.875rem}
+.btn-primary:hover{background:var(--green-600);box-shadow:var(--shadow-glow)}
+.btn-secondary{background:transparent;color:var(--neutral-50);border:1px solid var(--surface-4);padding:10px 20px;font-size:.875rem}
+.btn-secondary:hover{border-color:var(--neutral-400);background:var(--surface-2)}
+.btn-ghost{background:transparent;color:var(--neutral-400);padding:10px 20px;font-size:.875rem}
+.btn-ghost:hover{color:var(--neutral-50);background:var(--surface-2)}
+.btn-destructive{background:var(--red-500);color:white;padding:10px 20px;font-size:.875rem}
+.btn-destructive:hover{background:#dc2626}
+.btn-sm{padding:6px 14px;font-size:.8rem}
+.btn-lg{padding:14px 28px;font-size:1rem}
+
+/* Form Inputs */
+.input{width:100%;background:var(--surface-1);border:1px solid var(--surface-3);border-radius:var(--radius-md);padding:10px 14px;color:var(--neutral-50);font-family:var(--font-body);font-size:.875rem;transition:all .2s;outline:none}
+.input:focus{border-color:var(--green-500);box-shadow:0 0 0 3px rgba(34,197,94,.15)}
+.input::placeholder{color:var(--neutral-600)}
+.label{display:block;font-size:.8rem;font-weight:500;color:var(--neutral-300);margin-bottom:6px}
+textarea.input{min-height:100px;resize:vertical}
+select.input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+
+/* Toggle Switch */
+.toggle{position:relative;width:44px;height:24px;display:inline-block}
+.toggle input{opacity:0;width:0;height:0}
+.toggle .slider{position:absolute;inset:0;background:var(--surface-3);border-radius:var(--radius-full);cursor:pointer;transition:.3s}
+.toggle .slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:var(--neutral-400);border-radius:50%;transition:.3s}
+.toggle input:checked+.slider{background:var(--green-500)}
+.toggle input:checked+.slider::before{transform:translateX(20px);background:var(--surface-0)}
+
+/* Checkbox & Radio */
+.check-group{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.875rem}
+.check-group input[type="checkbox"]{appearance:none;width:18px;height:18px;border:2px solid var(--surface-4);border-radius:var(--radius-sm);cursor:pointer;transition:.2s;position:relative;flex-shrink:0}
+.check-group input[type="checkbox"]:checked{background:var(--green-500);border-color:var(--green-500)}
+.check-group input[type="checkbox"]:checked::after{content:'✓';position:absolute;color:var(--surface-0);font-size:12px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.check-group input[type="radio"]{appearance:none;width:18px;height:18px;border:2px solid var(--surface-4);border-radius:50%;cursor:pointer;transition:.2s;position:relative;flex-shrink:0}
+.check-group input[type="radio"]:checked{border-color:var(--green-500)}
+.check-group input[type="radio"]:checked::after{content:'';position:absolute;width:10px;height:10px;background:var(--green-500);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+
+/* Do / Don't */
+.do-card{border:2px solid var(--green-500);border-radius:var(--radius-lg);padding:20px;background:rgba(34,197,94,.03)}
+.dont-card{border:2px solid var(--red-500);border-radius:var(--radius-lg);padding:20px;background:rgba(239,68,68,.03)}
+.do-card h4::before{content:'✓ ';color:var(--green-400)}
+.dont-card h4::before{content:'✗ ';color:var(--red-500)}
+
+/* Persona Card */
+.persona-card{position:relative;overflow:hidden}
+.persona-card .persona-avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;margin-bottom:16px}
+
+/* Spectrum Slider */
+.spectrum{margin-bottom:20px}
+.spectrum-labels{display:flex;justify-content:space-between;font-size:.75rem;color:var(--neutral-400);margin-bottom:6px}
+.spectrum-bar{height:6px;background:var(--surface-3);border-radius:3px;position:relative}
+.spectrum-fill{height:100%;background:linear-gradient(90deg,var(--green-400),var(--green-500));border-radius:3px}
+.spectrum-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:var(--green-400);border:2px solid var(--surface-0);border-radius:50%}
+
+/* Table */
+.brand-table{width:100%;border-collapse:collapse}
+.brand-table th,.brand-table td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--surface-3);font-size:.85rem}
+.brand-table th{color:var(--neutral-400);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+.brand-table td{color:var(--neutral-50)}
+.brand-table tr:hover td{background:var(--surface-1)}
+
+/* Token Tree */
+.token-tree{font-family:var(--font-mono);font-size:.8rem}
+.token-node{padding:4px 0 4px 20px;border-left:1px solid var(--surface-3)}
+.token-key{color:var(--violet-400);cursor:pointer}
+.token-key:hover{text-decoration:underline}
+.token-value{color:var(--green-300)}
+.token-string{color:var(--green-300)}
+.token-toggle{cursor:pointer;user-select:none;color:var(--neutral-500)}
+
+/* Mockups */
+.phone-frame{width:280px;height:560px;border:3px solid var(--surface-4);border-radius:36px;overflow:hidden;background:var(--surface-0);margin:0 auto;position:relative;padding:12px}
+.phone-frame .notch{width:120px;height:24px;background:var(--surface-4);border-radius:0 0 16px 16px;position:absolute;top:0;left:50%;transform:translateX(-50%)}
+.browser-frame{border:1px solid var(--surface-3);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface-1)}
+.browser-bar{height:40px;background:var(--surface-2);border-bottom:1px solid var(--surface-3);display:flex;align-items:center;padding:0 16px;gap:8px}
+.browser-dot{width:10px;height:10px;border-radius:50%}
+.browser-url{flex:1;background:var(--surface-1);border-radius:var(--radius-sm);height:24px;margin-left:12px;display:flex;align-items:center;padding:0 10px;font-size:.7rem;color:var(--neutral-500);font-family:var(--font-mono)}
+
+/* Email Card */
+.email-card{background:var(--surface-1);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--surface-3)}
+.email-header{padding:20px 24px;border-bottom:1px solid var(--surface-3)}
+.email-body{padding:24px}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes typewriter{from{width:0}to{width:100%}}
+.anim-fade-up{animation:fadeUp .6s ease forwards}
+.anim-shimmer{background:linear-gradient(90deg,var(--surface-2) 25%,var(--surface-3) 50%,var(--surface-2) 75%);background-size:200% 100%;animation:shimmer 2s infinite}
+.anim-lift{transition:transform .3s,box-shadow .3s}
+.anim-lift:hover{transform:translateY(-4px);box-shadow:var(--shadow-glow-lg)}
+
+/* Social Post Mockups */
+.social-frame{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--surface-3);background:var(--surface-1)}
+.social-header{display:flex;align-items:center;gap:10px;padding:12px 16px}
+.social-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green-400),var(--green-500))}
+.social-content{padding:0 16px 16px}
+
+/* Download Card */
+.download-card{display:flex;align-items:center;gap:16px;padding:20px;background:var(--surface-2);border:1px solid var(--surface-3);border-radius:var(--radius-lg);transition:all .3s;cursor:pointer}
+.download-card:hover{border-color:var(--green-500);box-shadow:var(--shadow-glow)}
+.download-icon{width:48px;height:48px;border-radius:var(--radius-md);background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;color:var(--green-400);flex-shrink:0}
+
+/* Print styles */
+@media print{
+#sidebar,#hamburger,#progress,#toast,.copy-btn,.btn{display:none!important}
+main{margin-left:0!important;max-width:100%!important}
+body{background:#fff!important;color:#000!important}
+section{opacity:1!important;transform:none!important;page-break-inside:avoid;min-height:auto!important;padding:40px 0!important}
+.section-title{-webkit-text-fill-color:#166534!important;color:#166534!important}
+.card,.glass-card{border-color:#ccc!important;background:#f9f9f9!important}
+}
+
+/* Mobile */
+@media(max-width:768px){
+#sidebar{transform:translateX(-100%)}
+#sidebar.open{transform:translateX(0)}
+#hamburger{display:flex}
+main{margin-left:0;padding:0 20px}
+.section-num{font-size:3rem}
+.section-title{font-size:1.8rem}
+#cover .cover-title{font-size:3.5rem}
+.grid-2,.grid-3,.grid-4,.grid-6{grid-template-columns:1fr}
+.phone-frame{width:220px;height:440px}
+}
+@media(max-width:480px){
+main{padding:0 16px}
+#cover .cover-title{font-size:2.5rem}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="toast">Copiado!</div>
+
+<button id="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<aside id="sidebar">
+<div class="logo-area">
+<svg viewBox="0 0 64 64" fill="none"><defs><linearGradient id="slg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4ADE80"/><stop offset="100%" stop-color="#22C55E"/></linearGradient></defs><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="url(#slg1)" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="16" y1="12" x2="48" y2="12" stroke="url(#slg1)" stroke-width="3.5" stroke-linecap="round"/><line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/></svg>
+<span>musa</span>
+</div>
+<nav>
+<div class="nav-group">Identidade</div>
+<a href="#cover"><span class="nav-num">00</span> Cover</a>
+<a href="#brand-story"><span class="nav-num">01</span> Brand Story</a>
+<a href="#audience"><span class="nav-num">02</span> Público-Alvo</a>
+<a href="#personality"><span class="nav-num">03</span> Personalidade</a>
+<a href="#logo"><span class="nav-num">04</span> Logo</a>
+<div class="nav-group">Sistema Visual</div>
+<a href="#colors"><span class="nav-num">05</span> Cores</a>
+<a href="#typography"><span class="nav-num">06</span> Tipografia</a>
+<a href="#spacing"><span class="nav-num">07</span> Espaçamento</a>
+<a href="#shadows"><span class="nav-num">08</span> Sombras</a>
+<a href="#radius"><span class="nav-num">09</span> Border Radius</a>
+<a href="#gradients"><span class="nav-num">10</span> Gradientes</a>
+<a href="#effects"><span class="nav-num">11</span> Efeitos</a>
+<a href="#icons"><span class="nav-num">12</span> Iconografia</a>
+<div class="nav-group">Componentes</div>
+<a href="#buttons"><span class="nav-num">13</span> Botões</a>
+<a href="#cards"><span class="nav-num">14</span> Cards</a>
+<a href="#inputs"><span class="nav-num">15</span> Inputs</a>
+<a href="#navigation"><span class="nav-num">16</span> Navegação</a>
+<a href="#animations"><span class="nav-num">17</span> Animações</a>
+<div class="nav-group">Comunicação</div>
+<a href="#tone"><span class="nav-num">18</span> Tom de Voz</a>
+<a href="#social"><span class="nav-num">19</span> Social Media</a>
+<a href="#mockups"><span class="nav-num">20</span> Mockups</a>
+<a href="#emails"><span class="nav-num">21</span> Email Templates</a>
+<a href="#copywriting"><span class="nav-num">22</span> Copywriting</a>
+<div class="nav-group">Técnico</div>
+<a href="#accessibility"><span class="nav-num">23</span> Acessibilidade</a>
+<a href="#dos-donts"><span class="nav-num">24</span> Do's & Don'ts</a>
+<a href="#tokens"><span class="nav-num">25</span> Design Tokens</a>
+<a href="#implementation"><span class="nav-num">26</span> Implementação</a>
+<a href="#downloads"><span class="nav-num">27</span> Downloads</a>
+</nav>
+</aside>
+
+<main>
+
+<!-- ==================== 00 COVER ==================== -->
+<section id="cover">
+<div class="cover-version">Brand Book v1.0</div>
+<div class="cover-title">musa</div>
+<div class="cover-sub">Inteligência de conteúdo alimentada por IA para social media managers.</div>
+<div class="cover-version">Março 2026 — Confidencial</div>
+<div class="scroll-arrow">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+</div>
+</section>
+
+<!-- ==================== 01 BRAND STORY ==================== -->
+<section id="brand-story">
+<div class="section-num">01</div>
+<div class="section-title">Brand Story & Mission</div>
+<div class="section-subtitle">A origem da Musa e o propósito que guia cada decisão de produto.</div>
+
+<div class="card mb-32" style="border-left:3px solid var(--green-500)">
+<p style="font-size:1.1rem;font-style:italic;color:var(--neutral-200);line-height:1.8">"Na mitologia grega, as Musas eram as deusas que inspiravam a criação artística. Musa nasce dessa mesma essência — ser a fonte de inspiração que transforma dados brutos em conteúdo que conecta, engaja e converte."</p>
+</div>
+
+<div class="grid grid-2 mb-48">
+<div class="card">
+<div class="tag mb-12">Missão</div>
+<p style="font-size:1rem;color:var(--neutral-200)">Empoderar social media managers com inteligência de conteúdo alimentada por IA, eliminando o trabalho repetitivo e liberando tempo para criatividade estratégica.</p>
+</div>
+<div class="card">
+<div class="tag mb-12" style="background:rgba(167,139,250,.1);color:var(--violet-400);border-color:rgba(167,139,250,.2)">Visão</div>
+<p style="font-size:1rem;color:var(--neutral-200)">Ser a plataforma definitiva que conecta criatividade humana com análise de IA, transformando a forma como agências produzem conteúdo para redes sociais.</p>
+</div>
+</div>
+
+<h3 style="font-family:var(--font-display);font-size:1.3rem;margin-bottom:24px;color:var(--neutral-100)">Nossos Valores</h3>
+<div class="grid grid-4">
+<div class="card" style="text-align:center">
+<div style="font-size:2rem;margin-bottom:12px">🎯</div>
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--green-400)">Precisão</h4>
+<p style="font-size:.85rem;color:var(--neutral-400)">Dados acurados, sugestões relevantes. Cada insight é verificado e cada recomendação é baseada em evidências.</p>
+</div>
+<div class="card" style="text-align:center">
+<div style="font-size:2rem;margin-bottom:12px">⚡</div>
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--green-400)">Velocidade</h4>
+<p style="font-size:.85rem;color:var(--neutral-400)">De briefing a copy pronta em minutos, não horas. Workflow otimizado para a realidade de agências.</p>
+</div>
+<div class="card" style="text-align:center">
+<div style="font-size:2rem;margin-bottom:12px">✨</div>
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--green-400)">Criatividade</h4>
+<p style="font-size:.85rem;color:var(--neutral-400)">IA como amplificador criativo, nunca como substituto. Potencializamos a voz humana com inteligência artificial.</p>
+</div>
+<div class="card" style="text-align:center">
+<div style="font-size:2rem;margin-bottom:12px">🌐</div>
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--green-400)">Acessibilidade</h4>
+<p style="font-size:.85rem;color:var(--neutral-400)">Tecnologia avançada com interface intuitiva. Qualquer social media manager consegue usar desde o primeiro dia.</p>
+</div>
+</div>
+</section>
+
+<!-- ==================== 02 TARGET AUDIENCE ==================== -->
+<section id="audience">
+<div class="section-num">02</div>
+<div class="section-title">Público-Alvo</div>
+<div class="section-subtitle">As três personas principais que a Musa atende, suas dores e como as resolvemos.</div>
+
+<div class="grid grid-3">
+<div class="card persona-card">
+<div class="persona-avatar" style="background:linear-gradient(135deg,var(--green-400),var(--green-500));color:var(--surface-0)">M</div>
+<div class="tag mb-12">SM Manager</div>
+<h4 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:4px">Maria, 28</h4>
+<p style="font-size:.8rem;color:var(--neutral-400);margin-bottom:16px">Social Media Manager em agência de médio porte, gerencia 8 contas simultaneamente.</p>
+<h5 style="font-size:.75rem;color:var(--neutral-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Dores</h5>
+<ul style="font-size:.82rem;color:var(--neutral-300);padding-left:16px;margin-bottom:16px;list-style:none">
+<li style="margin-bottom:4px">• Sobrecarregada por múltiplos briefings simultâneos</li>
+<li style="margin-bottom:4px">• Horas perdidas pesquisando tendências manualmente</li>
+<li style="margin-bottom:4px">• Dificuldade em manter consistência de voz entre marcas</li>
+</ul>
+<h5 style="font-size:.75rem;color:var(--neutral-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Como Musa ajuda</h5>
+<p style="font-size:.82rem;color:var(--green-300)">Gera copies personalizadas por marca, sugere conteúdo baseado em tendências e mantém a consistência de tom automaticamente.</p>
+</div>
+<div class="card persona-card">
+<div class="persona-avatar" style="background:linear-gradient(135deg,var(--violet-400),var(--violet-500));color:var(--surface-0)">L</div>
+<div class="tag mb-12" style="background:rgba(167,139,250,.1);color:var(--violet-400);border-color:rgba(167,139,250,.2)">Estrategista</div>
+<h4 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:4px">Lucas, 32</h4>
+<p style="font-size:.8rem;color:var(--neutral-400);margin-bottom:16px">Content Strategist em equipe in-house de uma empresa de tecnologia.</p>
+<h5 style="font-size:.75rem;color:var(--neutral-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Dores</h5>
+<ul style="font-size:.82rem;color:var(--neutral-300);padding-left:16px;margin-bottom:16px;list-style:none">
+<li style="margin-bottom:4px">• Precisa justificar decisões criativas com dados</li>
+<li style="margin-bottom:4px">• Falta de visibilidade sobre o que funciona em cada canal</li>
+<li style="margin-bottom:4px">• Relatórios manuais consomem tempo demais</li>
+</ul>
+<h5 style="font-size:.75rem;color:var(--neutral-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Como Musa ajuda</h5>
+<p style="font-size:.82rem;color:var(--green-300)">Dashboards de performance em tempo real, análise comparativa de conteúdo e recomendações baseadas em dados históricos.</p>
+</div>
+<div class="card persona-card">
+<div class="persona-avatar" style="background:linear-gradient(135deg,#eab308,#f59e0b);color:var(--surface-0)">F</div>
+<div class="tag mb-12" style="background:rgba(234,179,8,.1);color:#eab308;border-color:rgba(234,179,8,.2)">Dona de Agência</div>
+<h4 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:4px">Fernanda, 40</h4>
+<p style="font-size:.8rem;color:var(--neutral-400);margin-bottom:16px">Proprietária de agência digital com 15 funcionários e 30+ clientes.</p>
+<h5 style="font-size:.75rem;color:var(--neutral-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Dores</h5>
+<ul style="font-size:.82rem;color:var(--neutral-300);padding-left:16px;margin-bottom:16px;list-style:none">
+<li style="margin-bottom:4px">• Precisa escalar a produção sem aumentar equipe</li>
+<li style="margin-bottom:4px">• Qualidade inconsistente entre diferentes redatores</li>
+<li style="margin-bottom:4px">• Margem de lucro pressionada por retrabalho</li>
+</ul>
+<h5 style="font-size:.75rem;color:var(--neutral-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Como Musa ajuda</h5>
+<p style="font-size:.82rem;color:var(--green-300)">Multiplica a capacidade da equipe, padroniza a qualidade do output e reduz o ciclo de produção de conteúdo em até 70%.</p>
+</div>
+</div>
+</section>
+
+<!-- ==================== 03 PERSONALITY ==================== -->
+<section id="personality">
+<div class="section-num">03</div>
+<div class="section-title">Personalidade & Posicionamento</div>
+<div class="section-subtitle">O arquétipo, os espectros comportamentais e o statement de posicionamento da marca.</div>
+
+<div class="grid grid-2 mb-48">
+<div class="card" style="border-top:3px solid var(--green-500)">
+<div class="tag mb-16">Arquétipo</div>
+<h3 style="font-family:var(--font-display);font-size:1.8rem;margin-bottom:12px;color:var(--neutral-50)">O Mago</h3>
+<p style="font-size:.95rem;color:var(--neutral-300);margin-bottom:16px">Transforma dados complexos em ouro criativo. O Mago faz a ponte entre o mundo analítico e o mundo criativo, revelando possibilidades que outros não conseguem enxergar.</p>
+<div style="font-size:.85rem;color:var(--neutral-400)">
+<strong style="color:var(--neutral-200)">Promessa:</strong> "Eu revelo o caminho mais inteligente."<br>
+<strong style="color:var(--neutral-200)">Motivação:</strong> Transformação e conhecimento profundo.<br>
+<strong style="color:var(--neutral-200)">Tom:</strong> Confiante, insightful, visionário.
+</div>
+</div>
+<div class="card">
+<h4 style="font-family:var(--font-display);margin-bottom:24px;color:var(--neutral-100)">Espectro da Marca</h4>
+<div class="spectrum">
+<div class="spectrum-labels"><span>Formal</span><span>Casual</span></div>
+<div class="spectrum-bar"><div class="spectrum-fill" style="width:60%"></div><div class="spectrum-dot" style="left:60%"></div></div>
+</div>
+<div class="spectrum">
+<div class="spectrum-labels"><span>Sério</span><span>Divertido</span></div>
+<div class="spectrum-bar"><div class="spectrum-fill" style="width:40%"></div><div class="spectrum-dot" style="left:40%"></div></div>
+</div>
+<div class="spectrum">
+<div class="spectrum-labels"><span>Tradicional</span><span>Moderno</span></div>
+<div class="spectrum-bar"><div class="spectrum-fill" style="width:90%"></div><div class="spectrum-dot" style="left:90%"></div></div>
+</div>
+<div class="spectrum">
+<div class="spectrum-labels"><span>Reservado</span><span>Ousado</span></div>
+<div class="spectrum-bar"><div class="spectrum-fill" style="width:75%"></div><div class="spectrum-dot" style="left:75%"></div></div>
+</div>
+</div>
+</div>
+
+<div class="card" style="border-left:3px solid var(--violet-400)">
+<div class="tag mb-12" style="background:rgba(167,139,250,.1);color:var(--violet-400);border-color:rgba(167,139,250,.2)">Posicionamento</div>
+<p style="font-size:1.05rem;color:var(--neutral-200);line-height:1.8"><strong>Para</strong> social media managers de agências <strong>que</strong> precisam produzir conteúdo de alta performance rapidamente, <strong>Musa</strong> é a plataforma de inteligência de conteúdo <strong>que</strong> transforma dados em copies prontas para publicar, <strong>diferente de</strong> ferramentas genéricas de IA que não entendem o contexto de agências.</p>
+</div>
+</section>
+
+<!-- ==================== 04 LOGO ==================== -->
+<section id="logo">
+<div class="section-num">04</div>
+<div class="section-title">Logo</div>
+<div class="section-subtitle">A lira abstrata — instrumento das Musas gregas — com cordas que representam fluxo de dados.</div>
+
+<div class="flex gap-24 mb-48" style="flex-wrap:wrap;align-items:flex-start">
+<div class="card" style="flex:1;min-width:280px;text-align:center;padding:48px">
+<svg viewBox="0 0 64 64" fill="none" style="width:120px;height:120px;margin-bottom:24px"><defs><linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4ADE80"/><stop offset="100%" stop-color="#22C55E"/></linearGradient><linearGradient id="lg2" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="#22C55E" stop-opacity="0.3"/><stop offset="100%" stop-color="#4ADE80" stop-opacity="0.8"/></linearGradient></defs><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="url(#lg1)" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="16" y1="12" x2="48" y2="12" stroke="url(#lg1)" stroke-width="3.5" stroke-linecap="round"/><line x1="24" y1="16" x2="24" y2="44" stroke="url(#lg2)" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 4"/><line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><line x1="40" y1="16" x2="40" y2="44" stroke="url(#lg2)" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 4"/><circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/><circle cx="32" cy="30" r="7" fill="none" stroke="#4ADE80" stroke-width="1" opacity="0.4"/></svg>
+<div style="font-family:var(--font-display);font-size:2rem;font-weight:700;background:linear-gradient(135deg,var(--green-400),var(--green-500));-webkit-background-clip:text;-webkit-text-fill-color:transparent">musa</div>
+<div style="font-size:.75rem;color:var(--neutral-500);margin-top:8px">Full Logo — Vertical</div>
+</div>
+<div style="flex:1;min-width:280px">
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Área de Respiro</h4>
+<p style="font-size:.85rem;color:var(--neutral-400);margin-bottom:24px">O espaço mínimo ao redor do logo equivale a <strong style="color:var(--green-400)">1x</strong> a altura do ícone. Nunca coloque elementos dentro desta zona de proteção.</p>
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Tamanhos Mínimos</h4>
+<div style="display:flex;gap:24px;align-items:flex-end;margin-bottom:24px">
+<div style="text-align:center">
+<svg viewBox="0 0 64 64" fill="none" style="width:24px;height:24px"><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="#22C55E" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="16" y1="12" x2="48" y2="12" stroke="#22C55E" stroke-width="3.5" stroke-linecap="round"/><line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/></svg>
+<div style="font-size:.65rem;color:var(--neutral-500);margin-top:4px">24px icon</div>
+</div>
+<div style="text-align:center">
+<div style="font-family:var(--font-display);font-size:.9rem;font-weight:700;color:var(--green-400);width:80px">musa</div>
+<div style="font-size:.65rem;color:var(--neutral-500);margin-top:4px">80px wordmark</div>
+</div>
+</div>
+</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:20px;color:var(--neutral-100)">Variantes</h4>
+<div class="grid grid-6 mb-48">
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg viewBox="0 0 64 80" fill="none" style="width:40px;height:50px;margin-bottom:8px"><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="#22C55E" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="16" y1="12" x2="48" y2="12" stroke="#22C55E" stroke-width="3.5" stroke-linecap="round"/><line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/><text x="32" y="74" text-anchor="middle" fill="#22C55E" font-family="Space Grotesk" font-size="12" font-weight="700">musa</text></svg>
+<div style="font-size:.65rem;color:var(--neutral-500)">Full</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg viewBox="0 0 64 64" fill="none" style="width:40px;height:40px;margin-bottom:8px"><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="#22C55E" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="16" y1="12" x2="48" y2="12" stroke="#22C55E" stroke-width="3.5" stroke-linecap="round"/><line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/></svg>
+<div style="font-size:.65rem;color:var(--neutral-500)">Icon</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<div style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--green-400);margin-bottom:8px;margin-top:8px">musa</div>
+<div style="font-size:.65rem;color:var(--neutral-500)">Wordmark</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg viewBox="0 0 64 64" fill="none" style="width:40px;height:40px;margin-bottom:8px"><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="16" y1="12" x2="48" y2="12" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/><line x1="32" y1="14" x2="32" y2="48" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#ffffff" opacity="0.9"/></svg>
+<div style="font-size:.65rem;color:var(--neutral-500)">Mono White</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px;background:var(--neutral-50)">
+<svg viewBox="0 0 64 64" fill="none" style="width:40px;height:40px;margin-bottom:8px"><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="#09090b" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="16" y1="12" x2="48" y2="12" stroke="#09090b" stroke-width="3.5" stroke-linecap="round"/><line x1="32" y1="14" x2="32" y2="48" stroke="#09090b" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#09090b" opacity="0.9"/></svg>
+<div style="font-size:.65rem;color:var(--neutral-600)">Mono Dark</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<div style="width:32px;height:32px;background:var(--green-500);border-radius:8px;margin:4px auto 8px;display:flex;align-items:center;justify-content:center">
+<svg viewBox="0 0 64 64" fill="none" style="width:20px;height:20px"><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="#09090b" stroke-width="4" stroke-linecap="round" fill="none"/><line x1="32" y1="14" x2="32" y2="48" stroke="#09090b" stroke-width="3" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#09090b" opacity="0.9"/></svg>
+</div>
+<div style="font-size:.65rem;color:var(--neutral-500)">Favicon</div>
+</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:20px;color:var(--neutral-100)">Do's & Don'ts</h4>
+<div class="grid grid-3">
+<div class="do-card"><h4 style="font-size:.85rem;margin-bottom:8px;color:var(--green-400)">Usar cores oficiais</h4><p style="font-size:.8rem;color:var(--neutral-400)">Sempre use o verde #22C55E ou as variantes mono.</p></div>
+<div class="do-card"><h4 style="font-size:.85rem;margin-bottom:8px;color:var(--green-400)">Manter proporções</h4><p style="font-size:.8rem;color:var(--neutral-400)">Nunca distorça ou estique o logo.</p></div>
+<div class="do-card"><h4 style="font-size:.85rem;margin-bottom:8px;color:var(--green-400)">Respeitar área de respiro</h4><p style="font-size:.8rem;color:var(--neutral-400)">Mínimo de 1x de espaço ao redor.</p></div>
+<div class="dont-card"><h4 style="font-size:.85rem;margin-bottom:8px;color:var(--red-500)">Mudar cores</h4><p style="font-size:.8rem;color:var(--neutral-400)">Não aplique cores fora da paleta oficial.</p></div>
+<div class="dont-card"><h4 style="font-size:.85rem;margin-bottom:8px;color:var(--red-500)">Adicionar efeitos</h4><p style="font-size:.8rem;color:var(--neutral-400)">Sem drop shadows, outlines ou gradientes extras.</p></div>
+<div class="dont-card"><h4 style="font-size:.85rem;margin-bottom:8px;color:var(--red-500)">Usar em fundos complexos</h4><p style="font-size:.8rem;color:var(--neutral-400)">Evite fotos ou padrões como fundo direto.</p></div>
+</div>
+</section>
+
+<!-- ==================== 05 COLORS ==================== -->
+<section id="colors">
+<div class="section-num">05</div>
+<div class="section-title">Cores</div>
+<div class="section-subtitle">Paleta completa com escalas, semântica e proporções de uso. Clique em qualquer swatch para copiar o hex.</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Primary — Green</h4>
+<div class="grid grid-6 mb-32" style="grid-template-columns:repeat(auto-fill,minmax(100px,1fr))">
+<div class="swatch" onclick="copyColor('#f0fdf4')"><div class="swatch-color" style="background:#f0fdf4"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#f0fdf4</div></div></div>
+<div class="swatch" onclick="copyColor('#dcfce7')"><div class="swatch-color" style="background:#dcfce7"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#dcfce7</div></div></div>
+<div class="swatch" onclick="copyColor('#bbf7d0')"><div class="swatch-color" style="background:#bbf7d0"></div><div class="swatch-info"><div class="swatch-name">200</div><div class="swatch-hex">#bbf7d0</div></div></div>
+<div class="swatch" onclick="copyColor('#86efac')"><div class="swatch-color" style="background:#86efac"></div><div class="swatch-info"><div class="swatch-name">300</div><div class="swatch-hex">#86efac</div></div></div>
+<div class="swatch" onclick="copyColor('#4ade80')"><div class="swatch-color" style="background:#4ade80"></div><div class="swatch-info"><div class="swatch-name">400</div><div class="swatch-hex">#4ade80</div></div></div>
+<div class="swatch" onclick="copyColor('#22c55e')"><div class="swatch-color" style="background:#22c55e"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#22c55e</div></div></div>
+<div class="swatch" onclick="copyColor('#16a34a')"><div class="swatch-color" style="background:#16a34a"></div><div class="swatch-info"><div class="swatch-name">600</div><div class="swatch-hex">#16a34a</div></div></div>
+<div class="swatch" onclick="copyColor('#15803d')"><div class="swatch-color" style="background:#15803d"></div><div class="swatch-info"><div class="swatch-name">700</div><div class="swatch-hex">#15803d</div></div></div>
+<div class="swatch" onclick="copyColor('#166534')"><div class="swatch-color" style="background:#166534"></div><div class="swatch-info"><div class="swatch-name">800</div><div class="swatch-hex">#166534</div></div></div>
+<div class="swatch" onclick="copyColor('#14532d')"><div class="swatch-color" style="background:#14532d"></div><div class="swatch-info"><div class="swatch-name">900</div><div class="swatch-hex">#14532d</div></div></div>
+<div class="swatch" onclick="copyColor('#052e16')"><div class="swatch-color" style="background:#052e16"></div><div class="swatch-info"><div class="swatch-name">950</div><div class="swatch-hex">#052e16</div></div></div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Accent — Violet</h4>
+<div class="grid mb-32" style="grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px">
+<div class="swatch" onclick="copyColor('#c4b5fd')"><div class="swatch-color" style="background:#c4b5fd"></div><div class="swatch-info"><div class="swatch-name">300</div><div class="swatch-hex">#c4b5fd</div></div></div>
+<div class="swatch" onclick="copyColor('#a78bfa')"><div class="swatch-color" style="background:#a78bfa"></div><div class="swatch-info"><div class="swatch-name">400</div><div class="swatch-hex">#a78bfa</div></div></div>
+<div class="swatch" onclick="copyColor('#8b5cf6')"><div class="swatch-color" style="background:#8b5cf6"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#8b5cf6</div></div></div>
+<div class="swatch" onclick="copyColor('#7c3aed')"><div class="swatch-color" style="background:#7c3aed"></div><div class="swatch-info"><div class="swatch-name">600</div><div class="swatch-hex">#7c3aed</div></div></div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Neutral</h4>
+<div class="grid mb-32" style="grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px">
+<div class="swatch" onclick="copyColor('#fafafa')"><div class="swatch-color" style="background:#fafafa"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#fafafa</div></div></div>
+<div class="swatch" onclick="copyColor('#f5f5f5')"><div class="swatch-color" style="background:#f5f5f5"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#f5f5f5</div></div></div>
+<div class="swatch" onclick="copyColor('#e5e5e5')"><div class="swatch-color" style="background:#e5e5e5"></div><div class="swatch-info"><div class="swatch-name">200</div><div class="swatch-hex">#e5e5e5</div></div></div>
+<div class="swatch" onclick="copyColor('#d4d4d4')"><div class="swatch-color" style="background:#d4d4d4"></div><div class="swatch-info"><div class="swatch-name">300</div><div class="swatch-hex">#d4d4d4</div></div></div>
+<div class="swatch" onclick="copyColor('#a1a1aa')"><div class="swatch-color" style="background:#a1a1aa"></div><div class="swatch-info"><div class="swatch-name">400</div><div class="swatch-hex">#a1a1aa</div></div></div>
+<div class="swatch" onclick="copyColor('#71717a')"><div class="swatch-color" style="background:#71717a"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#71717a</div></div></div>
+<div class="swatch" onclick="copyColor('#52525b')"><div class="swatch-color" style="background:#52525b"></div><div class="swatch-info"><div class="swatch-name">600</div><div class="swatch-hex">#52525b</div></div></div>
+<div class="swatch" onclick="copyColor('#3f3f46')"><div class="swatch-color" style="background:#3f3f46"></div><div class="swatch-info"><div class="swatch-name">700</div><div class="swatch-hex">#3f3f46</div></div></div>
+<div class="swatch" onclick="copyColor('#27272a')"><div class="swatch-color" style="background:#27272a"></div><div class="swatch-info"><div class="swatch-name">800</div><div class="swatch-hex">#27272a</div></div></div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Surfaces</h4>
+<div class="grid mb-32" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px">
+<div class="swatch" onclick="copyColor('#09090b')"><div class="swatch-color" style="background:#09090b;border:1px solid #27272a"></div><div class="swatch-info"><div class="swatch-name">Surface 0</div><div class="swatch-hex">#09090b</div></div></div>
+<div class="swatch" onclick="copyColor('#0f0f12')"><div class="swatch-color" style="background:#0f0f12;border:1px solid #27272a"></div><div class="swatch-info"><div class="swatch-name">Surface 1</div><div class="swatch-hex">#0f0f12</div></div></div>
+<div class="swatch" onclick="copyColor('#18181b')"><div class="swatch-color" style="background:#18181b;border:1px solid #27272a"></div><div class="swatch-info"><div class="swatch-name">Surface 2</div><div class="swatch-hex">#18181b</div></div></div>
+<div class="swatch" onclick="copyColor('#1f1f23')"><div class="swatch-color" style="background:#1f1f23;border:1px solid #27272a"></div><div class="swatch-info"><div class="swatch-name">Surface 3</div><div class="swatch-hex">#1f1f23</div></div></div>
+<div class="swatch" onclick="copyColor('#27272a')"><div class="swatch-color" style="background:#27272a"></div><div class="swatch-info"><div class="swatch-name">Surface 4</div><div class="swatch-hex">#27272a</div></div></div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Semantic</h4>
+<div class="grid mb-32" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px">
+<div class="swatch" onclick="copyColor('#22c55e')"><div class="swatch-color" style="background:#22c55e"></div><div class="swatch-info"><div class="swatch-name">Success</div><div class="swatch-hex">#22c55e</div></div></div>
+<div class="swatch" onclick="copyColor('#ef4444')"><div class="swatch-color" style="background:#ef4444"></div><div class="swatch-info"><div class="swatch-name">Error</div><div class="swatch-hex">#ef4444</div></div></div>
+<div class="swatch" onclick="copyColor('#eab308')"><div class="swatch-color" style="background:#eab308"></div><div class="swatch-info"><div class="swatch-name">Warning</div><div class="swatch-hex">#eab308</div></div></div>
+<div class="swatch" onclick="copyColor('#3b82f6')"><div class="swatch-color" style="background:#3b82f6"></div><div class="swatch-info"><div class="swatch-name">Info</div><div class="swatch-hex">#3b82f6</div></div></div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Proporção de Uso</h4>
+<div style="display:flex;height:40px;border-radius:var(--radius-md);overflow:hidden;margin-bottom:12px">
+<div style="width:60%;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;color:var(--neutral-400)">60% Surfaces</div>
+<div style="width:30%;background:var(--neutral-50);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;color:var(--surface-0)">30% Text</div>
+<div style="width:10%;background:var(--green-500);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:600;color:var(--surface-0)">10%</div>
+</div>
+<p style="font-size:.8rem;color:var(--neutral-500)">Superfícies dominam o layout. Texto em neutrals claros. Cores primária e accent usadas com parcimônia para destacar CTAs e elementos interativos.</p>
+</section>
+
+<!-- ==================== 06 TYPOGRAPHY ==================== -->
+<section id="typography">
+<div class="section-num">06</div>
+<div class="section-title">Tipografia</div>
+<div class="section-subtitle">Sistema tipográfico com três famílias — display, body e mono — cobrindo todas as necessidades da interface.</div>
+
+<div class="grid grid-3 mb-48">
+<div class="card">
+<div class="tag mb-16">Display</div>
+<div style="font-family:var(--font-display);font-size:2rem;font-weight:700;margin-bottom:8px">Space Grotesk</div>
+<p style="font-family:var(--font-display);font-size:1rem;color:var(--neutral-300);margin-bottom:16px">AaBbCcDdEeFfGg 0123456789</p>
+<div style="font-size:.8rem;color:var(--neutral-500)">
+<div style="margin-bottom:4px"><span style="font-family:var(--font-display);font-weight:500">Medium 500</span> — Subtítulos</div>
+<div style="margin-bottom:4px"><span style="font-family:var(--font-display);font-weight:600">Semi Bold 600</span> — Headings</div>
+<div><span style="font-family:var(--font-display);font-weight:700">Bold 700</span> — Hero títulos</div>
+</div>
+</div>
+<div class="card">
+<div class="tag mb-16">Body</div>
+<div style="font-family:var(--font-body);font-size:2rem;font-weight:600;margin-bottom:8px">Inter</div>
+<p style="font-family:var(--font-body);font-size:1rem;color:var(--neutral-300);margin-bottom:16px">AaBbCcDdEeFfGg 0123456789</p>
+<div style="font-size:.8rem;color:var(--neutral-500)">
+<div style="margin-bottom:4px"><span style="font-weight:400">Regular 400</span> — Body text</div>
+<div style="margin-bottom:4px"><span style="font-weight:500">Medium 500</span> — Labels, emphasis</div>
+<div><span style="font-weight:600">Semi Bold 600</span> — Button text</div>
+</div>
+</div>
+<div class="card">
+<div class="tag mb-16">Mono</div>
+<div style="font-family:var(--font-mono);font-size:2rem;font-weight:500;margin-bottom:8px">Geist Mono</div>
+<p style="font-family:var(--font-mono);font-size:1rem;color:var(--neutral-300);margin-bottom:16px">AaBbCcDdEeFfGg 0123456789</p>
+<div style="font-size:.8rem;color:var(--neutral-500)">
+<div style="margin-bottom:4px"><span style="font-family:var(--font-mono);font-weight:400">Regular 400</span> — Code blocks</div>
+<div><span style="font-family:var(--font-mono);font-weight:500">Medium 500</span> — Code emphasis</div>
+</div>
+</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:20px;color:var(--neutral-100)">Escala Tipográfica</h4>
+<div class="card mb-32">
+<div style="font-family:var(--font-display);font-size:4.5rem;font-weight:700;line-height:1.1;margin-bottom:16px;color:var(--neutral-50)">7xl — 4.5rem <span style="font-size:.8rem;color:var(--neutral-600);font-weight:400">/ 72px</span></div>
+<div style="font-family:var(--font-display);font-size:3.75rem;font-weight:700;line-height:1.1;margin-bottom:16px;color:var(--neutral-100)">6xl — 3.75rem <span style="font-size:.8rem;color:var(--neutral-600);font-weight:400">/ 60px</span></div>
+<div style="font-family:var(--font-display);font-size:3rem;font-weight:700;line-height:1.2;margin-bottom:16px;color:var(--neutral-100)">5xl — 3rem <span style="font-size:.8rem;color:var(--neutral-600);font-weight:400">/ 48px</span></div>
+<div style="font-family:var(--font-display);font-size:2.25rem;font-weight:600;line-height:1.2;margin-bottom:16px;color:var(--neutral-200)">4xl — 2.25rem <span style="font-size:.8rem;color:var(--neutral-600);font-weight:400">/ 36px</span></div>
+<div style="font-family:var(--font-display);font-size:1.875rem;font-weight:600;line-height:1.3;margin-bottom:12px;color:var(--neutral-200)">3xl — 1.875rem <span style="font-size:.8rem;color:var(--neutral-600);font-weight:400">/ 30px</span></div>
+<div style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;line-height:1.3;margin-bottom:12px;color:var(--neutral-200)">2xl — 1.5rem <span style="font-size:.8rem;color:var(--neutral-600);font-weight:400">/ 24px</span></div>
+<div style="font-family:var(--font-display);font-size:1.25rem;font-weight:500;line-height:1.4;margin-bottom:12px;color:var(--neutral-300)">xl — 1.25rem <span style="font-size:.8rem;color:var(--neutral-600);font-weight:400">/ 20px</span></div>
+<div style="font-size:1rem;line-height:1.5;margin-bottom:10px;color:var(--neutral-300)">base — 1rem <span style="font-size:.8rem;color:var(--neutral-600)">/ 16px</span></div>
+<div style="font-size:.875rem;line-height:1.5;margin-bottom:10px;color:var(--neutral-400)">sm — 0.875rem <span style="font-size:.8rem;color:var(--neutral-600)">/ 14px</span></div>
+<div style="font-size:.75rem;line-height:1.5;margin-bottom:8px;color:var(--neutral-400)">xs — 0.75rem <span style="font-size:.8rem;color:var(--neutral-600)">/ 12px</span></div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Guidelines</h4>
+<div class="grid grid-2">
+<div class="card">
+<h5 style="margin-bottom:12px;color:var(--neutral-200)">Line Height</h5>
+<table class="brand-table">
+<tr><td>Headings</td><td style="font-family:var(--font-mono);color:var(--green-300)">1.1 — 1.2</td></tr>
+<tr><td>Body text</td><td style="font-family:var(--font-mono);color:var(--green-300)">1.5 — 1.6</td></tr>
+<tr><td>UI elements</td><td style="font-family:var(--font-mono);color:var(--green-300)">1.2 — 1.4</td></tr>
+</table>
+</div>
+<div class="card">
+<h5 style="margin-bottom:12px;color:var(--neutral-200)">Letter Spacing</h5>
+<table class="brand-table">
+<tr><td>Large headings</td><td style="font-family:var(--font-mono);color:var(--green-300)">-0.02em</td></tr>
+<tr><td>Body text</td><td style="font-family:var(--font-mono);color:var(--green-300)">0 (default)</td></tr>
+<tr><td>Uppercase labels</td><td style="font-family:var(--font-mono);color:var(--green-300)">0.05 — 0.1em</td></tr>
+</table>
+</div>
+</div>
+</section>
+
+<!-- ==================== 07 SPACING ==================== -->
+<section id="spacing">
+<div class="section-num">07</div>
+<div class="section-title">Espaçamento</div>
+<div class="section-subtitle">Escala de espaçamento baseada em múltiplos de 4px para consistência visual em toda a interface.</div>
+
+<div class="card mb-32">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">2px</span><div style="width:2px;height:16px;background:var(--green-500);border-radius:1px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Micro — borders, hairlines</span></div>
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">4px</span><div style="width:4px;height:16px;background:var(--green-500);border-radius:1px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Tight grouping</span></div>
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">8px</span><div style="width:8px;height:16px;background:var(--green-500);border-radius:2px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Related items</span></div>
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">12px</span><div style="width:12px;height:16px;background:var(--green-400);border-radius:2px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Compact padding</span></div>
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">16px</span><div style="width:16px;height:16px;background:var(--green-400);border-radius:2px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Base unit — section padding</span></div>
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">24px</span><div style="width:24px;height:16px;background:var(--green-400);border-radius:2px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Card padding</span></div>
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">32px</span><div style="width:32px;height:16px;background:var(--green-300);border-radius:3px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Large card padding</span></div>
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">48px</span><div style="width:48px;height:16px;background:var(--green-300);border-radius:3px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Section gap</span></div>
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">64px</span><div style="width:64px;height:16px;background:var(--green-200);border-radius:3px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Large section gap</span></div>
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">80px</span><div style="width:80px;height:16px;background:var(--green-200);border-radius:4px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Page section spacing</span></div>
+<div style="display:flex;align-items:center;gap:16px"><span style="font-family:var(--font-mono);font-size:.75rem;color:var(--neutral-400);width:70px">128px</span><div style="width:128px;height:16px;background:var(--green-100);border-radius:4px"></div><span style="font-size:.75rem;color:var(--neutral-600)">Hero / major section breaks</span></div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 08 SHADOWS ==================== -->
+<section id="shadows">
+<div class="section-num">08</div>
+<div class="section-title">Sombras & Elevação</div>
+<div class="section-subtitle">Sistema de elevação com 5 níveis, mais efeitos de glow para elementos interativos.</div>
+
+<div class="grid grid-3 mb-32">
+<div class="card" style="box-shadow:var(--shadow-sm);text-align:center;padding:32px">
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--neutral-100)">Shadow SM</h4>
+<div class="code-block" style="font-size:.7rem;text-align:left;margin-top:12px">0 1px 2px rgba(0,0,0,.4)</div>
+</div>
+<div class="card" style="box-shadow:var(--shadow-md);text-align:center;padding:32px">
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--neutral-100)">Shadow MD</h4>
+<div class="code-block" style="font-size:.7rem;text-align:left;margin-top:12px">0 4px 6px -1px rgba(0,0,0,.5)</div>
+</div>
+<div class="card" style="box-shadow:var(--shadow-lg);text-align:center;padding:32px">
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--neutral-100)">Shadow LG</h4>
+<div class="code-block" style="font-size:.7rem;text-align:left;margin-top:12px">0 10px 15px -3px rgba(0,0,0,.6)</div>
+</div>
+<div class="card" style="box-shadow:var(--shadow-xl);text-align:center;padding:32px">
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--neutral-100)">Shadow XL</h4>
+<div class="code-block" style="font-size:.7rem;text-align:left;margin-top:12px">0 20px 25px -5px rgba(0,0,0,.7)</div>
+</div>
+<div class="card" style="box-shadow:var(--shadow-2xl);text-align:center;padding:32px">
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--neutral-100)">Shadow 2XL</h4>
+<div class="code-block" style="font-size:.7rem;text-align:left;margin-top:12px">0 25px 50px -12px rgba(0,0,0,.8)</div>
+</div>
+<div class="card" style="box-shadow:var(--shadow-glow);text-align:center;padding:32px">
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--green-400)">Glow</h4>
+<div class="code-block" style="font-size:.7rem;text-align:left;margin-top:12px">0 0 20px rgba(34,197,94,.15)</div>
+</div>
+<div class="card" style="box-shadow:var(--shadow-glow-lg);text-align:center;padding:32px;grid-column:span 2">
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--green-400)">Glow LG</h4>
+<div class="code-block" style="font-size:.7rem;text-align:left;margin-top:12px">0 0 40px rgba(34,197,94,.25)</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 09 BORDER RADIUS ==================== -->
+<section id="radius">
+<div class="section-num">09</div>
+<div class="section-title">Border Radius</div>
+<div class="section-subtitle">Escala de arredondamento para diferentes contextos de UI.</div>
+
+<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:20px">
+<div style="text-align:center">
+<div style="width:100px;height:100px;background:var(--surface-2);border:2px solid var(--green-500);border-radius:var(--radius-sm);margin:0 auto 12px"></div>
+<div style="font-family:var(--font-display);font-weight:600;font-size:.9rem;margin-bottom:4px">SM — 4px</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Tags, badges, chips</div>
+</div>
+<div style="text-align:center">
+<div style="width:100px;height:100px;background:var(--surface-2);border:2px solid var(--green-500);border-radius:var(--radius-md);margin:0 auto 12px"></div>
+<div style="font-family:var(--font-display);font-weight:600;font-size:.9rem;margin-bottom:4px">MD — 8px</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Buttons, inputs, dropdowns</div>
+</div>
+<div style="text-align:center">
+<div style="width:100px;height:100px;background:var(--surface-2);border:2px solid var(--green-500);border-radius:var(--radius-lg);margin:0 auto 12px"></div>
+<div style="font-family:var(--font-display);font-weight:600;font-size:.9rem;margin-bottom:4px">LG — 12px</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Cards, panels</div>
+</div>
+<div style="text-align:center">
+<div style="width:100px;height:100px;background:var(--surface-2);border:2px solid var(--green-500);border-radius:var(--radius-xl);margin:0 auto 12px"></div>
+<div style="font-family:var(--font-display);font-weight:600;font-size:.9rem;margin-bottom:4px">XL — 16px</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Modals, large containers</div>
+</div>
+<div style="text-align:center">
+<div style="width:100px;height:100px;background:var(--surface-2);border:2px solid var(--green-500);border-radius:var(--radius-2xl);margin:0 auto 12px"></div>
+<div style="font-family:var(--font-display);font-weight:600;font-size:.9rem;margin-bottom:4px">2XL — 24px</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Feature sections</div>
+</div>
+<div style="text-align:center">
+<div style="width:100px;height:100px;background:var(--surface-2);border:2px solid var(--green-500);border-radius:50%;margin:0 auto 12px"></div>
+<div style="font-family:var(--font-display);font-weight:600;font-size:.9rem;margin-bottom:4px">Full — 9999px</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Avatars, pills, toggles</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 10 GRADIENTS ==================== -->
+<section id="gradients">
+<div class="section-num">10</div>
+<div class="section-title">Gradientes</div>
+<div class="section-subtitle">Gradientes oficiais da marca para fundos, textos e superfícies.</div>
+
+<div class="grid grid-2 mb-32">
+<div>
+<div style="height:120px;border-radius:var(--radius-lg);background:linear-gradient(135deg,#4ade80,#22c55e);margin-bottom:12px"></div>
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--neutral-100)">Primary Gradient</h4>
+<div class="code-block" style="font-size:.75rem">background: linear-gradient(135deg, #4ade80, #22c55e);<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+</div>
+<div>
+<div style="height:120px;border-radius:var(--radius-lg);background:linear-gradient(135deg,#a78bfa,#8b5cf6);margin-bottom:12px"></div>
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--neutral-100)">Accent Gradient</h4>
+<div class="code-block" style="font-size:.75rem">background: linear-gradient(135deg, #a78bfa, #8b5cf6);<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+</div>
+<div>
+<div style="height:120px;border-radius:var(--radius-lg);background:linear-gradient(180deg,#0f0f12,#18181b,#1f1f23);margin-bottom:12px;border:1px solid var(--surface-3)"></div>
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--neutral-100)">Surface Gradient</h4>
+<div class="code-block" style="font-size:.75rem">background: linear-gradient(180deg, #0f0f12, #18181b, #1f1f23);<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+</div>
+<div>
+<div style="height:120px;border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;background:var(--surface-2);margin-bottom:12px">
+<span style="font-family:var(--font-display);font-size:2.5rem;font-weight:700;background:linear-gradient(135deg,var(--green-300),var(--green-500));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Gradient Text</span>
+</div>
+<h4 style="font-family:var(--font-display);margin-bottom:8px;color:var(--neutral-100)">Gradient Text</h4>
+<div class="code-block" style="font-size:.75rem">background: linear-gradient(135deg, #86efac, #22c55e);<br>-webkit-background-clip: text;<br>-webkit-text-fill-color: transparent;<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 11 EFFECTS ==================== -->
+<section id="effects">
+<div class="section-num">11</div>
+<div class="section-title">Efeitos</div>
+<div class="section-subtitle">Efeitos visuais especiais para criar profundidade e interesse na interface.</div>
+
+<div class="grid grid-2 mb-32">
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Glassmorphism</h4>
+<div id="glass-demo" style="position:relative;height:200px;border-radius:var(--radius-lg);overflow:hidden;background:linear-gradient(135deg,var(--green-900),var(--surface-2))">
+<div style="position:absolute;top:20px;left:20px;width:60px;height:60px;background:var(--green-500);border-radius:50%;opacity:.5"></div>
+<div style="position:absolute;bottom:20px;right:20px;width:80px;height:80px;background:var(--violet-500);border-radius:50%;opacity:.3"></div>
+<div class="glass-card" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80%;text-align:center;transition:all .3s">
+<p style="font-size:.85rem;color:var(--neutral-200)">Glass card com backdrop-filter: blur(16px)</p>
+</div>
+</div>
+<button class="btn btn-secondary btn-sm mt-24" onclick="toggleEffect('glass-demo')">Toggle Effect</button>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Noise Texture</h4>
+<div id="noise-demo" style="height:200px;border-radius:var(--radius-lg);background:var(--surface-2);position:relative;overflow:hidden">
+<div class="noise-overlay" style="position:absolute;inset:0;opacity:.05;background-image:url('data:image/svg+xml,%3Csvg viewBox=%270 0 256 256%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E');background-size:128px"></div>
+<div style="position:relative;z-index:1;padding:24px;display:flex;align-items:center;justify-content:center;height:100%">
+<p style="font-size:.85rem;color:var(--neutral-300)">Noise texture sutil para profundidade em superfícies</p>
+</div>
+</div>
+<button class="btn btn-secondary btn-sm mt-24" onclick="toggleNoise(this)">Toggle Noise</button>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Dot Grid</h4>
+<div id="dot-demo" style="height:200px;border-radius:var(--radius-lg);background:var(--surface-2);position:relative;overflow:hidden">
+<div class="dot-pattern" style="position:absolute;inset:0;background-image:radial-gradient(circle,var(--surface-4) 1px,transparent 1px);background-size:20px 20px;opacity:.5"></div>
+<div style="position:relative;z-index:1;padding:24px;display:flex;align-items:center;justify-content:center;height:100%">
+<p style="font-size:.85rem;color:var(--neutral-300)">Grid de pontos para backgrounds de seção</p>
+</div>
+</div>
+<button class="btn btn-secondary btn-sm mt-24" onclick="toggleDots(this)">Toggle Dots</button>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Green Glow</h4>
+<div id="glow-demo" style="height:200px;border-radius:var(--radius-lg);background:var(--surface-2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+<div class="glow-orb" style="width:120px;height:120px;background:radial-gradient(circle,rgba(34,197,94,.3),transparent 70%);border-radius:50%;position:absolute;transition:all .3s"></div>
+<p style="font-size:.85rem;color:var(--neutral-300);position:relative;z-index:1">Glow effect para destaque de elementos</p>
+</div>
+<button class="btn btn-secondary btn-sm mt-24" onclick="toggleGlow(this)">Toggle Glow</button>
+</div>
+</div>
+</section>
+
+<!-- ==================== 12 ICONOGRAPHY ==================== -->
+<section id="icons">
+<div class="section-num">12</div>
+<div class="section-title">Iconografia</div>
+<div class="section-subtitle">Ícones Lucide React com stroke width de 1.5-2px. Tamanhos padronizados de 16 a 32px.</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Escala de Tamanhos</h4>
+<div class="flex gap-24 items-center mb-48" style="flex-wrap:wrap">
+<div style="text-align:center">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green-400)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:6px">16px</div>
+</div>
+<div style="text-align:center">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green-400)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:6px">20px</div>
+</div>
+<div style="text-align:center">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green-400)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:6px">24px</div>
+</div>
+<div style="text-align:center">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green-400)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:6px">32px</div>
+</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Ícones de Referência</h4>
+<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:16px">
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">Home</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">Search</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">Zap</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">BarChart</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">Sparkles</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">FileText</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">Users</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">Calendar</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">Send</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">Layers</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">Settings</div>
+</div>
+<div class="card" style="text-align:center;padding:20px 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--neutral-200)"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-top:8px">ArrowRight</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 13 BUTTONS ==================== -->
+<section id="buttons">
+<div class="section-num">13</div>
+<div class="section-title">Botões</div>
+<div class="section-subtitle">Sistema completo de botões com variantes, tamanhos e estados interativos.</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Variantes</h4>
+<div class="card mb-32">
+<div class="flex gap-16 mb-24" style="flex-wrap:wrap;align-items:center">
+<button class="btn btn-primary">Primary</button>
+<button class="btn btn-secondary">Secondary</button>
+<button class="btn btn-ghost">Ghost</button>
+<button class="btn btn-destructive">Destructive</button>
+</div>
+<h5 style="font-size:.8rem;color:var(--neutral-400);margin-bottom:12px">Com ícone</h5>
+<div class="flex gap-16" style="flex-wrap:wrap;align-items:center">
+<button class="btn btn-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Gerar Copy</button>
+<button class="btn btn-secondary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Projeto</button>
+</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Tamanhos</h4>
+<div class="card mb-32">
+<div class="flex gap-16 items-center" style="flex-wrap:wrap">
+<button class="btn btn-primary btn-sm">Small</button>
+<button class="btn btn-primary">Medium (Default)</button>
+<button class="btn btn-primary btn-lg">Large</button>
+</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Grid Completo</h4>
+<div class="card">
+<table class="brand-table">
+<thead><tr><th>Variante</th><th>SM</th><th>MD</th><th>LG</th></tr></thead>
+<tbody>
+<tr><td>Primary</td><td><button class="btn btn-primary btn-sm">Button</button></td><td><button class="btn btn-primary">Button</button></td><td><button class="btn btn-primary btn-lg">Button</button></td></tr>
+<tr><td>Secondary</td><td><button class="btn btn-secondary btn-sm">Button</button></td><td><button class="btn btn-secondary">Button</button></td><td><button class="btn btn-secondary btn-lg">Button</button></td></tr>
+<tr><td>Ghost</td><td><button class="btn btn-ghost btn-sm">Button</button></td><td><button class="btn btn-ghost">Button</button></td><td><button class="btn btn-ghost btn-lg">Button</button></td></tr>
+<tr><td>Destructive</td><td><button class="btn btn-destructive btn-sm">Button</button></td><td><button class="btn btn-destructive">Button</button></td><td><button class="btn btn-destructive btn-lg">Button</button></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- ==================== 14 CARDS ==================== -->
+<section id="cards">
+<div class="section-num">14</div>
+<div class="section-title">Cards</div>
+<div class="section-subtitle">Variantes de cards para diferentes contextos na interface.</div>
+
+<div class="grid grid-2">
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Content Card</h4>
+<div class="card anim-lift">
+<div class="tag mb-12">Instagram</div>
+<h4 style="font-family:var(--font-display);margin-bottom:8px">5 dicas para engajamento</h4>
+<p style="font-size:.85rem;color:var(--neutral-400);margin-bottom:16px">Copy sugerida pela IA com base em tendências atuais do nicho fitness.</p>
+<div class="flex justify-between items-center">
+<span style="font-size:.75rem;color:var(--neutral-500)">Gerado há 2h</span>
+<button class="btn btn-primary btn-sm">Usar Copy</button>
+</div>
+</div>
+<div class="code-block mt-24" style="font-size:.72rem">&lt;div class="card"&gt;<br>  &lt;span class="tag"&gt;...&lt;/span&gt;<br>  &lt;h4&gt;...&lt;/h4&gt;<br>  &lt;p&gt;...&lt;/p&gt;<br>&lt;/div&gt;<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Feature Card</h4>
+<div class="card anim-lift" style="border-top:2px solid var(--green-500)">
+<div style="width:40px;height:40px;border-radius:var(--radius-md);background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;margin-bottom:16px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-400)" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+</div>
+<h4 style="font-family:var(--font-display);margin-bottom:8px">Geração Inteligente</h4>
+<p style="font-size:.85rem;color:var(--neutral-400)">Copies adaptadas ao tom de voz de cada marca, com variações A/B automáticas.</p>
+</div>
+<div class="code-block mt-24" style="font-size:.72rem">&lt;div class="card" style="border-top: 2px solid var(--green-500)"&gt;<br>  &lt;div class="icon-box"&gt;...&lt;/div&gt;<br>  &lt;h4&gt;...&lt;/h4&gt;<br>  &lt;p&gt;...&lt;/p&gt;<br>&lt;/div&gt;<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Stat Card</h4>
+<div class="card anim-lift">
+<div style="font-size:.8rem;color:var(--neutral-400);margin-bottom:4px">Copies Geradas</div>
+<div style="font-family:var(--font-display);font-size:2.5rem;font-weight:700;color:var(--green-400);margin-bottom:4px">1,247</div>
+<div style="font-size:.75rem;color:var(--green-400)">+23% vs. mês anterior</div>
+</div>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Glass Card</h4>
+<div style="position:relative;height:160px;border-radius:var(--radius-lg);overflow:hidden;background:linear-gradient(135deg,var(--green-900),var(--surface-1))">
+<div style="position:absolute;top:-10px;right:-10px;width:80px;height:80px;background:var(--green-500);border-radius:50%;opacity:.2"></div>
+<div class="glass-card anim-lift" style="position:absolute;inset:20px">
+<h4 style="font-family:var(--font-display);margin-bottom:4px;font-size:.95rem">Glass Card</h4>
+<p style="font-size:.8rem;color:var(--neutral-400)">backdrop-filter: blur(16px) com bordas semi-transparentes.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 15 INPUTS ==================== -->
+<section id="inputs">
+<div class="section-num">15</div>
+<div class="section-title">Inputs & Forms</div>
+<div class="section-subtitle">Componentes de formulário consistentes com o tema dark e feedback visual em verde.</div>
+
+<div class="grid grid-2 mb-32">
+<div class="card">
+<label class="label">Nome do Projeto</label>
+<input type="text" class="input mb-16" placeholder="Ex: Campanha de Verão 2026">
+<label class="label">Plataforma</label>
+<select class="input mb-16">
+<option>Instagram</option>
+<option>LinkedIn</option>
+<option>Twitter/X</option>
+<option>TikTok</option>
+</select>
+<label class="label">Briefing</label>
+<textarea class="input" placeholder="Descreva o objetivo da campanha, público-alvo e tom de voz desejado..."></textarea>
+</div>
+<div class="card">
+<h4 style="font-family:var(--font-display);margin-bottom:20px;color:var(--neutral-100)">Toggle Switch</h4>
+<div style="display:flex;flex-direction:column;gap:16px;margin-bottom:24px">
+<div class="flex items-center gap-12">
+<label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+<span style="font-size:.875rem">Geração automática de hashtags</span>
+</div>
+<div class="flex items-center gap-12">
+<label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+<span style="font-size:.875rem">Incluir emojis na copy</span>
+</div>
+<div class="flex items-center gap-12">
+<label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+<span style="font-size:.875rem">Sugestões de horário</span>
+</div>
+</div>
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Checkbox</h4>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+<label class="check-group"><input type="checkbox" checked> Feed do Instagram</label>
+<label class="check-group"><input type="checkbox"> Stories</label>
+<label class="check-group"><input type="checkbox" checked> Reels</label>
+</div>
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Radio</h4>
+<div style="display:flex;flex-direction:column;gap:12px">
+<label class="check-group"><input type="radio" name="tone" checked> Formal</label>
+<label class="check-group"><input type="radio" name="tone"> Casual</label>
+<label class="check-group"><input type="radio" name="tone"> Divertido</label>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 16 NAVIGATION ==================== -->
+<section id="navigation">
+<div class="section-num">16</div>
+<div class="section-title">Navegação</div>
+<div class="section-subtitle">Padrões de navegação para desktop e mobile.</div>
+
+<div class="grid grid-2 mb-32">
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Sidebar</h4>
+<div style="width:220px;background:var(--surface-1);border:1px solid var(--surface-3);border-radius:var(--radius-lg);padding:16px;overflow:hidden">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--surface-3)">
+<div style="width:24px;height:24px;background:var(--green-500);border-radius:6px"></div>
+<span style="font-family:var(--font-display);font-weight:600;font-size:.85rem;color:var(--green-400)">musa</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-md);background:rgba(34,197,94,.1);color:var(--green-400);font-size:.8rem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Dashboard</div>
+<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-md);color:var(--neutral-400);font-size:.8rem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Projetos</div>
+<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-md);color:var(--neutral-400);font-size:.8rem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21"/></svg> Gerar Copy</div>
+<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-md);color:var(--neutral-400);font-size:.8rem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Analytics</div>
+</div>
+</div>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Top Bar</h4>
+<div style="background:var(--surface-1);border:1px solid var(--surface-3);border-radius:var(--radius-lg);padding:12px 20px;display:flex;align-items:center;justify-content:space-between">
+<div class="flex items-center gap-16">
+<span style="font-family:var(--font-display);font-weight:600;color:var(--green-400);font-size:.9rem">musa</span>
+<div style="display:flex;gap:4px">
+<span style="padding:6px 12px;font-size:.8rem;border-radius:var(--radius-md);background:rgba(34,197,94,.1);color:var(--green-400)">Dashboard</span>
+<span style="padding:6px 12px;font-size:.8rem;border-radius:var(--radius-md);color:var(--neutral-400)">Projetos</span>
+<span style="padding:6px 12px;font-size:.8rem;border-radius:var(--radius-md);color:var(--neutral-400)">Analytics</span>
+</div>
+</div>
+<div style="width:28px;height:28px;border-radius:50%;background:var(--green-500);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:600;color:var(--surface-0)">P</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:12px;margin-top:24px;color:var(--neutral-100)">Tabs</h4>
+<div style="display:flex;border-bottom:1px solid var(--surface-3);gap:0">
+<div style="padding:10px 20px;font-size:.85rem;color:var(--green-400);border-bottom:2px solid var(--green-500)">Copies</div>
+<div style="padding:10px 20px;font-size:.85rem;color:var(--neutral-400)">Hashtags</div>
+<div style="padding:10px 20px;font-size:.85rem;color:var(--neutral-400)">Calendário</div>
+<div style="padding:10px 20px;font-size:.85rem;color:var(--neutral-400)">Relatórios</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:12px;margin-top:24px;color:var(--neutral-100)">Breadcrumbs</h4>
+<div class="flex items-center gap-8" style="font-size:.8rem">
+<span style="color:var(--neutral-400)">Dashboard</span>
+<span style="color:var(--neutral-600)">/</span>
+<span style="color:var(--neutral-400)">Projetos</span>
+<span style="color:var(--neutral-600)">/</span>
+<span style="color:var(--neutral-50)">Campanha Verão</span>
+</div>
+</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Mobile Bottom Bar</h4>
+<div style="max-width:360px;margin:0 auto;background:var(--surface-1);border:1px solid var(--surface-3);border-radius:var(--radius-xl);padding:8px 16px;display:flex;justify-content:space-around">
+<div style="text-align:center;padding:6px 12px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-400)" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+<div style="font-size:.6rem;color:var(--green-400);margin-top:2px">Home</div>
+</div>
+<div style="text-align:center;padding:6px 12px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--neutral-500)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<div style="font-size:.6rem;color:var(--neutral-500);margin-top:2px">Buscar</div>
+</div>
+<div style="text-align:center;padding:6px 12px">
+<div style="width:36px;height:36px;background:var(--green-500);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:-8px auto 0">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--surface-0)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</div>
+<div style="font-size:.6rem;color:var(--neutral-500);margin-top:2px">Criar</div>
+</div>
+<div style="text-align:center;padding:6px 12px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--neutral-500)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+<div style="font-size:.6rem;color:var(--neutral-500);margin-top:2px">Stats</div>
+</div>
+<div style="text-align:center;padding:6px 12px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--neutral-500)" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a8.38 8.38 0 0 1 13 0"/></svg>
+<div style="font-size:.6rem;color:var(--neutral-500);margin-top:2px">Perfil</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 17 ANIMATIONS ==================== -->
+<section id="animations">
+<div class="section-num">17</div>
+<div class="section-title">Animações</div>
+<div class="section-subtitle">Animações utilitárias para feedback, transições e micro-interações.</div>
+
+<div class="grid grid-2">
+<div class="card">
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Fade Up</h4>
+<div id="anim-fadeup-target" style="padding:24px;background:var(--surface-1);border-radius:var(--radius-md);text-align:center;color:var(--neutral-300);font-size:.85rem;opacity:0">Conteúdo aparece com fade de baixo para cima</div>
+<button class="btn btn-secondary btn-sm mt-24" onclick="playFadeUp()">Play</button>
+</div>
+<div class="card">
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Shimmer</h4>
+<div id="anim-shimmer-target" style="padding:24px;border-radius:var(--radius-md);text-align:center">
+<div style="height:16px;border-radius:4px;margin-bottom:8px;background:var(--surface-3)"></div>
+<div style="height:16px;border-radius:4px;width:75%;background:var(--surface-3)"></div>
+</div>
+<button class="btn btn-secondary btn-sm mt-24" onclick="playShimmer()">Play</button>
+</div>
+<div class="card">
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Hover Lift</h4>
+<div class="anim-lift" style="padding:24px;background:var(--surface-1);border:1px solid var(--surface-3);border-radius:var(--radius-md);text-align:center;color:var(--neutral-300);font-size:.85rem;cursor:pointer">Passe o mouse para ver o efeito de elevação</div>
+</div>
+<div class="card">
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Typewriter</h4>
+<div id="anim-typewriter-target" style="padding:24px;background:var(--surface-1);border-radius:var(--radius-md);font-family:var(--font-mono);font-size:.85rem;color:var(--green-400);min-height:60px;display:flex;align-items:center"></div>
+<button class="btn btn-secondary btn-sm mt-24" onclick="playTypewriter()">Play</button>
+</div>
+</div>
+</section>
+
+<!-- ==================== 18 TONE OF VOICE ==================== -->
+<section id="tone">
+<div class="section-num">18</div>
+<div class="section-title">Tom de Voz</div>
+<div class="section-subtitle">Os três pilares que guiam toda comunicação da Musa.</div>
+
+<div class="grid grid-3 mb-48">
+<div class="card" style="border-top:3px solid var(--green-500)">
+<h3 style="font-family:var(--font-display);font-size:1.3rem;margin-bottom:12px;color:var(--green-400)">Direto</h3>
+<p style="font-size:.85rem;color:var(--neutral-300);margin-bottom:20px">Comunicação clara e sem rodeios. Cada palavra tem propósito.</p>
+<table class="brand-table">
+<thead><tr><th style="color:var(--green-400)">Do</th><th style="color:var(--red-500)">Don't</th></tr></thead>
+<tbody>
+<tr><td style="font-size:.8rem">"Gere copies em 30 segundos."</td><td style="font-size:.8rem">"Nossa plataforma possui a capacidade de..."</td></tr>
+<tr><td style="font-size:.8rem">"Suas métricas caíram 12%."</td><td style="font-size:.8rem">"Gostaríamos de informar que houve uma variação..."</td></tr>
+</tbody>
+</table>
+</div>
+<div class="card" style="border-top:3px solid var(--violet-400)">
+<h3 style="font-family:var(--font-display);font-size:1.3rem;margin-bottom:12px;color:var(--violet-400)">Empoderador</h3>
+<p style="font-size:.85rem;color:var(--neutral-300);margin-bottom:20px">O usuário é o protagonista. Musa é a ferramenta que amplifica.</p>
+<table class="brand-table">
+<thead><tr><th style="color:var(--green-400)">Do</th><th style="color:var(--red-500)">Don't</th></tr></thead>
+<tbody>
+<tr><td style="font-size:.8rem">"Você criou 47 copies esta semana."</td><td style="font-size:.8rem">"A Musa criou 47 copies para você."</td></tr>
+<tr><td style="font-size:.8rem">"Sua estratégia está funcionando."</td><td style="font-size:.8rem">"Nossa IA detectou bons resultados."</td></tr>
+</tbody>
+</table>
+</div>
+<div class="card" style="border-top:3px solid var(--blue-500)">
+<h3 style="font-family:var(--font-display);font-size:1.3rem;margin-bottom:12px;color:var(--blue-500)">Tech-savvy</h3>
+<p style="font-size:.85rem;color:var(--neutral-300);margin-bottom:20px">Linguagem moderna sem ser alienante. Acessível mas inteligente.</p>
+<table class="brand-table">
+<thead><tr><th style="color:var(--green-400)">Do</th><th style="color:var(--red-500)">Don't</th></tr></thead>
+<tbody>
+<tr><td style="font-size:.8rem">"IA treinada em 10M+ de posts."</td><td style="font-size:.8rem">"Algoritmos de machine learning de última geração..."</td></tr>
+<tr><td style="font-size:.8rem">"Dashboard em tempo real."</td><td style="font-size:.8rem">"Interface de monitoramento parametrizada..."</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Frases de Exemplo</h4>
+<div class="card">
+<div style="display:flex;flex-direction:column;gap:12px;font-size:.9rem">
+<div style="padding:12px;background:var(--surface-1);border-radius:var(--radius-md);border-left:3px solid var(--green-500)"><strong style="color:var(--green-400)">Onboarding:</strong> <span style="color:var(--neutral-300)">"Bem-vindo à Musa. Vamos configurar sua primeira marca em 2 minutos."</span></div>
+<div style="padding:12px;background:var(--surface-1);border-radius:var(--radius-md);border-left:3px solid var(--green-500)"><strong style="color:var(--green-400)">Sucesso:</strong> <span style="color:var(--neutral-300)">"Copy gerada. 3 variações prontas para publicar."</span></div>
+<div style="padding:12px;background:var(--surface-1);border-radius:var(--radius-md);border-left:3px solid var(--green-500)"><strong style="color:var(--green-400)">Insight:</strong> <span style="color:var(--neutral-300)">"Posts com perguntas têm 34% mais engajamento neste nicho."</span></div>
+<div style="padding:12px;background:var(--surface-1);border-radius:var(--radius-md);border-left:3px solid var(--green-500)"><strong style="color:var(--green-400)">Erro:</strong> <span style="color:var(--neutral-300)">"Não conseguimos conectar ao Instagram. Verifique as permissões e tente novamente."</span></div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 19 SOCIAL MEDIA TEMPLATES ==================== -->
+<section id="social">
+<div class="section-num">19</div>
+<div class="section-title">Social Media Templates</div>
+<div class="section-subtitle">Mockups de como o conteúdo da Musa aparece nas redes sociais.</div>
+
+<div class="grid grid-2">
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Instagram Post (1:1)</h4>
+<div class="social-frame" style="max-width:320px">
+<div class="social-header">
+<div class="social-avatar"></div>
+<div><div style="font-size:.8rem;font-weight:600">musa.app</div><div style="font-size:.65rem;color:var(--neutral-500)">Patrocinado</div></div>
+</div>
+<div style="aspect-ratio:1/1;background:linear-gradient(135deg,var(--surface-0),var(--green-900));display:flex;flex-direction:column;justify-content:center;align-items:center;padding:32px;text-align:center">
+<svg viewBox="0 0 64 64" fill="none" style="width:40px;height:40px;margin-bottom:16px"><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="#22C55E" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/></svg>
+<div style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--green-400);margin-bottom:8px">70% menos tempo criando copies</div>
+<div style="font-size:.8rem;color:var(--neutral-400)">Inteligência de conteúdo para quem vive de social media.</div>
+</div>
+<div class="social-content" style="padding-top:12px">
+<p style="font-size:.8rem;color:var(--neutral-200);margin-bottom:8px"><strong>musa.app</strong> Pare de sofrer com copies. Comece a criar com inteligência. Link na bio.</p>
+<p style="font-size:.7rem;color:var(--neutral-500)">#socialmedia #contentcreator #ai #musa</p>
+</div>
+</div>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Instagram Story (9:16)</h4>
+<div style="width:200px;height:356px;background:linear-gradient(180deg,var(--green-900),var(--surface-0));border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--surface-3);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center;position:relative">
+<div style="position:absolute;top:12px;left:12px;right:12px;display:flex;gap:4px"><div style="flex:1;height:2px;background:var(--green-500);border-radius:1px"></div><div style="flex:1;height:2px;background:var(--surface-4);border-radius:1px"></div><div style="flex:1;height:2px;background:var(--surface-4);border-radius:1px"></div></div>
+<div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--green-400);margin-bottom:12px">De briefing a copy em 30s</div>
+<div style="font-size:.75rem;color:var(--neutral-400);margin-bottom:24px">Experimente grátis por 14 dias</div>
+<div style="padding:8px 20px;background:var(--green-500);border-radius:var(--radius-full);font-size:.75rem;font-weight:600;color:var(--surface-0)">Saiba Mais</div>
+</div>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">LinkedIn Post</h4>
+<div class="social-frame" style="max-width:400px">
+<div class="social-header">
+<div class="social-avatar"></div>
+<div><div style="font-size:.8rem;font-weight:600">Musa</div><div style="font-size:.65rem;color:var(--neutral-500)">1,234 seguidores · 2h</div></div>
+</div>
+<div class="social-content">
+<p style="font-size:.82rem;color:var(--neutral-200);line-height:1.6;margin-bottom:12px">Social media managers gastam em média 4h/dia escrevendo copies. Com Musa, esse tempo cai para 45 minutos.</p>
+<p style="font-size:.82rem;color:var(--neutral-200);line-height:1.6;margin-bottom:12px">Não é sobre substituir a criatividade — é sobre amplificá-la com dados.</p>
+<p style="font-size:.82rem;color:var(--neutral-200);line-height:1.6">O futuro do conteúdo é inteligente. 🚀</p>
+<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--surface-3);display:flex;gap:24px">
+<span style="font-size:.7rem;color:var(--neutral-500)">👍 148</span>
+<span style="font-size:.7rem;color:var(--neutral-500)">💬 23 comentários</span>
+<span style="font-size:.7rem;color:var(--neutral-500)">🔄 12 reposts</span>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Twitter/X Post</h4>
+<div class="social-frame" style="max-width:400px">
+<div class="social-header">
+<div class="social-avatar" style="width:32px;height:32px"></div>
+<div><div style="font-size:.8rem;font-weight:600">Musa <span style="font-size:.7rem;color:var(--neutral-500)">@musa_app · 3h</span></div></div>
+</div>
+<div class="social-content">
+<p style="font-size:.85rem;color:var(--neutral-200);line-height:1.5;margin-bottom:12px">hot take: social media managers não precisam de mais ferramentas de IA genéricas.<br><br>precisam de uma que realmente entenda o contexto de agência.<br><br>é por isso que construímos a Musa. 💚</p>
+<div style="display:flex;gap:24px">
+<span style="font-size:.7rem;color:var(--neutral-500)">💬 47</span>
+<span style="font-size:.7rem;color:var(--neutral-500)">🔄 89</span>
+<span style="font-size:.7rem;color:var(--neutral-500)">❤️ 312</span>
+<span style="font-size:.7rem;color:var(--neutral-500)">📊 12K</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 20 MOCKUPS ==================== -->
+<section id="mockups">
+<div class="section-num">20</div>
+<div class="section-title">Mockups</div>
+<div class="section-subtitle">Previews da interface em dispositivos reais, construidos em CSS.</div>
+
+<div class="grid grid-2">
+<div style="text-align:center">
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Mobile App</h4>
+<div class="phone-frame" style="margin:0 auto">
+<div class="notch"></div>
+<div style="padding-top:28px;height:100%;display:flex;flex-direction:column">
+<div style="padding:12px;display:flex;align-items:center;justify-content:space-between">
+<span style="font-family:var(--font-display);font-weight:600;font-size:.85rem;color:var(--green-400)">musa</span>
+<div style="width:24px;height:24px;background:var(--green-500);border-radius:50%;font-size:.55rem;font-weight:600;color:var(--surface-0);display:flex;align-items:center;justify-content:center">P</div>
+</div>
+<div style="padding:12px">
+<div style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin-bottom:4px">Bom dia, Pedro</div>
+<div style="font-size:.7rem;color:var(--neutral-500);margin-bottom:16px">3 copies pendentes</div>
+<div style="background:var(--surface-2);border:1px solid var(--surface-3);border-radius:8px;padding:12px;margin-bottom:8px">
+<div style="font-size:.7rem;color:var(--green-400);margin-bottom:4px">Instagram &bull; @fitlife</div>
+<div style="font-size:.75rem;color:var(--neutral-200)">5 dicas para treino matinal</div>
+</div>
+<div style="background:var(--surface-2);border:1px solid var(--surface-3);border-radius:8px;padding:12px;margin-bottom:8px">
+<div style="font-size:.7rem;color:var(--violet-400);margin-bottom:4px">LinkedIn &bull; TechCorp</div>
+<div style="font-size:.75rem;color:var(--neutral-200)">Lancamento do produto Q2</div>
+</div>
+<div style="background:var(--surface-2);border:1px solid var(--surface-3);border-radius:8px;padding:12px">
+<div style="font-size:.7rem;color:var(--yellow-500);margin-bottom:4px">Twitter &bull; @casagourmet</div>
+<div style="font-size:.75rem;color:var(--neutral-200)">Promocao dia das maes</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100);text-align:center">Desktop Dashboard</h4>
+<div class="browser-frame">
+<div class="browser-bar">
+<div class="browser-dot" style="background:#ef4444"></div>
+<div class="browser-dot" style="background:#eab308"></div>
+<div class="browser-dot" style="background:#22c55e"></div>
+<div class="browser-url">app.musa.ai/dashboard</div>
+</div>
+<div style="padding:16px;display:flex;gap:12px;min-height:340px">
+<div style="width:140px;flex-shrink:0;border-right:1px solid var(--surface-3);padding-right:12px">
+<div style="font-family:var(--font-display);font-weight:600;font-size:.75rem;color:var(--green-400);margin-bottom:12px">musa</div>
+<div style="display:flex;flex-direction:column;gap:2px;font-size:.65rem">
+<div style="padding:5px 8px;border-radius:4px;background:rgba(34,197,94,.1);color:var(--green-400)">Dashboard</div>
+<div style="padding:5px 8px;color:var(--neutral-500)">Projetos</div>
+<div style="padding:5px 8px;color:var(--neutral-500)">Gerar Copy</div>
+<div style="padding:5px 8px;color:var(--neutral-500)">Analytics</div>
+</div>
+</div>
+<div style="flex:1">
+<div style="font-family:var(--font-display);font-size:.85rem;font-weight:600;margin-bottom:12px">Dashboard</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--surface-2);border:1px solid var(--surface-3);border-radius:8px;padding:10px"><div style="font-size:.55rem;color:var(--neutral-500)">Copies Geradas</div><div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--green-400)">1,247</div></div>
+<div style="background:var(--surface-2);border:1px solid var(--surface-3);border-radius:8px;padding:10px"><div style="font-size:.55rem;color:var(--neutral-500)">Tempo Economizado</div><div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--violet-400)">48h</div></div>
+<div style="background:var(--surface-2);border:1px solid var(--surface-3);border-radius:8px;padding:10px"><div style="font-size:.55rem;color:var(--neutral-500)">Engajamento</div><div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--neutral-50)">4.2%</div></div>
+</div>
+<div style="background:var(--surface-2);border:1px solid var(--surface-3);border-radius:8px;padding:10px">
+<div style="font-size:.65rem;font-weight:600;margin-bottom:8px">Atividade Recente</div>
+<div style="font-size:.6rem;color:var(--neutral-400)">Copy gerada - @fitlife - 2 min<br>Analise completa - TechCorp - 15 min<br>Nova marca adicionada - 1h</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 21 EMAIL TEMPLATES ==================== -->
+<section id="emails">
+<div class="section-num">21</div>
+<div class="section-title">Email Templates</div>
+<div class="section-subtitle">Templates de email para os principais pontos de contato com o usuario.</div>
+
+<div class="grid grid-3">
+<div class="email-card">
+<div class="email-header">
+<div style="font-size:.7rem;color:var(--neutral-500)">DE: hello@musa.ai</div>
+<div style="font-size:.85rem;font-weight:600;margin-top:4px">Bem-vindo a Musa!</div>
+</div>
+<div class="email-body">
+<p style="font-size:.8rem;color:var(--neutral-300);margin-bottom:12px">Ola, <strong>Pedro</strong>!</p>
+<p style="font-size:.8rem;color:var(--neutral-400);margin-bottom:16px">Sua conta esta pronta. Em 3 passos voce comeca a gerar copies inteligentes:</p>
+<div style="font-size:.75rem;color:var(--neutral-300);margin-bottom:16px">1. Configure sua primeira marca<br>2. Defina o tom de voz<br>3. Gere sua primeira copy</div>
+<div style="text-align:center;margin:20px 0"><div style="display:inline-block;padding:10px 24px;background:var(--green-500);color:var(--surface-0);border-radius:var(--radius-md);font-size:.8rem;font-weight:600">Comecar Agora</div></div>
+</div>
+</div>
+<div class="email-card">
+<div class="email-header">
+<div style="font-size:.7rem;color:var(--neutral-500)">DE: insights@musa.ai</div>
+<div style="font-size:.85rem;font-weight:600;margin-top:4px">Seu resumo semanal</div>
+</div>
+<div class="email-body">
+<p style="font-size:.8rem;color:var(--neutral-300);margin-bottom:16px">O que aconteceu na semana:</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+<div style="background:var(--surface-2);padding:10px;border-radius:var(--radius-md);text-align:center"><div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--green-400)">34</div><div style="font-size:.65rem;color:var(--neutral-500)">Copies criadas</div></div>
+<div style="background:var(--surface-2);padding:10px;border-radius:var(--radius-md);text-align:center"><div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--violet-400)">12h</div><div style="font-size:.65rem;color:var(--neutral-500)">Economizadas</div></div>
+</div>
+<div style="text-align:center"><div style="display:inline-block;padding:8px 20px;background:var(--green-500);color:var(--surface-0);border-radius:var(--radius-md);font-size:.75rem;font-weight:600">Ver Relatorio</div></div>
+</div>
+</div>
+<div class="email-card">
+<div class="email-header">
+<div style="font-size:.7rem;color:var(--neutral-500)">DE: product@musa.ai</div>
+<div style="font-size:.85rem;font-weight:600;margin-top:4px">Novo: Analise de Concorrentes</div>
+</div>
+<div class="email-body">
+<div style="height:80px;background:linear-gradient(135deg,var(--green-900),var(--surface-2));border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:16px">
+<span style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--green-400)">Competitive Intelligence</span>
+</div>
+<p style="font-size:.8rem;color:var(--neutral-300);margin-bottom:12px">Agora voce pode:</p>
+<div style="font-size:.75rem;color:var(--neutral-400);margin-bottom:16px">- Monitorar copies de concorrentes<br>- Identificar gaps de conteudo<br>- Benchmarking automatico</div>
+<div style="text-align:center"><div style="display:inline-block;padding:8px 20px;background:var(--green-500);color:var(--surface-0);border-radius:var(--radius-md);font-size:.75rem;font-weight:600">Experimentar</div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 22 COPYWRITING ==================== -->
+<section id="copywriting">
+<div class="section-num">22</div>
+<div class="section-title">Copywriting Guidelines</div>
+<div class="section-subtitle">Formulas, regras e microcopy para manter a consistencia em toda comunicacao.</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Formulas de Headlines</h4>
+<div class="grid grid-3 mb-32">
+<div class="card">
+<div class="code-block mb-12" style="font-size:.8rem;color:var(--violet-400)">[Acao] + [Resultado] + [Tempo]</div>
+<p style="font-size:.85rem;color:var(--neutral-200)">"Gere copies de alta conversao em 30 segundos."</p>
+</div>
+<div class="card">
+<div class="code-block mb-12" style="font-size:.8rem;color:var(--violet-400)">Sem [Dor]. So [Resultado].</div>
+<p style="font-size:.85rem;color:var(--neutral-200)">"Sem bloqueio criativo. So copies prontas para publicar."</p>
+</div>
+<div class="card">
+<div class="code-block mb-12" style="font-size:.8rem;color:var(--violet-400)">[Numero] + [Beneficio]</div>
+<p style="font-size:.85rem;color:var(--neutral-200)">"70% menos tempo. 3x mais copies. 1 plataforma."</p>
+</div>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Regras de CTA</h4>
+<div class="card mb-32">
+<table class="brand-table">
+<thead><tr><th>Contexto</th><th>CTA Primario</th><th>CTA Secundario</th></tr></thead>
+<tbody>
+<tr><td>Landing page</td><td style="color:var(--green-400)">Comece Gratis</td><td style="color:var(--neutral-300)">Ver Demo</td></tr>
+<tr><td>Onboarding</td><td style="color:var(--green-400)">Proximo Passo</td><td style="color:var(--neutral-300)">Pular por Agora</td></tr>
+<tr><td>Feature</td><td style="color:var(--green-400)">Experimentar</td><td style="color:var(--neutral-300)">Saiba Mais</td></tr>
+<tr><td>Upgrade</td><td style="color:var(--green-400)">Fazer Upgrade</td><td style="color:var(--neutral-300)">Comparar Planos</td></tr>
+<tr><td>Geracao de copy</td><td style="color:var(--green-400)">Gerar Copy</td><td style="color:var(--neutral-300)">Personalizar</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Microcopy</h4>
+<div class="grid grid-2">
+<div class="card">
+<h5 style="margin-bottom:12px;color:var(--neutral-200)">Botoes</h5>
+<div style="font-size:.82rem;color:var(--neutral-400);display:flex;flex-direction:column;gap:6px">
+<div><span style="color:var(--green-400)">Salvar</span> (nao "Submeter")</div>
+<div><span style="color:var(--green-400)">Gerar Copy</span> (nao "Criar Texto")</div>
+<div><span style="color:var(--green-400)">Conectar Conta</span> (nao "Autenticar")</div>
+<div><span style="color:var(--green-400)">Cancelar</span> (nao "Voltar Atras")</div>
+</div>
+</div>
+<div class="card">
+<h5 style="margin-bottom:12px;color:var(--neutral-200)">Empty States</h5>
+<div style="font-size:.82rem;color:var(--neutral-400);display:flex;flex-direction:column;gap:6px">
+<div>"Nenhum projeto ainda. <span style="color:var(--green-400)">Crie o primeiro.</span>"</div>
+<div>"Sem copies recentes. <span style="color:var(--green-400)">Gere uma agora.</span>"</div>
+<div>"Sem dados suficientes. Publique mais conteudo para ver insights."</div>
+</div>
+</div>
+<div class="card">
+<h5 style="margin-bottom:12px;color:var(--neutral-200)">Sucesso</h5>
+<div style="font-size:.82rem;color:var(--neutral-400);display:flex;flex-direction:column;gap:6px">
+<div>"Copy gerada com sucesso. 3 variacoes prontas."</div>
+<div>"Projeto salvo."</div>
+<div>"Marca configurada. Comece a gerar copies."</div>
+</div>
+</div>
+<div class="card">
+<h5 style="margin-bottom:12px;color:var(--neutral-200)">Erros</h5>
+<div style="font-size:.82rem;color:var(--neutral-400);display:flex;flex-direction:column;gap:6px">
+<div>"Nao foi possivel gerar a copy. <span style="color:var(--green-400)">Tente novamente.</span>"</div>
+<div>"Conexao perdida. Suas alteracoes foram salvas localmente."</div>
+<div>"Limite de caracteres excedido. Maximo: 2.200."</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 23 ACCESSIBILITY ==================== -->
+<section id="accessibility">
+<div class="section-num">23</div>
+<div class="section-title">Acessibilidade</div>
+<div class="section-subtitle">Conformidade WCAG e guidelines de acessibilidade para garantir inclusao.</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Tabela de Contraste</h4>
+<div class="card mb-32">
+<table class="brand-table">
+<thead><tr><th>Combinacao</th><th>Ratio</th><th>WCAG AA</th><th>WCAG AAA</th></tr></thead>
+<tbody>
+<tr>
+<td><span style="display:inline-flex;align-items:center;gap:8px"><span style="width:20px;height:20px;border-radius:4px;background:#22c55e;display:inline-block"></span> #22C55E on #09090b</span></td>
+<td style="font-family:var(--font-mono);color:var(--green-400)">7.5:1</td>
+<td style="color:var(--green-400)">Pass</td>
+<td style="color:var(--green-400)">Pass</td>
+</tr>
+<tr>
+<td><span style="display:inline-flex;align-items:center;gap:8px"><span style="width:20px;height:20px;border-radius:4px;background:#22c55e;display:inline-block"></span> #22C55E on #18181b</span></td>
+<td style="font-family:var(--font-mono);color:var(--green-400)">6.2:1</td>
+<td style="color:var(--green-400)">Pass</td>
+<td style="color:var(--neutral-500)">Fail</td>
+</tr>
+<tr>
+<td><span style="display:inline-flex;align-items:center;gap:8px"><span style="width:20px;height:20px;border-radius:4px;background:#a78bfa;display:inline-block"></span> #A78BFA on #09090b</span></td>
+<td style="font-family:var(--font-mono);color:var(--violet-400)">6.8:1</td>
+<td style="color:var(--green-400)">Pass</td>
+<td style="color:var(--neutral-500)">Fail</td>
+</tr>
+<tr>
+<td><span style="display:inline-flex;align-items:center;gap:8px"><span style="width:20px;height:20px;border-radius:4px;background:#fafafa;display:inline-block"></span> #fafafa on #09090b</span></td>
+<td style="font-family:var(--font-mono);color:var(--neutral-50)">19.4:1</td>
+<td style="color:var(--green-400)">Pass</td>
+<td style="color:var(--green-400)">Pass</td>
+</tr>
+<tr>
+<td><span style="display:inline-flex;align-items:center;gap:8px"><span style="width:20px;height:20px;border-radius:4px;background:#a1a1aa;display:inline-block"></span> #a1a1aa on #09090b</span></td>
+<td style="font-family:var(--font-mono);color:var(--neutral-400)">6.3:1</td>
+<td style="color:var(--green-400)">Pass</td>
+<td style="color:var(--neutral-500)">Fail</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="grid grid-2">
+<div class="card">
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Focus Ring</h4>
+<p style="font-size:.85rem;color:var(--neutral-400);margin-bottom:16px">Todos os elementos interativos devem ter um focus ring visivel ao navegar com teclado.</p>
+<div class="code-block" style="font-size:.75rem">:focus-visible {<br>  outline: 2px solid #22C55E;<br>  outline-offset: 2px;<br>}<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+</div>
+<div class="card">
+<h4 style="font-family:var(--font-display);margin-bottom:12px;color:var(--neutral-100)">Navegacao por Teclado</h4>
+<p style="font-size:.85rem;color:var(--neutral-400)">
+<strong style="color:var(--neutral-200)">Tab:</strong> Avanca entre elementos interativos<br>
+<strong style="color:var(--neutral-200)">Shift+Tab:</strong> Retrocede entre elementos<br>
+<strong style="color:var(--neutral-200)">Enter/Space:</strong> Ativa botoes e links<br>
+<strong style="color:var(--neutral-200)">Escape:</strong> Fecha modals e dropdowns<br>
+<strong style="color:var(--neutral-200)">Arrow keys:</strong> Navega dentro de menus e tabs
+</p>
+</div>
+</div>
+</section>
+
+<!-- ==================== 24 DOS AND DONTS ==================== -->
+<section id="dos-donts">
+<div class="section-num">24</div>
+<div class="section-title">Do's & Don'ts</div>
+<div class="section-subtitle">Guia visual rapido para uso correto dos elementos da marca.</div>
+
+<div class="grid grid-2 mb-32">
+<div class="do-card">
+<h4 style="font-size:.9rem;margin-bottom:12px;color:var(--green-400)">Logo: usar em fundos escuros</h4>
+<div style="background:var(--surface-0);border-radius:var(--radius-md);padding:24px;text-align:center;margin-top:8px">
+<svg viewBox="0 0 64 64" fill="none" style="width:48px;height:48px"><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="#22C55E" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/></svg>
+</div>
+</div>
+<div class="dont-card">
+<h4 style="font-size:.9rem;margin-bottom:12px;color:var(--red-500)">Logo: usar em fundos claros sem inverter</h4>
+<div style="background:#e5e5e5;border-radius:var(--radius-md);padding:24px;text-align:center;margin-top:8px">
+<svg viewBox="0 0 64 64" fill="none" style="width:48px;height:48px;opacity:.3"><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="#22C55E" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/></svg>
+</div>
+</div>
+<div class="do-card">
+<h4 style="font-size:.9rem;margin-bottom:12px;color:var(--green-400)">Cores: verde como destaque pontual</h4>
+<div style="background:var(--surface-2);border-radius:var(--radius-md);padding:16px;margin-top:8px;font-size:.8rem;color:var(--neutral-300)">Texto em cinza claro com <span style="color:var(--green-400)">destaques pontuais</span> em verde para CTAs e elementos importantes.</div>
+</div>
+<div class="dont-card">
+<h4 style="font-size:.9rem;margin-bottom:12px;color:var(--red-500)">Cores: verde em grandes areas de texto</h4>
+<div style="background:var(--surface-2);border-radius:var(--radius-md);padding:16px;margin-top:8px;font-size:.8rem;color:var(--green-400)">Todo o texto em verde causa fadiga visual e remove a hierarquia da informacao na interface.</div>
+</div>
+<div class="do-card">
+<h4 style="font-size:.9rem;margin-bottom:12px;color:var(--green-400)">Tipografia: Space Grotesk para titulos</h4>
+<div style="background:var(--surface-2);border-radius:var(--radius-md);padding:16px;margin-top:8px">
+<div style="font-family:var(--font-display);font-size:1.2rem;font-weight:600;margin-bottom:4px">Titulo em Space Grotesk</div>
+<div style="font-family:var(--font-body);font-size:.8rem;color:var(--neutral-400)">Corpo em Inter para leitura confortavel.</div>
+</div>
+</div>
+<div class="dont-card">
+<h4 style="font-size:.9rem;margin-bottom:12px;color:var(--red-500)">Tipografia: misturar fontes sem regra</h4>
+<div style="background:var(--surface-2);border-radius:var(--radius-md);padding:16px;margin-top:8px">
+<div style="font-family:serif;font-size:1.2rem;font-weight:600;margin-bottom:4px">Titulo em Serif aleatoria</div>
+<div style="font-family:var(--font-mono);font-size:.8rem;color:var(--neutral-400)">Corpo em monospace nao e legivel para textos longos.</div>
+</div>
+</div>
+<div class="do-card">
+<h4 style="font-size:.9rem;margin-bottom:12px;color:var(--green-400)">Espacamento: generoso e consistente</h4>
+<div style="background:var(--surface-2);border-radius:var(--radius-md);padding:24px;margin-top:8px">
+<div style="background:var(--surface-3);padding:12px;border-radius:4px;margin-bottom:16px;font-size:.75rem;color:var(--neutral-400)">Item 1</div>
+<div style="background:var(--surface-3);padding:12px;border-radius:4px;font-size:.75rem;color:var(--neutral-400)">Item 2</div>
+</div>
+</div>
+<div class="dont-card">
+<h4 style="font-size:.9rem;margin-bottom:12px;color:var(--red-500)">Espacamento: apertado e irregular</h4>
+<div style="background:var(--surface-2);border-radius:var(--radius-md);padding:8px;margin-top:8px">
+<div style="background:var(--surface-3);padding:6px;border-radius:4px;margin-bottom:3px;font-size:.75rem;color:var(--neutral-400)">Item 1</div>
+<div style="background:var(--surface-3);padding:6px;border-radius:4px;margin-bottom:10px;font-size:.75rem;color:var(--neutral-400)">Item 2</div>
+<div style="background:var(--surface-3);padding:6px;border-radius:4px;font-size:.75rem;color:var(--neutral-400)">Item 3</div>
+</div>
+</div>
+<div class="do-card">
+<h4 style="font-size:.9rem;margin-bottom:12px;color:var(--green-400)">Tom: direto e empoderador</h4>
+<div style="background:var(--surface-2);border-radius:var(--radius-md);padding:16px;margin-top:8px;font-size:.82rem;color:var(--neutral-300)">"Voce gerou 47 copies esta semana. Seu engajamento medio subiu 12%."</div>
+</div>
+<div class="dont-card">
+<h4 style="font-size:.9rem;margin-bottom:12px;color:var(--red-500)">Tom: corporativo e passivo</h4>
+<div style="background:var(--surface-2);border-radius:var(--radius-md);padding:16px;margin-top:8px;font-size:.82rem;color:var(--neutral-300)">"Informamos que o sistema realizou a geracao de 47 unidades de conteudo textual no periodo corrente."</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 25 DESIGN TOKENS ==================== -->
+<section id="tokens">
+<div class="section-num">25</div>
+<div class="section-title">Design Tokens</div>
+<div class="section-subtitle">Tokens de design em formato JSON para integracao com ferramentas de design e codigo.</div>
+
+<div class="card mb-16">
+<div class="flex justify-between items-center mb-16">
+<input type="text" class="input" id="token-search" placeholder="Buscar tokens..." style="max-width:300px" oninput="filterTokens(this.value)">
+</div>
+<div id="token-tree" class="token-tree">
+<div class="token-node" data-key="color">
+<span class="token-toggle" onclick="toggleToken(this)">[-]</span> <span class="token-key" style="color:var(--neutral-200)">"color"</span>: {
+<div class="token-children" style="padding-left:20px">
+<div class="token-node" data-key="color.primary">
+<span class="token-toggle" onclick="toggleToken(this)">[-]</span> <span class="token-key">"primary"</span>: {
+<div class="token-children" style="padding-left:20px">
+<div class="token-node" data-key="color.primary.50"><span class="token-key">"50"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#f0fdf4')">"#f0fdf4"</span></div>
+<div class="token-node" data-key="color.primary.100"><span class="token-key">"100"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#dcfce7')">"#dcfce7"</span></div>
+<div class="token-node" data-key="color.primary.200"><span class="token-key">"200"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#bbf7d0')">"#bbf7d0"</span></div>
+<div class="token-node" data-key="color.primary.300"><span class="token-key">"300"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#86efac')">"#86efac"</span></div>
+<div class="token-node" data-key="color.primary.400"><span class="token-key">"400"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#4ade80')">"#4ade80"</span></div>
+<div class="token-node" data-key="color.primary.500"><span class="token-key">"500"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#22c55e')">"#22c55e"</span></div>
+<div class="token-node" data-key="color.primary.600"><span class="token-key">"600"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#16a34a')">"#16a34a"</span></div>
+<div class="token-node" data-key="color.primary.700"><span class="token-key">"700"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#15803d')">"#15803d"</span></div>
+<div class="token-node" data-key="color.primary.800"><span class="token-key">"800"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#166534')">"#166534"</span></div>
+<div class="token-node" data-key="color.primary.900"><span class="token-key">"900"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#14532d')">"#14532d"</span></div>
+<div class="token-node" data-key="color.primary.950"><span class="token-key">"950"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#052e16')">"#052e16"</span></div>
+</div>
+}
+</div>
+<div class="token-node" data-key="color.accent">
+<span class="token-toggle" onclick="toggleToken(this)">[-]</span> <span class="token-key">"accent"</span>: {
+<div class="token-children" style="padding-left:20px">
+<div class="token-node" data-key="color.accent.300"><span class="token-key">"300"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#c4b5fd')">"#c4b5fd"</span></div>
+<div class="token-node" data-key="color.accent.400"><span class="token-key">"400"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#a78bfa')">"#a78bfa"</span></div>
+<div class="token-node" data-key="color.accent.500"><span class="token-key">"500"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#8b5cf6')">"#8b5cf6"</span></div>
+<div class="token-node" data-key="color.accent.600"><span class="token-key">"600"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#7c3aed')">"#7c3aed"</span></div>
+</div>
+}
+</div>
+<div class="token-node" data-key="color.surface">
+<span class="token-toggle" onclick="toggleToken(this)">[-]</span> <span class="token-key">"surface"</span>: {
+<div class="token-children" style="padding-left:20px">
+<div class="token-node" data-key="color.surface.0"><span class="token-key">"0"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#09090b')">"#09090b"</span></div>
+<div class="token-node" data-key="color.surface.1"><span class="token-key">"1"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#0f0f12')">"#0f0f12"</span></div>
+<div class="token-node" data-key="color.surface.2"><span class="token-key">"2"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#18181b')">"#18181b"</span></div>
+<div class="token-node" data-key="color.surface.3"><span class="token-key">"3"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#1f1f23')">"#1f1f23"</span></div>
+<div class="token-node" data-key="color.surface.4"><span class="token-key">"4"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('#27272a')">"#27272a"</span></div>
+</div>
+}
+</div>
+</div>
+}
+</div>
+<div class="token-node" data-key="font">
+<span class="token-toggle" onclick="toggleToken(this)">[-]</span> <span class="token-key" style="color:var(--neutral-200)">"font"</span>: {
+<div class="token-children" style="padding-left:20px">
+<div class="token-node" data-key="font.display"><span class="token-key">"display"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('Space Grotesk')">"Space Grotesk"</span></div>
+<div class="token-node" data-key="font.body"><span class="token-key">"body"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('Inter')">"Inter"</span></div>
+<div class="token-node" data-key="font.mono"><span class="token-key">"mono"</span>: <span class="token-value" style="cursor:pointer" onclick="copyColor('Geist Mono')">"Geist Mono"</span></div>
+</div>
+}
+</div>
+<div class="token-node" data-key="radius">
+<span class="token-toggle" onclick="toggleToken(this)">[-]</span> <span class="token-key" style="color:var(--neutral-200)">"radius"</span>: {
+<div class="token-children" style="padding-left:20px">
+<div class="token-node" data-key="radius.sm"><span class="token-key">"sm"</span>: <span class="token-value">"4px"</span></div>
+<div class="token-node" data-key="radius.md"><span class="token-key">"md"</span>: <span class="token-value">"8px"</span></div>
+<div class="token-node" data-key="radius.lg"><span class="token-key">"lg"</span>: <span class="token-value">"12px"</span></div>
+<div class="token-node" data-key="radius.xl"><span class="token-key">"xl"</span>: <span class="token-value">"16px"</span></div>
+<div class="token-node" data-key="radius.2xl"><span class="token-key">"2xl"</span>: <span class="token-value">"24px"</span></div>
+<div class="token-node" data-key="radius.full"><span class="token-key">"full"</span>: <span class="token-value">"9999px"</span></div>
+</div>
+}
+</div>
+</div>
+</div>
+</section>
+
+<!-- ==================== 26 IMPLEMENTATION ==================== -->
+<section id="implementation">
+<div class="section-num">26</div>
+<div class="section-title">Guia de Implementacao</div>
+<div class="section-subtitle">Como integrar o sistema de design Musa em projetos Tailwind CSS 4 e Next.js.</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Import de Fontes</h4>
+<div class="code-block mb-32" style="font-size:.75rem">
+/* globals.css */<br>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+<button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">CSS Variables (Tailwind CSS 4)</h4>
+<div class="code-block mb-32" style="font-size:.75rem">
+@theme {<br>
+&nbsp;&nbsp;--color-primary-50: #f0fdf4;<br>
+&nbsp;&nbsp;--color-primary-100: #dcfce7;<br>
+&nbsp;&nbsp;--color-primary-200: #bbf7d0;<br>
+&nbsp;&nbsp;--color-primary-300: #86efac;<br>
+&nbsp;&nbsp;--color-primary-400: #4ade80;<br>
+&nbsp;&nbsp;--color-primary-500: #22c55e;<br>
+&nbsp;&nbsp;--color-primary-600: #16a34a;<br>
+&nbsp;&nbsp;--color-primary-700: #15803d;<br>
+&nbsp;&nbsp;--color-primary-800: #166534;<br>
+&nbsp;&nbsp;--color-primary-900: #14532d;<br>
+&nbsp;&nbsp;--color-primary-950: #052e16;<br><br>
+&nbsp;&nbsp;--color-accent-300: #c4b5fd;<br>
+&nbsp;&nbsp;--color-accent-400: #a78bfa;<br>
+&nbsp;&nbsp;--color-accent-500: #8b5cf6;<br>
+&nbsp;&nbsp;--color-accent-600: #7c3aed;<br><br>
+&nbsp;&nbsp;--color-surface-0: #09090b;<br>
+&nbsp;&nbsp;--color-surface-1: #0f0f12;<br>
+&nbsp;&nbsp;--color-surface-2: #18181b;<br>
+&nbsp;&nbsp;--color-surface-3: #1f1f23;<br>
+&nbsp;&nbsp;--color-surface-4: #27272a;<br><br>
+&nbsp;&nbsp;--font-display: 'Space Grotesk', sans-serif;<br>
+&nbsp;&nbsp;--font-body: 'Inter', sans-serif;<br>
+&nbsp;&nbsp;--font-mono: 'Geist Mono', monospace;<br>
+}
+<button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Next.js Integration</h4>
+<div class="code-block mb-32" style="font-size:.75rem">
+// app/layout.tsx<br>
+import { Space_Grotesk, Inter } from 'next/font/google'<br>
+import localFont from 'next/font/local'<br><br>
+const spaceGrotesk = Space_Grotesk({<br>
+&nbsp;&nbsp;subsets: ['latin'],<br>
+&nbsp;&nbsp;variable: '--font-display',<br>
+&nbsp;&nbsp;weight: ['400', '500', '600', '700'],<br>
+})<br><br>
+const inter = Inter({<br>
+&nbsp;&nbsp;subsets: ['latin'],<br>
+&nbsp;&nbsp;variable: '--font-body',<br>
+})<br><br>
+export default function RootLayout({ children }) {<br>
+&nbsp;&nbsp;return (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;html className={`${spaceGrotesk.variable} ${inter.variable}`}&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;body className="bg-surface-0 text-neutral-50 font-body"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{children}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/body&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/html&gt;<br>
+&nbsp;&nbsp;)<br>
+}
+<button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+
+<h4 style="font-family:var(--font-display);margin-bottom:16px;color:var(--neutral-100)">Checklist de Migracao (Indigo para Green)</h4>
+<div class="card">
+<div style="display:flex;flex-direction:column;gap:8px;font-size:.85rem">
+<label class="check-group"><input type="checkbox"> Substituir todas as referencias de indigo-* por primary-*</label>
+<label class="check-group"><input type="checkbox"> Atualizar CSS variables no theme</label>
+<label class="check-group"><input type="checkbox"> Verificar contraste WCAG nos novos pares de cores</label>
+<label class="check-group"><input type="checkbox"> Atualizar focus rings de indigo para green</label>
+<label class="check-group"><input type="checkbox"> Revisar gradientes e sombras glow</label>
+<label class="check-group"><input type="checkbox"> Atualizar favicon e meta theme-color</label>
+<label class="check-group"><input type="checkbox"> Testar em dark mode e light mode (se aplicavel)</label>
+<label class="check-group"><input type="checkbox"> Validar componentes em todos os breakpoints</label>
+</div>
+</div>
+</section>
+
+<!-- ==================== 27 DOWNLOADS ==================== -->
+<section id="downloads">
+<div class="section-num">27</div>
+<div class="section-title">Downloads & Recursos</div>
+<div class="section-subtitle">Arquivos e recursos para implementacao do sistema de design Musa.</div>
+
+<div class="grid grid-2">
+<div class="download-card" onclick="window.print()">
+<div class="download-icon">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+</div>
+<div>
+<div style="font-weight:600;margin-bottom:4px">Brand Book PDF</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Exporte este brand book como PDF via Print</div>
+</div>
+</div>
+<div class="download-card" onclick="downloadTokens()">
+<div class="download-icon">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+</div>
+<div>
+<div style="font-weight:600;margin-bottom:4px">Design Tokens JSON</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Tokens em formato JSON para integracao</div>
+</div>
+</div>
+<div class="download-card" onclick="downloadCSS()">
+<div class="download-icon" style="background:rgba(167,139,250,.1);color:var(--violet-400)">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+</div>
+<div>
+<div style="font-weight:600;margin-bottom:4px">Brand CSS</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Arquivo CSS com todas as variaveis da marca</div>
+</div>
+</div>
+<div class="download-card" onclick="downloadQuickRef()">
+<div class="download-icon" style="background:rgba(234,179,8,.1);color:var(--yellow-500)">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+</div>
+<div>
+<div style="font-weight:600;margin-bottom:4px">Quick Reference MD</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Referencia rapida em Markdown</div>
+</div>
+</div>
+<div class="download-card">
+<div class="download-icon" style="background:rgba(59,130,246,.1);color:var(--blue-500)">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+</div>
+<div>
+<div style="font-weight:600;margin-bottom:4px">Logo SVGs (6 variantes)</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Full, Icon, Wordmark, Mono White, Mono Dark, Favicon</div>
+</div>
+</div>
+<div class="download-card" onclick="location.href='#cover'">
+<div class="download-icon" style="background:rgba(34,197,94,.1);color:var(--green-400)">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+</div>
+<div>
+<div style="font-weight:600;margin-bottom:4px">Voltar ao Inicio</div>
+<div style="font-size:.75rem;color:var(--neutral-500)">Navegar para o topo do Brand Book</div>
+</div>
+</div>
+</div>
+
+<div style="text-align:center;margin-top:80px;padding:40px;border-top:1px solid var(--surface-3)">
+<svg viewBox="0 0 64 64" fill="none" style="width:40px;height:40px;margin-bottom:16px"><defs><linearGradient id="lgf" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4ADE80"/><stop offset="100%" stop-color="#22C55E"/></linearGradient></defs><path d="M16 12C16 12 12 12 12 18V38C12 48 20 56 32 56C44 56 52 48 52 38V18C52 12 48 12 48 12" stroke="url(#lgf)" stroke-width="3.5" stroke-linecap="round" fill="none"/><line x1="16" y1="12" x2="48" y2="12" stroke="url(#lgf)" stroke-width="3.5" stroke-linecap="round"/><line x1="32" y1="14" x2="32" y2="48" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/><circle cx="32" cy="30" r="4" fill="#22C55E" opacity="0.9"/></svg>
+<div style="font-family:var(--font-display);font-size:1.2rem;font-weight:600;background:linear-gradient(135deg,var(--green-400),var(--green-500));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px">musa</div>
+<div style="font-size:.8rem;color:var(--neutral-500)">Brand Book v1.0 — Marco 2026</div>
+<div style="font-size:.7rem;color:var(--neutral-600);margin-top:4px">Documento confidencial. Uso interno.</div>
+</div>
+</section>
+
+</main>
+
+<script>
+// ===== Progress Bar =====
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+
+// ===== Scroll Spy with IntersectionObserver =====
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('#sidebar nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    // Add visible class for scroll animations
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+    // Update nav
+    if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + entry.target.id) {
+          link.classList.add('active');
+        }
+      });
+    }
+  });
+}, { threshold: [0.1, 0.3], rootMargin: '-10% 0px -60% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// ===== Toast =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg || 'Copiado!';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ===== Copy Color =====
+function copyColor(hex) {
+  navigator.clipboard.writeText(hex).then(() => showToast('Copiado: ' + hex));
+}
+
+// ===== Copy Code Block =====
+function copyCode(btn) {
+  const block = btn.parentElement;
+  const text = block.textContent.replace('Copy', '').trim();
+  navigator.clipboard.writeText(text).then(() => showToast('Codigo copiado!'));
+}
+
+// ===== Mobile sidebar close on link click =====
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+// ===== Effects Toggles =====
+function toggleEffect(id) {
+  const el = document.querySelector('#' + id + ' .glass-card');
+  if (el) {
+    el.style.backdropFilter = el.style.backdropFilter === 'none' ? 'blur(16px)' : 'none';
+  }
+}
+
+function toggleNoise(btn) {
+  const overlay = document.querySelector('#noise-demo .noise-overlay');
+  if (overlay) overlay.style.opacity = overlay.style.opacity === '0' ? '0.05' : '0';
+}
+
+function toggleDots(btn) {
+  const pattern = document.querySelector('#dot-demo .dot-pattern');
+  if (pattern) pattern.style.opacity = pattern.style.opacity === '0' ? '0.5' : '0';
+}
+
+function toggleGlow(btn) {
+  const orb = document.querySelector('#glow-demo .glow-orb');
+  if (orb) {
+    if (orb.style.width === '0px') {
+      orb.style.width = '120px';
+      orb.style.height = '120px';
+    } else {
+      orb.style.width = '0px';
+      orb.style.height = '0px';
+    }
+  }
+}
+
+// ===== Animations =====
+function playFadeUp() {
+  const el = document.getElementById('anim-fadeup-target');
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  requestAnimationFrame(() => {
+    el.style.transition = 'opacity .6s ease, transform .6s ease';
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  });
+}
+
+function playShimmer() {
+  const el = document.getElementById('anim-shimmer-target');
+  const children = el.querySelectorAll('div');
+  children.forEach(c => {
+    c.classList.add('anim-shimmer');
+    setTimeout(() => c.classList.remove('anim-shimmer'), 3000);
+  });
+}
+
+let typewriterTimer;
+function playTypewriter() {
+  const el = document.getElementById('anim-typewriter-target');
+  const text = 'Gerando copy inteligente para @fitlife...';
+  el.textContent = '';
+  let i = 0;
+  clearInterval(typewriterTimer);
+  typewriterTimer = setInterval(() => {
+    if (i < text.length) {
+      el.textContent += text[i];
+      i++;
+    } else {
+      clearInterval(typewriterTimer);
+    }
+  }, 50);
+}
+
+// ===== Design Tokens =====
+function toggleToken(el) {
+  const node = el.parentElement;
+  const children = node.querySelector('.token-children');
+  if (children) {
+    const visible = children.style.display !== 'none';
+    children.style.display = visible ? 'none' : 'block';
+    el.textContent = visible ? '[+]' : '[-]';
+  }
+}
+
+function filterTokens(query) {
+  const nodes = document.querySelectorAll('#token-tree .token-node');
+  const q = query.toLowerCase();
+  nodes.forEach(node => {
+    const key = node.getAttribute('data-key') || '';
+    const text = node.textContent.toLowerCase();
+    if (!q || key.includes(q) || text.includes(q)) {
+      node.style.display = '';
+    } else {
+      node.style.display = 'none';
+    }
+  });
+}
+
+// ===== Downloads =====
+function downloadBlob(content, filename, type) {
+  const blob = new Blob([content], { type: type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Download: ' + filename);
+}
+
+function downloadTokens() {
+  const tokens = {
+    color: {
+      primary: { 50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#052e16' },
+      accent: { 300:'#c4b5fd',400:'#a78bfa',500:'#8b5cf6',600:'#7c3aed' },
+      neutral: { 50:'#fafafa',100:'#f5f5f5',200:'#e5e5e5',300:'#d4d4d4',400:'#a1a1aa',500:'#71717a',600:'#52525b',700:'#3f3f46',800:'#27272a' },
+      surface: { 0:'#09090b',1:'#0f0f12',2:'#18181b',3:'#1f1f23',4:'#27272a' },
+      semantic: { success:'#22c55e',error:'#ef4444',warning:'#eab308',info:'#3b82f6' }
+    },
+    font: { display:'Space Grotesk',body:'Inter',mono:'Geist Mono' },
+    radius: { sm:'4px',md:'8px',lg:'12px',xl:'16px','2xl':'24px',full:'9999px' },
+    shadow: {
+      sm:'0 1px 2px rgba(0,0,0,.4)',
+      md:'0 4px 6px -1px rgba(0,0,0,.5)',
+      lg:'0 10px 15px -3px rgba(0,0,0,.6)',
+      xl:'0 20px 25px -5px rgba(0,0,0,.7)',
+      '2xl':'0 25px 50px -12px rgba(0,0,0,.8)',
+      glow:'0 0 20px rgba(34,197,94,.15)',
+      'glow-lg':'0 0 40px rgba(34,197,94,.25)'
+    }
+  };
+  downloadBlob(JSON.stringify(tokens, null, 2), 'musa-design-tokens.json', 'application/json');
+}
+
+function downloadCSS() {
+  const css = `:root {
+  /* Primary */
+  --green-50: #f0fdf4; --green-100: #dcfce7; --green-200: #bbf7d0;
+  --green-300: #86efac; --green-400: #4ade80; --green-500: #22c55e;
+  --green-600: #16a34a; --green-700: #15803d; --green-800: #166534;
+  --green-900: #14532d; --green-950: #052e16;
+  /* Accent */
+  --violet-300: #c4b5fd; --violet-400: #a78bfa;
+  --violet-500: #8b5cf6; --violet-600: #7c3aed;
+  /* Surfaces */
+  --surface-0: #09090b; --surface-1: #0f0f12;
+  --surface-2: #18181b; --surface-3: #1f1f23; --surface-4: #27272a;
+  /* Fonts */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
+  /* Radius */
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-xl: 16px; --radius-2xl: 24px; --radius-full: 9999px;
+}`;
+  downloadBlob(css, 'musa-brand.css', 'text/css');
+}
+
+function downloadQuickRef() {
+  const md = `# Musa Brand Quick Reference
+
+## Colors
+- Primary: #22C55E (Green 500)
+- Accent: #A78BFA (Violet 400)
+- Background: #09090B (Surface 0)
+- Text: #FAFAFA (Neutral 50)
+- Muted: #A1A1AA (Neutral 400)
+
+## Typography
+- Display: Space Grotesk (500/600/700)
+- Body: Inter (400/500/600)
+- Mono: Geist Mono (400/500)
+
+## Radius
+- SM: 4px | MD: 8px | LG: 12px | XL: 16px | Full: 9999px
+
+## Brand Voice
+- Direto, Empoderador, Tech-savvy
+- Archetype: O Mago (The Magician)
+
+## Surfaces
+- Surface 0: #09090B | Surface 1: #0F0F12
+- Surface 2: #18181B | Surface 3: #1F1F23 | Surface 4: #27272A
+`;
+  downloadBlob(md, 'musa-quick-reference.md', 'text/markdown');
+}
+</script>
+</body>
+</html>

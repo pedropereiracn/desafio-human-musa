@@ -11,6 +11,7 @@ import {
   BarChart3,
   CalendarDays,
   Layers,
+  BookOpen,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -29,6 +30,10 @@ const NAV_ITEMS = [
   { href: "/briefs", icon: FileText, label: "Briefs" },
   { href: "/clients", icon: Users, label: "Clientes" },
   { href: "/carousel", icon: Layers, label: "Carrossel" },
+];
+
+const INTERNAL_ITEMS = [
+  { href: "/brand", icon: BookOpen, label: "Brand Book" },
 ];
 
 const BETA_ITEMS = [
@@ -168,6 +173,47 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                     {item.label}
                     <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-green-500/15 text-green-400 font-semibold uppercase tracking-wider">
                       Beta
+                    </span>
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </Link>
+          ))}
+
+          {/* Separator — Internal */}
+          <div className="my-3 border-t border-white/[0.04]" />
+
+          {INTERNAL_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all relative",
+                isActive(item.href)
+                  ? "text-foreground font-medium"
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/[0.03]"
+              )}
+              title={collapsed ? item.label : undefined}
+            >
+              {isActive(item.href) && (
+                <motion.div
+                  layoutId="sidebar-active"
+                  className="absolute inset-0 rounded-xl bg-white/[0.06]"
+                  transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
+                />
+              )}
+              <item.icon size={18} className={cn("shrink-0 relative z-10", isActive(item.href) && "text-primary")} />
+              <AnimatePresence>
+                {!collapsed && (
+                  <motion.span
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: "auto" }}
+                    exit={{ opacity: 0, width: 0 }}
+                    className="overflow-hidden whitespace-nowrap flex items-center gap-2 relative z-10"
+                  >
+                    {item.label}
+                    <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-violet-500/15 text-violet-400 font-semibold uppercase tracking-wider">
+                      Interno
                     </span>
                   </motion.span>
                 )}
