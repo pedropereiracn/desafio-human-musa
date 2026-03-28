@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { fetchActivities, insertActivity } from "@/lib/db";
 import type { ActivityItem } from "@/lib/types";
 
 export function useActivities() {
@@ -9,7 +8,8 @@ export function useActivities() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    fetchActivities()
+    fetch("/api/activities")
+      .then((r) => r.json())
       .then(setActivities)
       .catch(console.error)
       .finally(() => setIsLoaded(true));
@@ -22,7 +22,11 @@ export function useActivities() {
       clientId?: string;
       module: string;
     }) => {
-      await insertActivity(item);
+      await fetch("/api/activities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item),
+      });
       const entry: ActivityItem = {
         id: crypto.randomUUID(),
         type: item.type,

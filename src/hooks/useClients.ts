@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { fetchClients, insertClient, updateClientById, deleteClientById } from "@/lib/db";
 import type { ClientProfile, Platform } from "@/lib/types";
 
 const SEGMENT_COLORS: Record<string, string> = {
@@ -32,7 +31,8 @@ export function useClients() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    fetchClients()
+    fetch("/api/clients")
+      .then((r) => r.json())
       .then(setClients)
       .catch(console.error)
       .finally(() => setIsLoaded(true));
@@ -41,7 +41,16 @@ export function useClients() {
   const addClient = useCallback(
     async (data: Omit<ClientProfile, "id" | "createdAt" | "color">) => {
       const color = getColorForSegment(data.segment);
-      const client = await insertClient({ ...data, color });
+      const res = await fetch("/api/clients", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, color }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Erro ao salvar cliente");
+      }
+      const client: ClientProfile = await res.json();
       setClients((prev) => [client, ...prev]);
       return client;
     },
@@ -53,7 +62,15 @@ export function useClients() {
       const updates = data.segment
         ? { ...data, color: getColorForSegment(data.segment) }
         : data;
-      await updateClientById(id, updates);
+      const res = await fetch("/api/clients", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, ...updates }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Erro ao atualizar cliente");
+      }
       setClients((prev) =>
         prev.map((c) => (c.id === id ? { ...c, ...updates } : c))
       );
@@ -63,7 +80,15 @@ export function useClients() {
 
   const deleteClient = useCallback(
     async (id: string) => {
-      await deleteClientById(id);
+      const res = await fetch("/api/clients", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Erro ao remover cliente");
+      }
       setClients((prev) => prev.filter((c) => c.id !== id));
     },
     []

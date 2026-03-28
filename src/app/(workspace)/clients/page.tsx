@@ -87,19 +87,18 @@ export default function ClientsPage() {
       } else {
         await addClient(form);
         toast.success(`${form.name} adicionado`);
-        await addActivity({
+        addActivity({
           type: "client",
           title: `Novo cliente: ${form.name}`,
           module: "Hub de Clientes",
-        });
+        }).catch(() => {});
       }
 
       setShowForm(false);
       setForm(EMPTY_FORM);
       setEditingId(null);
-    } catch (err) {
-      console.error("Erro ao salvar cliente:", err);
-      toast.error("Erro ao salvar cliente. Verifique a conexão.");
+    } catch (err: unknown) {
+      toast.error("Erro ao salvar cliente");
     } finally {
       setSaving(false);
     }

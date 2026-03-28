@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { fetchClients, fetchCopyHistoryByClient, fetchBriefsByClient, fetchActivitiesByClient } from "@/lib/db";
 import type { ClientProfile, CopyHistoryItem, SavedBrief, ActivityItem, Platform } from "@/lib/types";
 
 interface ClientStats {
@@ -23,18 +22,13 @@ export function useClientDetail(clientId: string) {
     if (!clientId) return;
 
     setIsLoading(true);
-    Promise.all([
-      fetchClients(),
-      fetchCopyHistoryByClient(clientId),
-      fetchBriefsByClient(clientId),
-      fetchActivitiesByClient(clientId),
-    ])
-      .then(([allClients, copiesData, briefsData, activitiesData]) => {
-        const found = allClients.find((c) => c.id === clientId) || null;
-        setClient(found);
-        setCopies(copiesData);
-        setBriefs(briefsData);
-        setActivities(activitiesData);
+    fetch(`/api/clients?id=${clientId}`)
+      .then((r) => r.json())
+      .then((data) => {
+        setClient(data.client || null);
+        setCopies(data.copies || []);
+        setBriefs(data.briefs || []);
+        setActivities(data.activities || []);
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
