@@ -37,7 +37,7 @@ export default function TopBar({ clients, selectedClientId, onSelectClient }: To
   const isClientDetail = pathname.startsWith("/clients/") && pathname !== "/clients";
 
   return (
-    <header className="h-14 flex items-center justify-between px-6 bg-[#09090b]/40 backdrop-blur-2xl border-b border-white/[0.07]">
+    <header className="h-14 flex items-center justify-between px-6 bg-[#09090b]/35 backdrop-blur-2xl border-b border-white/[0.07]">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm">
         {isHome ? (
