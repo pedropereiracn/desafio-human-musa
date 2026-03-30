@@ -38,9 +38,9 @@ export default function TopBar({ clients, selectedClientId, selectedClient, onSe
   const isClientDetail = pathname.startsWith("/clients/") && pathname !== "/clients";
 
   return (
-    <header className="h-14 flex items-center justify-between px-6 bg-[#09090b]/35 backdrop-blur-2xl border-b border-white/[0.07]">
+    <header className="h-14 flex items-center justify-between px-3 md:px-6 bg-[#09090b]/35 backdrop-blur-2xl border-b border-white/[0.07]">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm">
+      <div className="flex items-center gap-2 text-sm min-w-0">
         {isHome ? (
           <span className="text-foreground font-medium">Dashboard</span>
         ) : isClientDetail ? (
@@ -87,7 +87,7 @@ export default function TopBar({ clients, selectedClientId, selectedClient, onSe
           value={selectedClientId || "all"}
           onValueChange={(value) => onSelectClient(value === "all" ? undefined : value)}
         >
-          <SelectTrigger className="w-[200px] h-9 rounded-xl bg-surface-2 border-white/[0.06] text-sm hover:border-primary/30 transition-colors focus:ring-primary/20">
+          <SelectTrigger className="w-[140px] md:w-[200px] h-9 rounded-xl bg-surface-2 border-white/[0.06] text-sm hover:border-primary/30 transition-colors focus:ring-primary/20">
             <div className="flex items-center gap-2">
               {selectedClient ? (
                 <div

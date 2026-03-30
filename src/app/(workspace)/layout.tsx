@@ -8,13 +8,10 @@ function WorkspaceInner({ children }: { children: React.ReactNode }) {
   const { clients, selectedClientId, selectedClient, setSelectedClientId } = useWorkspace();
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen overflow-x-hidden">
       <Sidebar />
 
-      <div
-        className="flex-1 flex flex-col workspace-content"
-        style={{ marginLeft: 272 }}
-      >
+      <div className="flex flex-col min-h-screen md:ml-[272px]">
         <TopBar
           clients={clients}
           selectedClientId={selectedClientId}
@@ -22,7 +19,7 @@ function WorkspaceInner({ children }: { children: React.ReactNode }) {
           onSelectClient={setSelectedClientId}
         />
 
-        <main className="flex-1 px-6 py-4 pb-20 md:pb-4 overflow-y-auto">
+        <main className="flex-1 px-4 sm:px-6 py-4 pb-20 md:pb-4 overflow-y-auto">
           {children}
         </main>
       </div>

@@ -82,6 +82,7 @@ body {
   font-family: var(--font-display);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* ═══ AURORA BOREAL — high quality, GPU-composited ═══ */
@@ -566,13 +567,7 @@ body::after {
 .pill-amber { background: rgba(251, 191, 36, 0.12); color: #fbbf24; }
 .pill-green { background: rgba(34, 197, 94, 0.12); color: #22c55e; }
 
-/* ═══ WORKSPACE SIDEBAR ═══ */
-
-@media (max-width: 768px) {
-  .workspace-content {
-    margin-left: 0 !important;
-  }
-}
+/* (workspace sidebar responsive handled by Tailwind md: prefix) */
 
 /* ═══ MISC UTILITIES ═══ */
 

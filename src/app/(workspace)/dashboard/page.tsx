@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import {
@@ -61,6 +61,9 @@ export default function DashboardPage() {
   const { copies } = useCopyHistory();
   const { activities } = useActivities();
 
+  const [greeting, setGreeting] = useState("");
+  useEffect(() => { setGreeting(getGreeting()); }, []);
+
   const stats = useMemo(() => [
     { label: "Clientes", value: clients.length, icon: Users, color: "text-emerald-400" },
     { label: "Briefs", value: briefs.length, icon: FileText, color: "text-amber-400" },
@@ -93,7 +96,7 @@ export default function DashboardPage() {
             </motion.div>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
-            {getGreeting()} 👋
+            {greeting ? `${greeting} 👋` : "\u00A0"}
           </h1>
           <p className="text-muted-foreground mt-2 text-base">O que vamos criar hoje?</p>
         </motion.div>

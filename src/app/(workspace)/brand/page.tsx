@@ -15,7 +15,7 @@ export default function BrandPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-heading text-foreground flex items-center gap-3">
             <BookOpen size={28} className="text-primary" />
@@ -26,7 +26,7 @@ export default function BrandPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {ASSETS.map((asset) => (
             <a
               key={asset.file}

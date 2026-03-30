@@ -211,7 +211,7 @@ export default function BriefsPage() {
               Briefing Decodificado
             </h3>
 
-            <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
               {[
                 { label: "Tema", value: result.topic },
                 { label: "Plataforma", value: result.platform },
@@ -248,7 +248,7 @@ export default function BriefsPage() {
             )}
 
             {/* Cross-nav buttons */}
-            <div className="flex gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Link
                 href={`/musa`}
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors"

@@ -313,12 +313,12 @@ export default function MusaPage() {
 
               return (
               <motion.div key="refs" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                   <div>
                     <h2 className="text-xl font-bold text-foreground">Referências encontradas</h2>
                     <p className="text-sm text-muted-foreground">{references.length} posts sobre &quot;{topic}&quot; no {platform}</p>
                   </div>
-                  <motion.button whileTap={{ scale: 0.98 }} onClick={handleGenerateIdeas} disabled={ideasLoading} className="flex items-center gap-2 btn-primary !py-2.5 !px-5 disabled:opacity-50">
+                  <motion.button whileTap={{ scale: 0.98 }} onClick={handleGenerateIdeas} disabled={ideasLoading} className="flex items-center justify-center gap-2 btn-primary !py-2.5 !px-5 disabled:opacity-50 shrink-0">
                     {ideasLoading ? <Loader2 size={16} className="animate-spin" /> : <Lightbulb size={16} />}
                     Gerar Ideias
                     <ArrowRight size={14} />
@@ -326,7 +326,7 @@ export default function MusaPage() {
                 </div>
 
                 {/* Summary Bar */}
-                <div className="card rounded-xl p-4 mb-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+                <div className="card rounded-xl p-3 sm:p-4 mb-4 flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-2 text-sm">
                   <span className="font-medium text-foreground">{references.length} referências</span>
                   <span className="text-muted-foreground">Média:</span>
                   {avgViews > 0 && (
@@ -395,12 +395,12 @@ export default function MusaPage() {
 
             {currentStep === "ideas" && (
               <motion.div key="ideas" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.3 }}>
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                   <div>
                     <h2 className="text-xl font-bold text-foreground">Ideias de Conteúdo</h2>
                     <p className="text-sm text-muted-foreground">Selecione uma ideia para gerar o copy completo</p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     <motion.button whileTap={{ scale: 0.98 }} onClick={handleGenerateIdeas} disabled={ideasLoading} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors disabled:opacity-50">
                       {ideasLoading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
                       Novas ideias

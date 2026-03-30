@@ -157,7 +157,7 @@ function CopyLabContent() {
         </div>
 
         {/* Tone + Platform */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-muted-foreground mb-2">Tom</label>
             <div className="flex flex-wrap gap-1.5">
