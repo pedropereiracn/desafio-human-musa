@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
 const TOOLS = [
-  { href: "/", icon: LayoutDashboard, label: "Inicio", desc: "Visao geral do workspace", color: "text-white", bg: "bg-white/[0.06]", border: "hover:border-white/[0.10]" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "Inicio", desc: "Visao geral do workspace", color: "text-white", bg: "bg-white/[0.06]", border: "hover:border-white/[0.10]" },
   { href: "/musa", icon: Sparkles, label: "Musa Pipeline", desc: "Busque referencias e gere copy", color: "text-green-400", bg: "bg-green-500/10", border: "hover:border-green-500/20" },
   { href: "/copy-lab", icon: PenTool, label: "Copy Lab", desc: "Copy standalone para qualquer formato", color: "text-violet-400", bg: "bg-violet-500/10", border: "hover:border-violet-500/20" },
   { href: "/briefs", icon: FileText, label: "Briefs", desc: "Decodifique briefings de clientes", color: "text-amber-400", bg: "bg-amber-500/10", border: "hover:border-amber-500/20" },
@@ -65,7 +65,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
+    if (href === "/dashboard") return pathname === "/dashboard";
     return pathname.startsWith(href);
   };
 

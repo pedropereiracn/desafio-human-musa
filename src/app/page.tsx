@@ -474,7 +474,7 @@ export default function LandingPage() {
             <a href="#depoimentos" className="hover:text-foreground transition-colors">Depoimentos</a>
           </nav>
           <Button asChild size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-lg shadow-green-500/20">
-            <Link href="/">
+            <Link href="/musa">
               Entrar
               <ArrowRight size={14} />
             </Link>
@@ -533,7 +533,7 @@ export default function LandingPage() {
                   className="flex flex-col sm:flex-row items-start gap-3"
                 >
                   <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-xl shadow-green-500/25 text-base px-8 h-12">
-                    <Link href="/">
+                    <Link href="/musa">
                       Comece agora
                       <ArrowRight size={16} />
                     </Link>
@@ -809,7 +809,7 @@ export default function LandingPage() {
               Entre no workspace e comece a produzir com inteligencia artificial agora.
             </p>
             <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-2xl shadow-green-500/30 text-base px-10 h-13">
-              <Link href="/">
+              <Link href="/musa">
                 Entrar no Workspace
                 <ArrowRight size={16} />
               </Link>

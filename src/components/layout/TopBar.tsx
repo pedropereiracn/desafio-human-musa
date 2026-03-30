@@ -20,7 +20,7 @@ interface TopBarProps {
 }
 
 const MODULE_NAMES: Record<string, string> = {
-  "/": "Dashboard",
+  "/dashboard": "Dashboard",
   "/musa": "Musa Pipeline",
   "/copy-lab": "Copy Lab",
   "/briefs": "Central de Briefs",
@@ -34,7 +34,7 @@ const MODULE_NAMES: Record<string, string> = {
 export default function TopBar({ clients, selectedClientId, selectedClient, onSelectClient }: TopBarProps) {
   const pathname = usePathname();
   const moduleName = MODULE_NAMES[pathname] || "Musa";
-  const isHome = pathname === "/";
+  const isHome = pathname === "/dashboard";
   const isClientDetail = pathname.startsWith("/clients/") && pathname !== "/clients";
 
   return (
@@ -46,7 +46,7 @@ export default function TopBar({ clients, selectedClientId, selectedClient, onSe
         ) : isClientDetail ? (
           <>
             <Link
-              href="/"
+              href="/dashboard"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Workspace
@@ -64,7 +64,7 @@ export default function TopBar({ clients, selectedClientId, selectedClient, onSe
         ) : (
           <>
             <Link
-              href="/"
+              href="/dashboard"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Workspace
