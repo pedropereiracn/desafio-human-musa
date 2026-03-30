@@ -39,5 +39,18 @@ export function parseClaudeJSON<T>(raw: string): T {
   if (cleaned.startsWith("```")) {
     cleaned = cleaned.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
   }
-  return JSON.parse(cleaned);
+  try {
+    return JSON.parse(cleaned);
+  } catch (firstError) {
+    // Try to extract JSON object from response (Claude sometimes adds text before/after)
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try {
+        return JSON.parse(jsonMatch[0]);
+      } catch {
+        // Fall through to throw original error
+      }
+    }
+    throw firstError;
+  }
 }

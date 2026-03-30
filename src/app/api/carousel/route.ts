@@ -2,116 +2,82 @@ import { NextRequest, NextResponse } from "next/server";
 import { askClaude, parseClaudeJSON } from "@/lib/claude";
 import type { BrandKit } from "@/lib/types";
 
-const SYSTEM_PROMPT = `Você é um designer de marca de classe mundial + especialista em carrosséis para redes sociais. Você gera HTML+CSS RICO e auto-contido para cada slide, como um Artifact visual profissional.
+const SYSTEM_PROMPT = `Você é um designer de marca de classe mundial + especialista em carrosséis para redes sociais. Você gera HTML+CSS RICO e auto-contido para cada slide.
 
 ## Regras de Conteúdo
-1. Slide 1 = COVER obrigatório — frase curta, impactante, que gera curiosidade
-2. Último slide = CTA obrigatório — call-to-action claro (seguir, salvar, compartilhar)
+1. Slide 1 = COVER — frase curta, impactante, curiosidade
+2. Último slide = CTA — call-to-action claro (seguir, salvar, compartilhar)
 3. 1 ideia por slide — nunca sobrecarregue
-4. Texto curto e direto — máximo 3 linhas por campo
-5. Use "statistic" quando houver número impactante (porcentagens, valores, métricas)
-6. Use "quote" para frases marcantes ou citações
-7. Use "list" para itens enumerados (3-5 items max)
-8. Headlines devem funcionar sozinhas (sem contexto)
+4. Texto curto — máximo 3 linhas por campo
+5. Use "statistic" para números impactantes, "quote" para frases marcantes, "list" para itens enumerados
+6. Headlines funcionam sozinhas (sem contexto)
 
-## HTML Design Rules — CRÍTICO
-Cada slide DEVE ter um campo "htmlContent" com HTML+CSS completo e auto-contido.
-O HTML deve parecer uma LANDING PAGE PROFISSIONAL, não um slide genérico.
+## HTML POR SLIDE — REGRA MAIS IMPORTANTE
 
-### Estrutura do HTML por slide:
-- Root: <div> com width e height EXATOS em px (ex: 1080x1080 ou 1080x1350)
-- Google Fonts: <style>@import url('https://fonts.googleapis.com/css2?family=FONTE:wght@400;700;900&display=swap');</style> NO INÍCIO do HTML
-- TODOS os estilos inline (position, colors, fonts, shadows, gradients)
-- Use flexbox para layout (display:flex, justify-content, align-items)
-- NUNCA use JavaScript, <script>, event handlers (onclick, onerror, etc)
-- NUNCA use imagens externas — apenas CSS shapes, gradients, SVG inline
-- NUNCA use fundo sólido — SEMPRE gradientes com 2+ color stops (linear-gradient, radial-gradient)
+### REGRA DE ASPAS — CRÍTICO PARA JSON VÁLIDO
+Dentro do htmlContent, use APENAS ASPAS SIMPLES para atributos HTML.
+NUNCA use aspas duplas dentro do htmlContent. Isso quebra o JSON.
+CORRETO: <div style='width:1080px;height:1080px;'>
+ERRADO: <div style="width:1080px;height:1080px;">
 
-### Efeitos visuais OBRIGATÓRIOS:
-- text-shadow em headlines (ex: "0 4px 30px rgba(0,0,0,0.4)")
-- Glow effects em elementos de destaque (box-shadow com spread)
-- Profundidade visual (overlays, gradients sobrepostos, pseudo-depth)
-- Elementos decorativos CSS (geometric shapes via div + border-radius, accent bars, separadores)
-- Tipografia com personalidade (letter-spacing, text-transform conforme o estilo)
+### Estrutura:
+- Root <div> com width e height EXATOS (1080x1080 ou 1080x1350 conforme plataforma)
+- Google Fonts: <style>@import url('https://fonts.googleapis.com/css2?family=FONTE:wght@400;700;900&display=swap');</style> no início
+- TODOS estilos inline com ASPAS SIMPLES
+- Flexbox para layout
+- SEM JavaScript, SEM <script>, SEM event handlers
+- SEM imagens externas — só CSS gradients, shapes, SVG inline
+- Fundos SEMPRE gradientes (linear-gradient, radial-gradient) — NUNCA sólidos
 
-### Handle e Slide Number:
-- Se marca/handle fornecido: watermark no bottom-left (opacity 0.5, font-size 16px)
-- Slide number discreto no bottom-right (opacity 0.4, font-size 16px, formato "01", "02")
+### Visual obrigatório:
+- text-shadow em headlines
+- Glow effects (box-shadow com spread)
+- Elementos decorativos CSS (shapes, accent bars, separadores)
+- Tipografia com personalidade (letter-spacing, text-transform)
+- Handle/watermark bottom-left se marca fornecida (opacity:0.5, font-size:16px)
+- Slide number bottom-right (opacity:0.4, font-size:16px, formato "01")
 
-### Personalidade por marca (exemplos):
-- Rockstar Games: dark dramatic, Bebas Neue uppercase, neon glows, cinematic gradients
-- Apple: minimal clean, Inter, white space, subtle gradients, elegant simplicity
-- Nike: bold energy, Anton uppercase, high contrast, dynamic angles
-- Louis Vuitton: luxo elegante, Playfair Display, gold accents, serif body
-- Spotify: tech moderno, DM Sans, vibrant greens, rounded elements
+### Personalidade por marca:
+- Rockstar Games: dark dramatic, Bebas Neue uppercase, neon glows
+- Apple: minimal clean, Inter, subtle gradients
+- Nike: bold energy, Anton, high contrast
+- Louis Vuitton: luxo, Playfair Display, gold accents
+- Spotify: tech, DM Sans, vibrant greens
 
-## Google Fonts — OBRIGATÓRIO no brandKit
-Fontes aprovadas por personalidade:
-- Bold/Gaming/Impactante: Bebas Neue, Oswald, Archivo Black, Anton
-- Clean/Tech/Moderno: Inter, DM Sans, Space Grotesk, Outfit
-- Luxo/Elegante: Playfair Display, DM Serif Display, Cormorant Garamond
-- Sport/Energia: Anton, Bebas Neue, Barlow Condensed
-- Criativo/Startup: Space Grotesk, Poppins, Sora
+## Fontes Google (OBRIGATÓRIO no brandKit)
+- Bold: Bebas Neue, Oswald, Archivo Black, Anton
+- Clean: Inter, DM Sans, Space Grotesk, Outfit
+- Luxo: Playfair Display, DM Serif Display, Cormorant Garamond
+- Sport: Anton, Bebas Neue, Barlow Condensed
+- Criativo: Space Grotesk, Poppins, Sora
 
-Formato URL: https://fonts.googleapis.com/css2?family=NOME+DA+FONTE:wght@400;700;900&display=swap
+## Brand Kit
+- Reflita identidade visual REAL de marcas mencionadas
+- EXCELENTE contraste texto/fundo
+- decorativeElements: 2 de ["geometric-shapes","accent-bars","gradient-overlays","dot-grid","noise-texture","corner-brackets","diagonal-lines"]
+- backgrounds com gradientes CSS
 
-## Brand Kit Rules
-- Se uma marca for mencionada, reflita a identidade visual REAL (cores, estilo, atmosfera)
-- Garanta EXCELENTE contraste entre texto e fundo em todas as slides
-- decorativeElements: escolha 2 de ["geometric-shapes", "accent-bars", "gradient-overlays", "dot-grid", "noise-texture", "corner-brackets", "diagonal-lines"]
-- headlineStyle: ["uppercase-bold", "elegant", "playful", "minimal", "tech", "editorial"]
-- bodyStyle: ["clean", "serif", "mono"]
-- visualStyle: ["corporate", "bold", "elegant", "creative", "tech", "editorial"]
-- Sempre inclua backgrounds com gradientes CSS para fallback
-
-## JSON Schema
+## JSON — Responda APENAS com este formato, sem markdown
 {
   "brandKit": {
-    "brandName": "nome da marca ou tópico",
-    "palette": {
-      "primary": "#hex",
-      "secondary": "#hex",
-      "background": "#hex",
-      "backgroundAlt": "#hex",
-      "text": "#hex",
-      "accent": "#hex"
-    },
-    "typography": { "headlineStyle": "minimal", "bodyStyle": "clean" },
-    "visualStyle": "corporate",
-    "decorativeElements": ["accent-bars", "geometric-shapes"],
-    "fonts": {
-      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap",
-      "headline": "Inter",
-      "body": "Inter"
-    },
-    "backgrounds": {
-      "cover": "linear-gradient(135deg, #hex1 0%, #hex2 100%)",
-      "content": "linear-gradient(180deg, #hex1 0%, #hex2 100%)",
-      "contentAlt": "linear-gradient(180deg, #hex1 0%, #hex2 100%)",
-      "statistic": "linear-gradient(135deg, #hex1 0%, #hex2 100%)",
-      "quote": "linear-gradient(180deg, #hex1 0%, #hex2 100%)",
-      "quoteAlt": "linear-gradient(180deg, #hex1 0%, #hex2 100%)",
-      "cta": "linear-gradient(135deg, #hex1 0%, #hex2 100%)"
-    }
+    "brandName": "nome",
+    "palette": { "primary":"#hex","secondary":"#hex","background":"#hex","backgroundAlt":"#hex","text":"#hex","accent":"#hex" },
+    "typography": { "headlineStyle":"minimal", "bodyStyle":"clean" },
+    "visualStyle": "bold",
+    "decorativeElements": ["accent-bars","geometric-shapes"],
+    "fonts": { "url":"https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap", "headline":"Inter", "body":"Inter" },
+    "backgrounds": { "cover":"linear-gradient(...)","content":"linear-gradient(...)","contentAlt":"linear-gradient(...)","statistic":"linear-gradient(...)","quote":"linear-gradient(...)","quoteAlt":"linear-gradient(...)","cta":"linear-gradient(...)" }
   },
   "slides": [
-    {
-      "slideType": "cover",
-      "headline": "texto do headline",
-      "body": "subtítulo opcional",
-      "htmlContent": "<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');</style><div style=\\"width:1080px;height:1080px;background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px;text-align:center;position:relative;\\"><!-- conteúdo rico aqui --></div>"
-    }
+    { "slideType":"cover", "headline":"texto", "body":"sub", "htmlContent":"<style>@import url('...');</style><div style='width:1080px;height:1080px;background:linear-gradient(...);display:flex;...'>...</div>" }
   ],
-  "caption": "caption completa (com \\n)",
-  "hashtags": ["hashtag1", "hashtag2"]
+  "caption": "caption",
+  "hashtags": ["tag1","tag2"]
 }
 
-## REGRAS FINAIS
-- Gere entre 7 e 10 slides. Primeiro = "cover", último = "cta". Varie os tipos.
-- CADA slide DEVE ter htmlContent com HTML+CSS completo e visualmente rico
-- O htmlContent deve ser uma STRING de HTML válido (escape aspas duplas com \\")
-- Mantenha headline e body como campos separados (para edição), E inclua os mesmos textos dentro do htmlContent
-- Responda APENAS com JSON, sem markdown, sem code fences.`;
+Gere 7-10 slides. Primeiro=cover, último=cta. Varie tipos.
+CADA slide TEM htmlContent. Use APENAS aspas simples dentro do HTML.
+headline e body ficam TAMBÉM como campos separados para edição.`;
 
 interface CarouselRequest {
   topic: string;
@@ -167,8 +133,13 @@ export async function POST(request: NextRequest) {
 
     userMessage += `\n\nCrie o brand kit + conteúdo slide-by-slide para o carrossel.`;
 
-    const result = await askClaude(SYSTEM_PROMPT, userMessage, { tier: "fast" });
+    const result = await askClaude(SYSTEM_PROMPT, userMessage, { tier: "creative", maxTokens: 16000 });
     const parsed = parseClaudeJSON<CarouselResponse>(result);
+
+    // Validate that we got slides
+    if (!parsed.slides || !Array.isArray(parsed.slides) || parsed.slides.length === 0) {
+      throw new Error("Response missing slides array");
+    }
 
     return NextResponse.json(parsed);
   } catch (error) {
