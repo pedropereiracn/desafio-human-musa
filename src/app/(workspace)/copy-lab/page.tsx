@@ -6,7 +6,7 @@ import { PenTool, Loader2, Copy, RefreshCw, Sparkles } from "lucide-react";
 import { LoadingPulse, SkeletonCopy } from "@/components/ui/Skeleton";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
-import { useClients } from "@/hooks/useClients";
+import { useWorkspace } from "@/contexts/WorkspaceContext";
 import { useCopyHistory } from "@/hooks/useCopyHistory";
 import { useActivities } from "@/hooks/useActivities";
 import { cn } from "@/lib/utils";
@@ -44,12 +44,9 @@ function CopyLabContent() {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<CopyResult[]>([]);
 
-  const { clients } = useClients();
+  const { selectedClient } = useWorkspace();
   const { addCopy } = useCopyHistory();
   const { addActivity } = useActivities();
-
-  // Use first client as default for now (no global selector needed)
-  const selectedClient = clients.length > 0 ? clients[0] : undefined;
 
   const handleGenerate = useCallback(async () => {
     if (!prompt.trim()) return;

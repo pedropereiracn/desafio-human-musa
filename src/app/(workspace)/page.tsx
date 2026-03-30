@@ -17,7 +17,7 @@ import {
   Zap,
   Copy,
 } from "lucide-react";
-import { useClients } from "@/hooks/useClients";
+import { useWorkspace } from "@/contexts/WorkspaceContext";
 import { useBriefs } from "@/hooks/useBriefs";
 import { useCopyHistory } from "@/hooks/useCopyHistory";
 import { useActivities } from "@/hooks/useActivities";
@@ -56,7 +56,7 @@ function timeAgo(dateStr: string): string {
 }
 
 export default function DashboardPage() {
-  const { clients } = useClients();
+  const { clients } = useWorkspace();
   const { briefs } = useBriefs();
   const { copies } = useCopyHistory();
   const { activities } = useActivities();

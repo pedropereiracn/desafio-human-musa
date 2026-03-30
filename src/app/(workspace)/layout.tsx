@@ -1,17 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import Sidebar from "@/components/layout/Sidebar";
 import TopBar from "@/components/layout/TopBar";
-import { useClients } from "@/hooks/useClients";
+import { WorkspaceProvider, useWorkspace } from "@/contexts/WorkspaceContext";
 
-export default function WorkspaceLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [selectedClientId, setSelectedClientId] = useState<string | undefined>();
-  const { clients } = useClients();
+function WorkspaceInner({ children }: { children: React.ReactNode }) {
+  const { clients, selectedClientId, selectedClient, setSelectedClientId } = useWorkspace();
 
   return (
     <div className="min-h-screen flex">
@@ -24,6 +18,7 @@ export default function WorkspaceLayout({
         <TopBar
           clients={clients}
           selectedClientId={selectedClientId}
+          selectedClient={selectedClient}
           onSelectClient={setSelectedClientId}
         />
 
@@ -32,5 +27,17 @@ export default function WorkspaceLayout({
         </main>
       </div>
     </div>
+  );
+}
+
+export default function WorkspaceLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <WorkspaceProvider>
+      <WorkspaceInner>{children}</WorkspaceInner>
+    </WorkspaceProvider>
   );
 }

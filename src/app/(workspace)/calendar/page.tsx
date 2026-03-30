@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useClients } from "@/hooks/useClients";
+import { useWorkspace } from "@/contexts/WorkspaceContext";
 import { cn } from "@/lib/utils";
 
 interface CalendarEntry {
@@ -66,7 +66,7 @@ function generateMockEntries(year: number, month: number, clients: { name: strin
 }
 
 export default function CalendarPage() {
-  const { clients } = useClients();
+  const { clients } = useWorkspace();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 

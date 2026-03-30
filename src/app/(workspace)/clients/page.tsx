@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Users, Plus, X, Trash2, Edit3, Check, MessageSquare, Loader2, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
-import { useClients } from "@/hooks/useClients";
+import { useWorkspace } from "@/contexts/WorkspaceContext";
 import { useActivities } from "@/hooks/useActivities";
 import { cn } from "@/lib/utils";
 import type { Platform, Format, ClientProfile } from "@/lib/types";
@@ -40,7 +40,7 @@ const EMPTY_FORM: FormData = {
 };
 
 export default function ClientsPage() {
-  const { clients, addClient, updateClient, deleteClient } = useClients();
+  const { clients, addClient, updateClient, deleteClient } = useWorkspace();
   const { addActivity } = useActivities();
 
   const [showForm, setShowForm] = useState(false);

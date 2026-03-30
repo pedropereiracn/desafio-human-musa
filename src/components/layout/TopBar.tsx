@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronRight, User } from "lucide-react";
+import { ChevronRight, User, MessageSquare } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -15,6 +15,7 @@ import type { ClientProfile } from "@/lib/types";
 interface TopBarProps {
   clients: ClientProfile[];
   selectedClientId?: string;
+  selectedClient?: ClientProfile;
   onSelectClient: (id: string | undefined) => void;
 }
 
@@ -30,7 +31,7 @@ const MODULE_NAMES: Record<string, string> = {
   "/brand": "Brand Book",
 };
 
-export default function TopBar({ clients, selectedClientId, onSelectClient }: TopBarProps) {
+export default function TopBar({ clients, selectedClientId, selectedClient, onSelectClient }: TopBarProps) {
   const pathname = usePathname();
   const moduleName = MODULE_NAMES[pathname] || "Musa";
   const isHome = pathname === "/";
@@ -76,13 +77,28 @@ export default function TopBar({ clients, selectedClientId, onSelectClient }: To
 
       {/* Client Selector */}
       <div className="flex items-center gap-3">
+        {selectedClient && selectedClient.brandVoice && (
+          <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/5 border border-primary/15 max-w-[200px]">
+            <MessageSquare size={10} className="text-primary shrink-0" />
+            <span className="text-[11px] text-primary/80 truncate">{selectedClient.brandVoice}</span>
+          </div>
+        )}
         <Select
           value={selectedClientId || "all"}
           onValueChange={(value) => onSelectClient(value === "all" ? undefined : value)}
         >
-          <SelectTrigger className="w-[180px] h-9 rounded-xl bg-surface-2 border-white/[0.06] text-sm hover:border-primary/30 transition-colors focus:ring-primary/20">
+          <SelectTrigger className="w-[200px] h-9 rounded-xl bg-surface-2 border-white/[0.06] text-sm hover:border-primary/30 transition-colors focus:ring-primary/20">
             <div className="flex items-center gap-2">
-              <User size={14} className="text-muted-foreground" />
+              {selectedClient ? (
+                <div
+                  className="w-5 h-5 rounded-md flex items-center justify-center text-white text-[9px] font-bold shrink-0"
+                  style={{ backgroundColor: selectedClient.color }}
+                >
+                  {selectedClient.name.charAt(0).toUpperCase()}
+                </div>
+              ) : (
+                <User size={14} className="text-muted-foreground" />
+              )}
               <SelectValue placeholder="Todos os clientes" />
             </div>
           </SelectTrigger>
@@ -90,7 +106,18 @@ export default function TopBar({ clients, selectedClientId, onSelectClient }: To
             <SelectItem value="all" className="rounded-lg text-sm">Todos os clientes</SelectItem>
             {clients.map((c) => (
               <SelectItem key={c.id} value={c.id} className="rounded-lg text-sm">
-                {c.name}
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-4 h-4 rounded flex items-center justify-center text-white text-[8px] font-bold shrink-0"
+                    style={{ backgroundColor: c.color }}
+                  >
+                    {c.name.charAt(0).toUpperCase()}
+                  </div>
+                  {c.name}
+                  {c.brandVoice && (
+                    <MessageSquare size={10} className="text-primary/50 ml-auto" />
+                  )}
+                </div>
               </SelectItem>
             ))}
           </SelectContent>
