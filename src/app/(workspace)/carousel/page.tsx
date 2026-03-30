@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Layers, Loader2, Sparkles, ArrowRight, Trash2, Clock, Edit3 } from "lucide-react";
+import { Layers, Loader2, Sparkles, ArrowRight, Trash2, Clock, Edit3, ChevronDown } from "lucide-react";
 import { LoadingPulse, SkeletonCarousel } from "@/components/ui/Skeleton";
 import { useActivities } from "@/hooks/useActivities";
 import { motion, AnimatePresence } from "motion/react";
@@ -40,11 +40,23 @@ export default function CarouselPage() {
   );
 }
 
+const VISUAL_STYLES = [
+  { id: "minimal", name: "Minimal", desc: "Limpo, elegante, espaçoso", example: "Apple, Stripe, Notion", gradient: "linear-gradient(135deg, #e8e8ed 0%, #f5f5f7 100%)", textColor: "#1d1d1f" },
+  { id: "bold-dark", name: "Bold & Dark", desc: "Dramático, impactante, ousado", example: "Rockstar, Nike, Netflix", gradient: "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)", textColor: "#ffffff" },
+  { id: "luxury", name: "Luxo", desc: "Sofisticado, serif, dourado", example: "Louis Vuitton, Rolex", gradient: "linear-gradient(135deg, #1a1a1a 0%, #2a1f0f 100%)", textColor: "#c9a96e" },
+  { id: "tech", name: "Tech", desc: "Futurista, neon, vibrante", example: "Spotify, Discord, Vercel", gradient: "linear-gradient(135deg, #0f0f23 0%, #1a0a3e 100%)", textColor: "#00d4ff" },
+  { id: "creative", name: "Criativo", desc: "Colorido, divertido, energia", example: "Canva, Figma, Notion", gradient: "linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%)", textColor: "#1a1a2e" },
+  { id: "editorial", name: "Editorial", desc: "Clássico, tipográfico, autoridade", example: "NYT, Vogue, Medium", gradient: "linear-gradient(135deg, #faf9f6 0%, #e8e4df 100%)", textColor: "#1a1a1a" },
+] as const;
+
 type ViewMode = "home" | "editor";
 
 function CarouselPageInner() {
   const [topic, setTopic] = useState("");
   const [brandName, setBrandName] = useState("");
+  const [selectedStyle, setSelectedStyle] = useState<string>("");
+  const [brandDescription, setBrandDescription] = useState("");
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [tone, setTone] = useState<Tone>("casual");
   const [loading, setLoading] = useState(false);
@@ -87,7 +99,15 @@ function CarouselPageInner() {
       const res = await fetch("/api/carousel", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, platform, tone, brandName: brandName.trim() || undefined, context }),
+        body: JSON.stringify({
+          topic,
+          platform,
+          tone,
+          brandName: brandName.trim() || undefined,
+          style: selectedStyle || undefined,
+          brandDescription: brandDescription.trim() || undefined,
+          context,
+        }),
       });
 
       if (!res.ok) {
@@ -170,6 +190,9 @@ function CarouselPageInner() {
     setActiveCarouselId(null);
     setTopic("");
     setBrandName("");
+    setSelectedStyle("");
+    setBrandDescription("");
+    setShowAdvanced(false);
     setViewMode("home");
   }, []);
 
@@ -239,6 +262,65 @@ function CarouselPageInner() {
                   placeholder="Ex: Rockstar Games, Apple, Nike..."
                   className="input-field w-full"
                 />
+              </div>
+
+              {/* Estilo Visual */}
+              <div>
+                <label className="text-sm font-medium text-foreground mb-2 block">
+                  Estilo Visual
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {VISUAL_STYLES.map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => setSelectedStyle(selectedStyle === s.id ? "" : s.id)}
+                      className={cn(
+                        "relative rounded-xl overflow-hidden border-2 transition-all text-left p-0",
+                        selectedStyle === s.id
+                          ? "border-primary shadow-lg shadow-primary/20"
+                          : "border-border hover:border-primary/30"
+                      )}
+                    >
+                      <div
+                        className="px-3 py-2.5"
+                        style={{ background: s.gradient }}
+                      >
+                        <p className="text-[11px] font-bold" style={{ color: s.textColor }}>
+                          {s.name}
+                        </p>
+                        <p className="text-[9px] opacity-70" style={{ color: s.textColor }}>
+                          {s.example}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Seção avançada: descrição da marca */}
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setShowAdvanced(!showAdvanced)}
+                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <ChevronDown
+                    size={14}
+                    className={cn("transition-transform", showAdvanced && "rotate-180")}
+                  />
+                  Personalizar marca / colar brand kit
+                </button>
+                {showAdvanced && (
+                  <div className="mt-2">
+                    <textarea
+                      value={brandDescription}
+                      onChange={(e) => setBrandDescription(e.target.value)}
+                      placeholder={"Descreva o estilo visual da marca, ou cole o brand kit:\n\nEx: Cores principais: #FF0000 e #000000\nFonte: Montserrat bold\nEstilo: moderno e minimalista\nTom: profissional mas acessível"}
+                      className="input-field w-full resize-none text-sm"
+                      rows={4}
+                    />
+                  </div>
+                )}
               </div>
 
               <div>
