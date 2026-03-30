@@ -97,7 +97,7 @@ export default function BriefDecoder({ onSearchFromBrief, isLoading }: BriefDeco
             Briefing Decodificado
           </h3>
 
-          <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
             {[
               { label: "Tema", value: result.topic },
               { label: "Plataforma", value: result.platform },

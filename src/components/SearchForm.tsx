@@ -44,7 +44,7 @@ export default function SearchForm({ onSearch, isLoading, initialTopic = "", ini
           type="text"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          placeholder="Ex: cuidados com a pele, marketing digital, receitas fit..."
+          placeholder="Ex: cuidados com a pele, marketing digital..."
           className="w-full input-field"
         />
         <p className="text-xs text-muted-foreground/60 mt-2">
@@ -52,63 +52,62 @@ export default function SearchForm({ onSearch, isLoading, initialTopic = "", ini
         </p>
       </div>
 
-      {/* Platform & Format */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-muted-foreground mb-2">
-            Plataforma
-          </label>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setPlatform("instagram")}
-              className={cn(
-                "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all",
-                platform === "instagram"
-                  ? "bg-primary/10 border-primary/30 text-primary"
-                  : "bg-surface-2 border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
-              )}
-            >
-              <Camera size={16} />
-              Instagram
-            </button>
-            <button
-              type="button"
-              onClick={() => setPlatform("tiktok")}
-              className={cn(
-                "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all",
-                platform === "tiktok"
-                  ? "bg-primary/10 border-primary/30 text-primary"
-                  : "bg-surface-2 border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
-              )}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.88 2.89 2.89 0 0 1 2.88-2.88c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.6a8.24 8.24 0 0 0 4.76 1.5v-3.4a4.85 4.85 0 0 1-1-.01z"/></svg>
-              TikTok
-            </button>
-          </div>
+      {/* Platform */}
+      <div>
+        <label className="block text-sm font-medium text-muted-foreground mb-2">
+          Plataforma
+        </label>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setPlatform("instagram")}
+            className={cn(
+              "flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all",
+              platform === "instagram"
+                ? "bg-primary/10 border-primary/30 text-primary"
+                : "bg-surface-2 border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
+            )}
+          >
+            <Camera size={16} />
+            Instagram
+          </button>
+          <button
+            type="button"
+            onClick={() => setPlatform("tiktok")}
+            className={cn(
+              "flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all",
+              platform === "tiktok"
+                ? "bg-primary/10 border-primary/30 text-primary"
+                : "bg-surface-2 border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
+            )}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.88 2.89 2.89 0 0 1 2.88-2.88c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.6a8.24 8.24 0 0 0 4.76 1.5v-3.4a4.85 4.85 0 0 1-1-.01z"/></svg>
+            TikTok
+          </button>
         </div>
+      </div>
 
-        <div>
-          <label className="block text-sm font-medium text-muted-foreground mb-2">
-            Formato
-          </label>
-          <div className="flex flex-wrap gap-1.5">
-            {formats.map((f) => (
-              <button
-                key={f.value}
-                type="button"
-                onClick={() => setFormat(f.value)}
-                className={cn(
-                  "px-3 py-2 rounded-lg text-xs font-medium border transition-all",
-                  format === f.value
-                    ? "bg-primary/10 border-primary/30 text-primary"
-                    : "bg-surface-2 border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
-                )}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
+      {/* Format */}
+      <div>
+        <label className="block text-sm font-medium text-muted-foreground mb-2">
+          Formato
+        </label>
+        <div className="grid grid-cols-2 gap-2">
+          {formats.map((f) => (
+            <button
+              key={f.value}
+              type="button"
+              onClick={() => setFormat(f.value)}
+              className={cn(
+                "px-3 py-2.5 rounded-xl text-sm font-medium border transition-all text-center",
+                format === f.value
+                  ? "bg-primary/10 border-primary/30 text-primary"
+                  : "bg-surface-2 border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
+              )}
+            >
+              {f.label}
+            </button>
+          ))}
         </div>
       </div>
 
