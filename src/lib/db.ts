@@ -382,6 +382,7 @@ export async function insertCalendarEntry(entry: {
   format?: string;
   scheduledDate: string;
   status?: string;
+  notes?: string;
 }): Promise<string> {
   const { data, error } = await supabase
     .from("calendar_entries")
@@ -392,6 +393,7 @@ export async function insertCalendarEntry(entry: {
       format: entry.format || "reels",
       scheduled_date: entry.scheduledDate,
       status: entry.status || "rascunho",
+      notes: entry.notes || "",
     })
     .select("id")
     .single();
@@ -402,12 +404,24 @@ export async function insertCalendarEntry(entry: {
 
 export async function updateCalendarEntry(
   id: string,
-  updates: Partial<{ title: string; status: string; scheduledDate: string }>
+  updates: Partial<{
+    title: string;
+    status: string;
+    scheduledDate: string;
+    platform: string;
+    format: string;
+    clientId: string;
+    notes: string;
+  }>
 ): Promise<void> {
   const mapped: Record<string, unknown> = {};
   if (updates.title !== undefined) mapped.title = updates.title;
   if (updates.status !== undefined) mapped.status = updates.status;
   if (updates.scheduledDate !== undefined) mapped.scheduled_date = updates.scheduledDate;
+  if (updates.platform !== undefined) mapped.platform = updates.platform;
+  if (updates.format !== undefined) mapped.format = updates.format;
+  if (updates.clientId !== undefined) mapped.client_id = updates.clientId || null;
+  if (updates.notes !== undefined) mapped.notes = updates.notes;
 
   const { error } = await supabase.from("calendar_entries").update(mapped).eq("id", id);
   if (error) throw error;
