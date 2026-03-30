@@ -446,9 +446,32 @@ function CTASlide({ slide, bk, w, h }: { slide: CarouselSlide; bk: BrandKit; w: 
   );
 }
 
+// ═══ HTML SLIDE RENDERER (Rich HTML from Claude) ═══
+
+function HtmlSlideRenderer({ html, width, height }: { html: string; width: number; height: number }) {
+  const sanitized = html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<iframe\b[^>]*>.*?<\/iframe>/gi, "")
+    .replace(/on\w+\s*=\s*"[^"]*"/gi, "")
+    .replace(/on\w+\s*=\s*'[^']*'/gi, "");
+
+  return (
+    <div
+      style={{ width, height, overflow: "hidden", position: "relative", pointerEvents: "none" }}
+      dangerouslySetInnerHTML={{ __html: sanitized }}
+    />
+  );
+}
+
 // ═══ MAIN DISPATCHER ═══
 
 function renderSlide(slide: CarouselSlide, w: number, h: number, bk: BrandKit) {
+  // Rich HTML slides take priority
+  if (slide.htmlContent) {
+    return <HtmlSlideRenderer html={slide.htmlContent} width={w} height={h} />;
+  }
+
+  // Fallback to legacy typed renderers
   const type: SlideType = slide.slideType || "content";
 
   switch (type) {

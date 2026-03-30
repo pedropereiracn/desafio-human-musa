@@ -200,6 +200,7 @@ export interface CarouselSlide {
   statValue?: string;
   statLabel?: string;
   quoteAttribution?: string;
+  htmlContent?: string; // HTML+CSS auto-contido gerado pelo Claude (rich slides)
 }
 
 export interface CarouselProject {

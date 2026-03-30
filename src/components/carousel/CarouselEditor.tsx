@@ -92,7 +92,20 @@ export default function CarouselEditor({ initialSlides, platform, topic, brandKi
   const updateSlide = useCallback(
     (index: number, updates: Partial<CarouselSlide>) => {
       setSlides((prev) =>
-        prev.map((s, i) => (i === index ? { ...s, ...updates } : s))
+        prev.map((s, i) => {
+          if (i !== index) return s;
+          const updated = { ...s, ...updates };
+          // Sync text changes into htmlContent via find-and-replace
+          if (updated.htmlContent) {
+            if (updates.headline && s.headline && updates.headline !== s.headline) {
+              updated.htmlContent = updated.htmlContent.replace(s.headline, updates.headline);
+            }
+            if (updates.body !== undefined && s.body && updates.body !== s.body) {
+              updated.htmlContent = updated.htmlContent.replace(s.body, updates.body || "");
+            }
+          }
+          return updated;
+        })
       );
     },
     []
@@ -184,6 +197,7 @@ export default function CarouselEditor({ initialSlides, platform, topic, brandKi
             headline: data.slides[0].headline,
             body: data.slides[0].body || "",
             footnote: data.slides[0].footnote || "",
+            htmlContent: data.slides[0].htmlContent,
           });
         }
       } catch {
@@ -224,11 +238,15 @@ export default function CarouselEditor({ initialSlides, platform, topic, brandKi
             <span className="absolute bottom-0.5 right-1 text-[9px] font-bold text-white/60 drop-shadow">
               {i + 1}
             </span>
-            {slide.slideType && slide.slideType !== "content" && (
+            {slide.htmlContent ? (
+              <span className="absolute top-0.5 left-0.5 text-[7px] font-bold text-emerald-300/80 bg-black/50 px-1 rounded">
+                HTML
+              </span>
+            ) : slide.slideType && slide.slideType !== "content" ? (
               <span className="absolute top-0.5 left-0.5 text-[7px] font-bold text-white/50 bg-black/40 px-1 rounded">
                 {slide.slideType}
               </span>
-            )}
+            ) : null}
           </button>
         ))}
         <button

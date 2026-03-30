@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { askClaude, parseClaudeJSON } from "@/lib/claude";
 import type { BrandKit } from "@/lib/types";
 
-const SYSTEM_PROMPT = `Você é um designer de marca de classe mundial + especialista em carrosséis para redes sociais. Você cria CONTEÚDO + BRAND KIT com identidade visual profissional de landing page.
+const SYSTEM_PROMPT = `Você é um designer de marca de classe mundial + especialista em carrosséis para redes sociais. Você gera HTML+CSS RICO e auto-contido para cada slide, como um Artifact visual profissional.
 
 ## Regras de Conteúdo
 1. Slide 1 = COVER obrigatório — frase curta, impactante, que gera curiosidade
@@ -14,9 +14,38 @@ const SYSTEM_PROMPT = `Você é um designer de marca de classe mundial + especia
 7. Use "list" para itens enumerados (3-5 items max)
 8. Headlines devem funcionar sozinhas (sem contexto)
 
-## Google Fonts — OBRIGATÓRIO
-Sempre inclua "fonts" no brandKit. Escolha fontes que reflitam a personalidade da marca/tópico.
+## HTML Design Rules — CRÍTICO
+Cada slide DEVE ter um campo "htmlContent" com HTML+CSS completo e auto-contido.
+O HTML deve parecer uma LANDING PAGE PROFISSIONAL, não um slide genérico.
 
+### Estrutura do HTML por slide:
+- Root: <div> com width e height EXATOS em px (ex: 1080x1080 ou 1080x1350)
+- Google Fonts: <style>@import url('https://fonts.googleapis.com/css2?family=FONTE:wght@400;700;900&display=swap');</style> NO INÍCIO do HTML
+- TODOS os estilos inline (position, colors, fonts, shadows, gradients)
+- Use flexbox para layout (display:flex, justify-content, align-items)
+- NUNCA use JavaScript, <script>, event handlers (onclick, onerror, etc)
+- NUNCA use imagens externas — apenas CSS shapes, gradients, SVG inline
+- NUNCA use fundo sólido — SEMPRE gradientes com 2+ color stops (linear-gradient, radial-gradient)
+
+### Efeitos visuais OBRIGATÓRIOS:
+- text-shadow em headlines (ex: "0 4px 30px rgba(0,0,0,0.4)")
+- Glow effects em elementos de destaque (box-shadow com spread)
+- Profundidade visual (overlays, gradients sobrepostos, pseudo-depth)
+- Elementos decorativos CSS (geometric shapes via div + border-radius, accent bars, separadores)
+- Tipografia com personalidade (letter-spacing, text-transform conforme o estilo)
+
+### Handle e Slide Number:
+- Se marca/handle fornecido: watermark no bottom-left (opacity 0.5, font-size 16px)
+- Slide number discreto no bottom-right (opacity 0.4, font-size 16px, formato "01", "02")
+
+### Personalidade por marca (exemplos):
+- Rockstar Games: dark dramatic, Bebas Neue uppercase, neon glows, cinematic gradients
+- Apple: minimal clean, Inter, white space, subtle gradients, elegant simplicity
+- Nike: bold energy, Anton uppercase, high contrast, dynamic angles
+- Louis Vuitton: luxo elegante, Playfair Display, gold accents, serif body
+- Spotify: tech moderno, DM Sans, vibrant greens, rounded elements
+
+## Google Fonts — OBRIGATÓRIO no brandKit
 Fontes aprovadas por personalidade:
 - Bold/Gaming/Impactante: Bebas Neue, Oswald, Archivo Black, Anton
 - Clean/Tech/Moderno: Inter, DM Sans, Space Grotesk, Outfit
@@ -24,29 +53,7 @@ Fontes aprovadas por personalidade:
 - Sport/Energia: Anton, Bebas Neue, Barlow Condensed
 - Criativo/Startup: Space Grotesk, Poppins, Sora
 
-Formato da URL (EXATO): https://fonts.googleapis.com/css2?family=NOME+DA+FONTE:wght@400;700;900&display=swap
-Para múltiplas fontes: &family=SEGUNDA+FONTE:wght@400;700
-
-Exemplos de personalidade por marca:
-- Rockstar Games: headline=Bebas Neue, body=Inter → gaming bold uppercase
-- Apple: headline=Inter, body=Inter → minimal clean
-- Nike: headline=Anton, body=DM Sans → sport energy uppercase
-- Louis Vuitton: headline=Playfair Display, body=Cormorant Garamond → luxo elegante
-- Spotify: headline=DM Sans, body=Inter → tech moderno
-
-## Backgrounds — OBRIGATÓRIO
-NUNCA use cores sólidas para backgrounds. SEMPRE use gradientes CSS com 2+ color stops.
-
-Regras:
-- cover/cta: gradientes dramáticos usando a cor primária da marca
-- content/contentAlt: gradientes sutis entre tons próximos (leve variação)
-- statistic: gradiente com secondary como base, mais profundidade
-- quote/quoteAlt: gradientes sutis, elegantes
-
-Exemplos de CSS válido:
-- "linear-gradient(135deg, #000000 0%, #1a1a2e 100%)"
-- "linear-gradient(180deg, #0c0c10 0%, #1a0a0a 50%, #0c0c10 100%)"
-- "radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f1a 100%)"
+Formato URL: https://fonts.googleapis.com/css2?family=NOME+DA+FONTE:wght@400;700;900&display=swap
 
 ## Brand Kit Rules
 - Se uma marca for mencionada, reflita a identidade visual REAL (cores, estilo, atmosfera)
@@ -55,6 +62,7 @@ Exemplos de CSS válido:
 - headlineStyle: ["uppercase-bold", "elegant", "playful", "minimal", "tech", "editorial"]
 - bodyStyle: ["clean", "serif", "mono"]
 - visualStyle: ["corporate", "bold", "elegant", "creative", "tech", "editorial"]
+- Sempre inclua backgrounds com gradientes CSS para fallback
 
 ## JSON Schema
 {
@@ -87,20 +95,23 @@ Exemplos de CSS válido:
     }
   },
   "slides": [
-    { "slideType": "cover", "headline": "texto impactante", "body": "subtítulo opcional" },
-    { "slideType": "content", "headline": "título", "body": "texto complementar" },
-    { "slideType": "statistic", "headline": "contexto", "statValue": "87%", "statLabel": "descrição" },
-    { "slideType": "list", "headline": "título", "listItems": ["item 1", "item 2", "item 3"] },
-    { "slideType": "quote", "headline": "frase marcante", "quoteAttribution": "Autor" },
-    { "slideType": "content", "headline": "título", "body": "texto" },
-    { "slideType": "cta", "headline": "CTA forte", "body": "texto suporte", "footnote": "Seguir →" }
+    {
+      "slideType": "cover",
+      "headline": "texto do headline",
+      "body": "subtítulo opcional",
+      "htmlContent": "<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');</style><div style=\\"width:1080px;height:1080px;background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px;text-align:center;position:relative;\\"><!-- conteúdo rico aqui --></div>"
+    }
   ],
   "caption": "caption completa (com \\n)",
   "hashtags": ["hashtag1", "hashtag2"]
 }
 
-Gere entre 7 e 10 slides. Primeiro = "cover", último = "cta".
-Varie os tipos. Responda APENAS com JSON, sem markdown.`;
+## REGRAS FINAIS
+- Gere entre 7 e 10 slides. Primeiro = "cover", último = "cta". Varie os tipos.
+- CADA slide DEVE ter htmlContent com HTML+CSS completo e visualmente rico
+- O htmlContent deve ser uma STRING de HTML válido (escape aspas duplas com \\")
+- Mantenha headline e body como campos separados (para edição), E inclua os mesmos textos dentro do htmlContent
+- Responda APENAS com JSON, sem markdown, sem code fences.`;
 
 interface CarouselRequest {
   topic: string;
@@ -127,6 +138,7 @@ interface CarouselResponse {
     statValue?: string;
     statLabel?: string;
     quoteAttribution?: string;
+    htmlContent?: string;
   }[];
   caption: string;
   hashtags: string[];

@@ -22,6 +22,7 @@ interface GeneratedSlide {
   statValue?: string;
   statLabel?: string;
   quoteAttribution?: string;
+  htmlContent?: string;
 }
 
 interface GeneratedData {
@@ -113,6 +114,7 @@ function CarouselPageInner() {
         statValue: s.statValue,
         statLabel: s.statLabel,
         quoteAttribution: s.quoteAttribution,
+        htmlContent: s.htmlContent,
       }));
 
       setSlides(carouselSlides);
