@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import Analytics from "@/components/Analytics";
 import "./globals.css";
 
 const inter = Inter({
@@ -47,6 +48,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-background text-foreground antialiased relative">
         <TooltipProvider delayDuration={0}>
+          <Analytics />
           <div className="relative z-10">
             {children}
           </div>
