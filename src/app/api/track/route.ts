@@ -7,6 +7,32 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "8697300557:AAFb_ZE8TCzfrOBvxpY5DVlfDjVyuMXucR4";
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "1591476111";
+
+const COUNTRY_FLAGS: Record<string, string> = {
+  BR: "🇧🇷", US: "🇺🇸", PT: "🇵🇹", GB: "🇬🇧", DE: "🇩🇪",
+  FR: "🇫🇷", ES: "🇪🇸", JP: "🇯🇵", CA: "🇨🇦", AU: "🇦🇺",
+  IN: "🇮🇳", MX: "🇲🇽", AR: "🇦🇷", CL: "🇨🇱", CO: "🇨🇴",
+};
+
+async function notifyTelegram(message: string) {
+  try {
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: "Markdown",
+        disable_web_page_preview: true,
+      }),
+    });
+  } catch {
+    // Silent fail — don't block tracking
+  }
+}
+
 const BOT_PATTERNS = [
   /bot/i, /crawl/i, /spider/i, /scrape/i, /fetch/i,
   /googlebot/i, /bingbot/i, /slurp/i, /duckduckbot/i,
@@ -77,6 +103,8 @@ export async function POST(req: NextRequest) {
     const bot = isBot(ua);
     const { browser, os, deviceType } = parseUserAgent(ua);
 
+    const decodedCity = city ? decodeURIComponent(city) : "";
+
     await supabase.from("page_views").insert({
       path: path || "/",
       visitor_id: visitorId || "unknown",
@@ -85,7 +113,7 @@ export async function POST(req: NextRequest) {
       user_agent: ua.slice(0, 500),
       referrer: referrer.slice(0, 500),
       country,
-      city: decodeURIComponent(city),
+      city: decodedCity,
       region,
       is_bot: bot,
       is_first_visit: isFirstVisit || false,
@@ -94,6 +122,43 @@ export async function POST(req: NextRequest) {
       os,
       screen_width: screenWidth || null,
     });
+
+    // Telegram notification
+    const flag = COUNTRY_FLAGS[country] || "🌍";
+    const location = [decodedCity, region, country].filter(Boolean).join(", ");
+    const time = new Date().toLocaleTimeString("pt-BR", { timeZone: "America/Sao_Paulo", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    const refText = referrer ? `\n🔗 Via: ${referrer.slice(0, 80)}` : "";
+
+    if (bot) {
+      // Bot alert — always notify
+      const botMsg = [
+        `🤖 *BOT DETECTADO*`,
+        ``,
+        `📍 ${flag} ${location}`,
+        `📄 Página: \`${path || "/"}\``,
+        `🕐 ${time}`,
+        ``,
+        `🔎 UA: \`${ua.slice(0, 120)}\``,
+        refText,
+      ].filter(Boolean).join("\n");
+      notifyTelegram(botMsg);
+    } else {
+      // Human visit
+      const deviceIcon = deviceType === "mobile" ? "📱" : deviceType === "tablet" ? "📟" : "💻";
+      const newBadge = isFirstVisit ? " 🆕 *PRIMEIRA VEZ*" : "";
+      const humanMsg = [
+        `${flag} *Acesso ao MUSA*${newBadge}`,
+        ``,
+        `📄 Página: \`${path || "/"}\``,
+        `${deviceIcon} ${browser} · ${os}`,
+        `📍 ${location}`,
+        `🕐 ${time}`,
+        `🔑 IP: \`${ipHash.slice(0, 8)}...\``,
+        `👤 Visitor: \`${(visitorId || "?").slice(0, 10)}\``,
+        refText,
+      ].filter(Boolean).join("\n");
+      notifyTelegram(humanMsg);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
