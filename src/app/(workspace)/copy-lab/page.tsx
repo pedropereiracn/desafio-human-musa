@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { useWorkspace } from "@/contexts/WorkspaceContext";
 import { useCopyHistory } from "@/hooks/useCopyHistory";
+import { trackFeatureClick } from "@/components/Analytics";
 import { useActivities } from "@/hooks/useActivities";
 import { cn } from "@/lib/utils";
 import type { CopyType, Tone, Platform, CopyResult } from "@/lib/types";
@@ -50,6 +51,7 @@ function CopyLabContent() {
 
   const handleGenerate = useCallback(async () => {
     if (!prompt.trim()) return;
+    trackFeatureClick("copy-lab:gerar-copy");
     setLoading(true);
     setResults([]);
 

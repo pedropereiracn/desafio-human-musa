@@ -87,7 +87,13 @@ function hashIP(ip: string): string {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { path, visitorId, sessionId, isFirstVisit, screenWidth } = body;
+    const {
+      path, visitorId, sessionId, isFirstVisit, screenWidth,
+      eventType, timeOnPage, scrollDepth, journey, feature,
+      screenHeight, language, timezone, touchPoints,
+      colorDepth, pixelRatio, visitCount, connectionType,
+      platform,
+    } = body;
 
     const forwarded = req.headers.get("x-forwarded-for");
     const realIP = req.headers.get("x-real-ip");
@@ -121,6 +127,20 @@ export async function POST(req: NextRequest) {
       browser,
       os,
       screen_width: screenWidth || null,
+      event_type: eventType || "pageview",
+      time_on_page: timeOnPage || null,
+      scroll_depth: scrollDepth || null,
+      journey: journey || null,
+      feature: feature || null,
+      screen_height: screenHeight || null,
+      language: language || null,
+      timezone: timezone || null,
+      touch_points: touchPoints || null,
+      color_depth: colorDepth || null,
+      pixel_ratio: pixelRatio || null,
+      visit_count: visitCount || null,
+      connection_type: connectionType || null,
+      platform: platform || null,
     });
 
     // Telegram notification
@@ -130,7 +150,6 @@ export async function POST(req: NextRequest) {
     const refText = referrer ? `\n🔗 Via: ${referrer.slice(0, 80)}` : "";
 
     if (bot) {
-      // Bot alert — always notify
       const botMsg = [
         `🤖 *BOT DETECTADO*`,
         ``,
@@ -142,19 +161,47 @@ export async function POST(req: NextRequest) {
         refText,
       ].filter(Boolean).join("\n");
       notifyTelegram(botMsg);
+    } else if (eventType === "exit") {
+      // Exit event — time on page + scroll depth
+      const exitMsg = [
+        `🚪 *Saiu do MUSA*`,
+        ``,
+        `📄 Página: \`${path || "/"}\``,
+        `⏱ Tempo: *${timeOnPage || 0}s*`,
+        `📜 Scroll: *${scrollDepth || 0}%*`,
+        journey ? `🗺 Jornada: ${journey}` : "",
+        `👤 \`${(visitorId || "?").slice(0, 10)}\``,
+        `🕐 ${time}`,
+      ].filter(Boolean).join("\n");
+      notifyTelegram(exitMsg);
+    } else if (eventType === "feature") {
+      // Feature click
+      const featureMsg = [
+        `🖱 *Feature Usada*`,
+        ``,
+        `⚡ Feature: *${feature || "?"}*`,
+        `📄 Página: \`${path || "/"}\``,
+        `👤 \`${(visitorId || "?").slice(0, 10)}\``,
+        `📍 ${flag} ${location}`,
+        `🕐 ${time}`,
+      ].filter(Boolean).join("\n");
+      notifyTelegram(featureMsg);
     } else {
-      // Human visit
+      // Human pageview
       const deviceIcon = deviceType === "mobile" ? "📱" : deviceType === "tablet" ? "📟" : "💻";
       const newBadge = isFirstVisit ? " 🆕 *PRIMEIRA VEZ*" : "";
+      const visitBadge = visitCount && visitCount > 1 ? ` (visita #${visitCount})` : "";
       const humanMsg = [
         `${flag} *Acesso ao MUSA*${newBadge}`,
         ``,
         `📄 Página: \`${path || "/"}\``,
-        `${deviceIcon} ${browser} · ${os}`,
+        `${deviceIcon} ${browser} · ${os} · ${platform || "?"}`,
         `📍 ${location}`,
         `🕐 ${time}`,
+        `🌐 ${language || "?"} · ${timezone || "?"}`,
+        `📺 ${screenWidth || "?"}x${screenHeight || "?"} · ${connectionType || "?"}`,
         `🔑 IP: \`${ipHash.slice(0, 8)}...\``,
-        `👤 Visitor: \`${(visitorId || "?").slice(0, 10)}\``,
+        `👤 Visitor: \`${(visitorId || "?").slice(0, 10)}\`${visitBadge}`,
         refText,
       ].filter(Boolean).join("\n");
       notifyTelegram(humanMsg);

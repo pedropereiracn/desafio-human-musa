@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useActivities } from "@/hooks/useActivities";
 import { LoadingPulse, SkeletonReport } from "@/components/ui/Skeleton";
+import { trackFeatureClick } from "@/components/Analytics";
 
 interface ReportResult {
   title: string;
@@ -37,6 +38,7 @@ export default function ReportsPage() {
 
   const handleGenerate = useCallback(async () => {
     if (!metricsText.trim()) return;
+    trackFeatureClick("reports:gerar-relatorio");
     setLoading(true);
     setReport(null);
 

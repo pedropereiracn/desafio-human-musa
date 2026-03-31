@@ -8,6 +8,7 @@ import { useActivities } from "@/hooks/useActivities";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { trackFeatureClick } from "@/components/Analytics";
 import CarouselEditor from "@/components/carousel/CarouselEditor";
 import type { CarouselSlide, Platform, Tone, BrandKit, SlideType } from "@/lib/types";
 import { getTemplate } from "@/lib/carousel-templates";
@@ -84,6 +85,7 @@ function CarouselPageInner() {
       toast.error("Insira um tópico para o carrossel");
       return;
     }
+    trackFeatureClick("carousel:gerar-carrossel");
 
     setLoading(true);
     setSlides(null);

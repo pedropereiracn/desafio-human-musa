@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import SearchForm from "@/components/SearchForm";
 import BriefDecoder from "@/components/BriefDecoder";
 import StepIndicator from "@/components/StepIndicator";
+import { trackFeatureClick } from "@/components/Analytics";
 import ReferenceCard from "@/components/ReferenceCard";
 import IdeaCard from "@/components/IdeaCard";
 import CopyOutput from "@/components/CopyOutput";
@@ -60,6 +61,7 @@ export default function MusaPage() {
   }, [addActivity]);
 
   const handleSearch = useCallback(async (searchTopic: string, searchPlatform: Platform, searchFormat: Format) => {
+    trackFeatureClick(`musa:buscar-referencias:${searchPlatform}`);
     setTopic(searchTopic);
     setPlatform(searchPlatform);
     setFormat(searchFormat);
@@ -127,6 +129,7 @@ export default function MusaPage() {
   }, [logActivity]);
 
   const handleGenerateIdeas = useCallback(async () => {
+    trackFeatureClick("musa:gerar-ideias");
     setIdeasLoading(true);
     setIdeas([]);
     setSelectedIdea(null);
@@ -160,6 +163,7 @@ export default function MusaPage() {
 
   const handleGenerateCopy = useCallback(async () => {
     if (!selectedIdea) return;
+    trackFeatureClick("musa:gerar-copy");
     setCopyLoading(true);
     setCopyResult(null);
 
